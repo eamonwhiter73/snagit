@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "599782590095",
+    "firebase_url": "https://snag-b2b2d.firebaseio.com",
+    "project_id": "snag-b2b2d",
+    "storage_bucket": "snag-b2b2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599782590095:android:20c017f2c2d432a5",
+        "android_client_info": {
+          "package_name": "com.snag.snag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599782590095-f4544cmeanuj2usot96fc8jj4v0680i1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2EzkqmhZAbfkGw-owrU6B20KldGh6v2c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
