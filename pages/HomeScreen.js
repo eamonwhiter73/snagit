@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, Platform, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, Platform, FlatList, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import firebase from 'react-native-firebase';
 
@@ -136,13 +136,6 @@ export default class HomeScreen extends React.Component {
             </View>
           </View>
         </View>
-          {/*<TouchableOpacity
-            style = {styles.editcontainer}
-            onPress={() => { 
-              this.edit(item)
-            }}>
-            <Text style = {styles.buttonTextAdjust}>EDIT</Text>
-          </TouchableOpacity>*/}
       </View>
     )
   }
@@ -156,8 +149,9 @@ export default class HomeScreen extends React.Component {
             //onClear={this.clear.bind(this)}
             //onSubmitEditing={this.search.bind(this)}
             placeholder='Search rentals...'
-            containerStyle={{ marginTop: 30,
-                              height: 46,
+            containerStyle={{ 
+                              //marginBottom: Platform.OS === 'android' ? 10 : 0,
+                              height: Platform.OS === 'android' ? 56 : 46,
                               backgroundColor: '#6de3dc',
                               borderTopColor: '#fff',
                               borderBottomColor: '#fff',
@@ -169,7 +163,9 @@ export default class HomeScreen extends React.Component {
                               flex: 0.945,
                               borderRadius: 4
                             }}
-            inputStyle={{backgroundColor: '#ffffff'}}
+            inputStyle={{backgroundColor: '#ffffff',
+                         paddingTop: Platform.OS === 'android' ? 11 : 0
+                       }}
             value={this.state.searchText}
             lightTheme={true}
             placeholderTextColor='#dddddd'
@@ -190,6 +186,8 @@ const styles = StyleSheet.create ({
    container: {
       flexDirection: 'column',
       flex: 1,
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      backgroundColor: '#fff',
+      paddingTop: Platform.OS === 'android' ? 10 : 30,
    },
 })

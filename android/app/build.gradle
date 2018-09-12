@@ -153,6 +153,9 @@ android {
 }
 
 dependencies {
+    compile project(':rn-fetch-blob')
+    compile project(':react-native-firebase')
+    compile project(':react-native-camera')
     compile project(':react-native-vector-icons')
   implementation(project(':react-native-firebase')) {
     transitive = false
