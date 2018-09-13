@@ -154,20 +154,16 @@ export default class HomeScreen extends React.Component {
               placeholder='Search rentals...'
               containerStyle={{ 
                                 //marginBottom: Platform.OS === 'android' ? 10 : 0,
-                                height: Platform.OS === 'android' ? 56 : 46,
+                                height: Platform.OS === 'android' ? 58 : 48,
                                 backgroundColor: '#6de3dc',
-                                borderTopColor: '#fff',
-                                borderBottomColor: '#fff',
-                                borderBottomWidth: 0,
-                                borderBottomColor: '#1e4683',
-                                borderTopWidth: 0,
-                                borderTopColor: '#1e4683',
-                                borderStyle: 'solid',
+                                borderWidth: 1,
+                                borderColor: '#54e1d9',
                                 flex: 0.945,
                                 borderRadius: 4
                               }}
               inputStyle={{backgroundColor: '#ffffff',
-                           paddingTop: Platform.OS === 'android' ? 11 : 0
+                           paddingTop: Platform.OS === 'android' ? 11 : 0,
+                           paddingBottom: Platform.OS === 'android' ? 11 : 0
                          }}
               value={this.state.searchText}
               lightTheme={true}

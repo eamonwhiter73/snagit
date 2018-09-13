@@ -2,11 +2,9 @@ import React from 'react';
 import { RNCamera } from 'react-native-camera';
 import { StyleSheet, Text, View, Alert, Permissions, Linking, TouchableOpacity, Platform, ImageStore, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, NavigationActions, StackActions } from 'react-navigation';
 
-import RentScreen from './RentScreen';
-
-class CameraScreen extends React.Component {
+export default class CameraScreen extends React.Component {
 
   static navigatorStyle = { navBarHidden: true };
 
@@ -42,17 +40,29 @@ class CameraScreen extends React.Component {
 
   takePicture = async () => {
     if (this.camera) {
-      const options = { quality: 0.1, base64: true };
+      const options = { quality: 0.2, base64: true };
       const data = await this.camera.takePictureAsync(options)
-      console.log(data.base64);
-
-      const { navigate } = this.props.navigation;
+      console.log(data.uri);
 
       if(Platform.OS === 'android') {
-        navigate('RentDetails', { base64orURI: data.uri });
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'RentDetails', params: { base64orURI: data.uri } }),  
+          ],
+        });
+        
+        this.props.navigation.dispatch(resetAction);
       }
       else {
-        navigate('RentDetails', { base64orURI: data.base64 });
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'RentDetails', params: { base64orURI: data.base64 } }),  
+          ],
+        });
+        
+        this.props.navigation.dispatch(resetAction);
       }
 
 
@@ -86,12 +96,12 @@ class CameraScreen extends React.Component {
             permissionDialogTitle={'Permission to use camera'}
             permissionDialogMessage={'We need your permission to use your camera phone'}
         />
-        <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
+        <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center', backgroundColor: '#e6fffe'}}>
           <TouchableOpacity
               onPress={this.takePicture.bind(this)}
               style = {styles.capture}
           >
-              <Text style={{fontSize: 14}}> SNAP </Text>
+              <Text style={{fontSize: 14, fontWeight: '700', color: "#fff"}}> SNAP </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -103,7 +113,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'black'
+    backgroundColor: 'rgba(109, 227, 220, 0.2)'
   },
   preview: {
     flex: 1,
@@ -112,7 +122,7 @@ const styles = StyleSheet.create({
   },
   capture: {
     flex: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#6de3dc',
     borderRadius: 5,
     padding: 15,
     paddingHorizontal: 20,
@@ -120,19 +130,3 @@ const styles = StyleSheet.create({
     margin: 20
   }
 });
-
-export default createStackNavigator(
-{
-  Rent: {
-    screen: CameraScreen
-  },
-  RentDetails: {
-    screen: RentScreen
-  },
-},
-{
-  navigationOptions: ({ navigation }) => ({
-    header: null
-  }),
-}
-);

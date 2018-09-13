@@ -8,17 +8,19 @@ import { YellowBox } from 'react-native';
 
 import HomeScreen from './pages/HomeScreen';
 import ProfileScreen from './pages/ProfileScreen';
-import CameraScreen from './pages/CameraScreen';
-import RentScreen from './pages/RentScreen';
+//import CameraScreen from './pages/CameraScreen';
+import CameraScreenNavigator from './components/CameraScreenNavigator';
+//import RentScreenNavigator from './components/RentScreenNavigator';
 
 YellowBox.ignoreWarnings(['Class RCTCxxModule']);
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['You should only render one navigator explicitly in your app, and other navigators should by rendered by including them in that navigator.']);
 
-const App = createBottomTabNavigator(
+const AppNavigator = createBottomTabNavigator(
   {
     Home: HomeScreen,
     Profile: ProfileScreen,
-    Rent: CameraScreen,
+    Rent: CameraScreenNavigator,
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -45,10 +47,18 @@ const App = createBottomTabNavigator(
       }
     }),
     tabBarOptions: {
-      activeTintColor: '#6de3dc',
-      inactiveTintColor: 'gray',
+      activeTintColor: '#fff',
+      inactiveTintColor: '#c9fffd',
+      activeBackgroundColor: '#6de3dc',
+      inactiveBackgroundColor: '#6de3dc'
     },
   },
 );
 
-export default App;
+export default class App extends React.Component {
+  render() {
+    return (
+      <AppNavigator/>
+    )
+  }
+}

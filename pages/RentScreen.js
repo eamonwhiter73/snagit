@@ -1,7 +1,10 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, ImageStore, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
+import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
+import { createStackNavigator } from 'react-navigation';
+import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 export default class RentScreen extends React.Component {
 
@@ -81,12 +84,23 @@ export default class RentScreen extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}
-        >
+        <View style={styles.container}>
+          <View style={{backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? 15 : 10, top: Platform.OS === 'ios' ? 25 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5}}>
+            <SimpleLineIcons
+              name='close'
+              color='#6de3dc'
+              size={40}
+              onPress={() => {
+                const { navigate } = this.props.navigation;
+
+                navigate('Rent');
+              }}
+            />
+          </View>
           <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
             <Image
               source={{uri: base64Image}}
-              style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
+              style={{transform: [{ rotate: '90deg'}], height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
             />
           </View>
           <View style={styles.small_container}>
