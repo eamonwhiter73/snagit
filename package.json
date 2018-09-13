@@ -27,6 +27,8 @@
     "react-native-camera": "^1.2.0",
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^4.3.6",
+    "react-native-picker-select": "^4.3.0",
+    "react-native-tab-view": "^1.0.2",
     "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.13.0",
     "rn-fetch-blob": "^0.10.13"

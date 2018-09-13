@@ -9,6 +9,7 @@ import { YellowBox } from 'react-native';
 import HomeScreen from './pages/HomeScreen';
 import ProfileScreen from './pages/ProfileScreen';
 import CameraScreen from './pages/CameraScreen';
+import RentScreen from './pages/RentScreen';
 
 YellowBox.ignoreWarnings(['Class RCTCxxModule']);
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -17,7 +18,7 @@ const App = createBottomTabNavigator(
   {
     Home: HomeScreen,
     Profile: ProfileScreen,
-    Rent: CameraScreen
+    Rent: CameraScreen,
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -41,13 +42,13 @@ const App = createBottomTabNavigator(
             type='feather'
           />
         )
-      },
+      }
     }),
     tabBarOptions: {
       activeTintColor: '#6de3dc',
       inactiveTintColor: 'gray',
     },
-  }
+  },
 );
 
 export default App;

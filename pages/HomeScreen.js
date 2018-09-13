@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, Platform, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, Platform, FlatList, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import firebase from 'react-native-firebase';
+
 
 export default class HomeScreen extends React.Component {
 
@@ -19,6 +20,7 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
+
     // The user is an Object, so they're logged in
     /*if (!this.state.user) {
       const { navigate } = this.props.navigation;
@@ -85,7 +87,7 @@ export default class HomeScreen extends React.Component {
       >
         <Image
           source={require('../assets/rowboat.jpg')}
-          style={{height: 95, width: 95, marginTop: 10, marginLeft: 10, borderColor: '#6de3dc', borderWidth: 2}}
+          style={{height: 95, width: 95, marginTop: 10, marginLeft: 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
         />
         <View style={{flexDirection: 'column', flex: 1}}>
           <View style={{alignItems: 'center', marginBottom: 10}}>
@@ -142,42 +144,44 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <SearchBar
-            onChangeText={(text) => this.setState({searchText: text})}
-            //onClear={this.clear.bind(this)}
-            //onSubmitEditing={this.search.bind(this)}
-            placeholder='Search rentals...'
-            containerStyle={{ 
-                              //marginBottom: Platform.OS === 'android' ? 10 : 0,
-                              height: Platform.OS === 'android' ? 56 : 46,
-                              backgroundColor: '#6de3dc',
-                              borderTopColor: '#fff',
-                              borderBottomColor: '#fff',
-                              borderBottomWidth: 0,
-                              borderBottomColor: '#1e4683',
-                              borderTopWidth: 0,
-                              borderTopColor: '#1e4683',
-                              borderStyle: 'solid',
-                              flex: 0.945,
-                              borderRadius: 4
-                            }}
-            inputStyle={{backgroundColor: '#ffffff',
-                         paddingTop: Platform.OS === 'android' ? 11 : 0
-                       }}
-            value={this.state.searchText}
-            lightTheme={true}
-            placeholderTextColor='#dddddd'
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <SearchBar
+              onChangeText={(text) => this.setState({searchText: text})}
+              //onClear={this.clear.bind(this)}
+              //onSubmitEditing={this.search.bind(this)}
+              placeholder='Search rentals...'
+              containerStyle={{ 
+                                //marginBottom: Platform.OS === 'android' ? 10 : 0,
+                                height: Platform.OS === 'android' ? 56 : 46,
+                                backgroundColor: '#6de3dc',
+                                borderTopColor: '#fff',
+                                borderBottomColor: '#fff',
+                                borderBottomWidth: 0,
+                                borderBottomColor: '#1e4683',
+                                borderTopWidth: 0,
+                                borderTopColor: '#1e4683',
+                                borderStyle: 'solid',
+                                flex: 0.945,
+                                borderRadius: 4
+                              }}
+              inputStyle={{backgroundColor: '#ffffff',
+                           paddingTop: Platform.OS === 'android' ? 11 : 0
+                         }}
+              value={this.state.searchText}
+              lightTheme={true}
+              placeholderTextColor='#dddddd'
+            />
+          </View>
+          <FlatList
+            style={{backgroundColor: '#fff'}}
+            data={this.state.items}
+            renderItem={({item}) => this.renderListItems(item)}
+            //contentContainerStyle={{backgroundColor: '#1e4683'}}
           />
         </View>
-        <FlatList
-          style={{backgroundColor: '#fff'}}
-          data={this.state.items}
-          renderItem={({item}) => this.renderListItems(item)}
-          //contentContainerStyle={{backgroundColor: '#1e4683'}}
-        />
-      </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -190,4 +194,4 @@ const styles = StyleSheet.create ({
       backgroundColor: '#fff',
       paddingTop: Platform.OS === 'android' ? 10 : 30,
    },
-})
+});
