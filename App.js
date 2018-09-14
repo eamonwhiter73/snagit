@@ -5,6 +5,7 @@ import { Icon } from 'react-native-elements';
 import { createBottomTabNavigator } from 'react-navigation';
 import firebase from 'react-native-firebase';
 import { YellowBox } from 'react-native';
+import NavigationService from './services/NavigationService';
 
 import HomeScreen from './pages/HomeScreen';
 import ProfileScreen from './pages/ProfileScreen';
@@ -18,9 +19,9 @@ YellowBox.ignoreWarnings(['You should only render one navigator explicitly in yo
 
 const AppNavigator = createBottomTabNavigator(
   {
-    Home: HomeScreen,
-    Profile: ProfileScreen,
-    Rent: CameraScreenNavigator,
+    Home: { key: 'home', screen: HomeScreen },
+    Profile: { key: 'profile', screen: ProfileScreen },
+    Rent: { key: 'renttab', screen: CameraScreenNavigator },
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -58,7 +59,7 @@ const AppNavigator = createBottomTabNavigator(
 export default class App extends React.Component {
   render() {
     return (
-      <AppNavigator/>
+      <AppNavigator ref={navigatorRef => { NavigationService.setTopLevelNavigator(navigatorRef);}}/*ref={nav => { this.navigator = nav; }}*//>
     )
   }
 }

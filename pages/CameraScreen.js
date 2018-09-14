@@ -1,6 +1,6 @@
 import React from 'react';
 import { RNCamera } from 'react-native-camera';
-import { StyleSheet, Text, View, Alert, Permissions, Linking, TouchableOpacity, Platform, ImageStore, Dimensions } from 'react-native';
+import { AppState, StyleSheet, Text, View, Alert, Permissions, Linking, TouchableOpacity, Platform, ImageStore, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createStackNavigator, NavigationActions, StackActions } from 'react-navigation';
 
@@ -18,10 +18,6 @@ export default class CameraScreen extends React.Component {
     //this.ref = firebase.firestore().collection('items');
   }
 
-  componentDidMount() {
-    // firebase things?
-  }
-
   componentWillMount() {
     /*his.authSubscription = firebase.auth().onAuthStateChanged((user) => {
 
@@ -34,8 +30,21 @@ export default class CameraScreen extends React.Component {
     });*/
   }
 
-  componentWillUnmount() {
-    //this.authSubscription();
+  componentDidMount() {
+    this._sub = this.props.navigation.addListener(
+      'didFocus',
+      () => {
+        if(this.props.navigation.getParam('param', '') === 'RentTab') {
+          console.log('I HEARD YOU');
+
+          this.navigator && this.navigator.dispatch(
+            NavigationActions.navigate({
+              routeName: 'Rentable',
+            })
+          );
+        }
+      }
+    );
   }
 
   takePicture = async () => {

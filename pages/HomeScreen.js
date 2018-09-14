@@ -2,7 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, Platform, FlatList, Image } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import firebase from 'react-native-firebase';
+import { StackActions, NavigationActions } from 'react-navigation';
 
+export const toRentable = () => {
+  const resetToRentable = NavigationActions.navigate({
+      key: 'rentable',
+      routeName: 'Rentable'
+  });
+  return resetToRentable;
+}
 
 export default class HomeScreen extends React.Component {
 
@@ -68,77 +76,119 @@ export default class HomeScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    //this.authSubscription();
+  
+  }
+
+  navigateToRentable = () => {
+    console.log('in navigateToRentable');
+
+    /*this.props
+     .navigation
+     .dispatch(
+        NavigationActions.navigate({
+          key: 'renttab',
+          routeName: 'RentTab',
+          action: toRentable
+        })
+     )*/
+
+     this.props.navigation.dispatch(
+        NavigationActions.navigate({
+          routeName: 'Rent',
+          params: { param: 'RentTab' },
+        })
+      );
+
+
+    /*const navigateAction = NavigationActions.navigate({
+      routeName: 'Rent',
+
+      params: {},
+
+      action: NavigationActions.navigate({ routeName: 'Rentable' }),
+    });
+
+    this.props.navigation.dispatch(navigateAction);*/
+   
+    /*this.props.navigation.dispatch(NavigationActions.navigate({
+      routeName: 'Rent',
+      action: NavigationActions.navigate({
+        routeName: 'Rentable'
+      })
+    }));
+    */
   }
 
   renderListItems = (item) => {
     return ( 
-      <View style={{flex: 1,
-                    flexDirection: 'row',
-                    backgroundColor: '#e6fffe',
-                    paddingBottom: 10,
-                    marginTop: 10,
-                    borderColor: '#6de3dc',
-                    borderBottomWidth: 2,
-                    borderStyle: 'solid',
-                    marginHorizontal: 10,
-                    borderRadius: 4
-                  }}
-      >
-        <Image
-          source={require('../assets/rowboat.jpg')}
-          style={{height: 95, width: 95, marginTop: 10, marginLeft: 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
-        />
-        <View style={{flexDirection: 'column', flex: 1}}>
-          <View style={{alignItems: 'center', marginBottom: 10}}>
-            <Text style={{marginTop: 10, flex: 1, fontSize: 18, fontWeight: '700'}}
-                onPress={() => {}}
-            >
-              {item.name} {/*distance/condition/price*/}
-            </Text>
-          </View>
-          <View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
-                    onPress={() => {}}
-                >
-                  Dist. (mi.)
-                </Text>
-                <Text style={{flex: 1, fontSize: 24, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
-                    onPress={() => {}}
-                >
-                  3.2
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', textAlign: 'center'}}
-                    onPress={() => {}}
-                >
-                  Cond.
-                </Text>
-                <Text style={{flex: 1, fontSize: 24, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                    onPress={() => {}}
-                >
-                  Fair
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', textAlign: 'center'}}
-                    onPress={() => {}}
-                >
-                  Price
-                </Text>
-                <Text style={{flex: 1, fontSize: 24, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                    onPress={() => {}}
-                >
-                  $25
-                </Text>
+      <TouchableWithoutFeedback onPress={this.navigateToRentable}>
+        <View style={{flex: 1,
+                      flexDirection: 'row',
+                      backgroundColor: '#e6fffe',
+                      paddingBottom: 10,
+                      marginTop: 10,
+                      borderColor: '#6de3dc',
+                      borderBottomWidth: 2,
+                      borderStyle: 'solid',
+                      marginHorizontal: 10,
+                      borderRadius: 4
+                    }}
+        >
+          <Image
+            source={require('../assets/rowboat.jpg')}
+            style={{height: 95, width: 95, marginTop: 10, marginLeft: 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
+          />
+          <View style={{flexDirection: 'column', flex: 1}}>
+            <View style={{alignItems: 'center', marginBottom: 10}}>
+              <Text style={{marginTop: 10, flex: 1, fontSize: 18, fontWeight: '700'}}
+                  onPress={() => {}}
+              >
+                {item.name} {/*distance/condition/price*/}
+              </Text>
+            </View>
+            <View>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
+                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
+                      onPress={() => {}}
+                  >
+                    Dist. (mi.)
+                  </Text>
+                  <Text style={{flex: 1, fontSize: 24, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
+                      onPress={() => {}}
+                  >
+                    3.2
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', textAlign: 'center'}}
+                      onPress={() => {}}
+                  >
+                    Cond.
+                  </Text>
+                  <Text style={{flex: 1, fontSize: 24, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                      onPress={() => {}}
+                  >
+                    Fair
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', textAlign: 'center'}}
+                      onPress={() => {}}
+                  >
+                    Price
+                  </Text>
+                  <Text style={{flex: 1, fontSize: 24, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                      onPress={() => {}}
+                  >
+                    $25
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     )
   }
 
