@@ -7,7 +7,9 @@ import CameraNavigator from './CameraNavigator';
 export default class CameraScreenNavigator extends React.Component {
   constructor(props) {
     super(props)
+  }
 
+  componentDidMount() {
     this._sub = this.props.navigation.addListener(
       'didFocus',
       () => {
@@ -33,18 +35,25 @@ export default class CameraScreenNavigator extends React.Component {
         }
       }
     );
-  }
 
-  componentDidMount() {
-
-  }
-
-  componentWillMount() {
-
+    this._sub2 = this.props.navigation.addListener(
+      'didBlur',
+      payload => {
+        console.debug('didBlur', payload);
+        /*if(payload.action.routeName != 'Home') {
+          console.log("DID BLUR");*/
+          this.navigator.dispatch(StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'OpenCamera'})]
+          }));
+        //}
+      }
+    );
   }
 
   componentWillUnmount() {
     this._sub.remove();
+    this._sub2.remove();
     //this.authSubscription();
   }
   

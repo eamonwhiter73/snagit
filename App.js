@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon } from 'react-native-elements';
-import { createBottomTabNavigator } from 'react-navigation';
+import { createBottomTabNavigator, StackActions, NavigationActions } from 'react-navigation';
 import firebase from 'react-native-firebase';
 import { YellowBox } from 'react-native';
 import NavigationService from './services/NavigationService';
@@ -56,10 +56,23 @@ const AppNavigator = createBottomTabNavigator(
   },
 );
 
+// gets the current screen from navigation state
+function getActiveRouteName(navigationState) {
+  if (!navigationState) {
+    return null;
+  }
+  const route = navigationState.routes[navigationState.index];
+  // dive into nested navigators
+  if (route.routes) {
+    return getActiveRouteName(route);
+  }
+  return route.routeName;
+}
+
 export default class App extends React.Component {
   render() {
     return (
-      <AppNavigator ref={navigatorRef => { NavigationService.setTopLevelNavigator(navigatorRef);}}/*ref={nav => { this.navigator = nav; }}*//>
+      <AppNavigator ref={navigatorRef => { NavigationService.setTopLevelNavigator(navigatorRef);}}/>
     )
   }
 }

@@ -32,22 +32,12 @@ export default class CameraScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this._sub.remove();
   }
 
   //GET NAVIGATION PROPS HERE SOMEHOW
 
   componentDidMount() {
-    this._sub = this.props.navigation.addListener(
-      'didFocus',
-      () => {
-        if(this.props.navigation.getParam('param', '') === 'fromRentableScreen') {
-          NavigationService.navigate('Home')
 
-          this.props.navigation.state.params = null;
-        }
-      }
-    );    
     /*this._sub = this.props.navigation.addListener(
       'didFocus',
       () => {*/
