@@ -1,10 +1,12 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
+import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import NavigationService from '../services/NavigationService.js';
 
 export default class RentableScreen extends React.Component {
@@ -73,14 +75,6 @@ export default class RentableScreen extends React.Component {
     //this.authSubscription();
   }
 
-  navigateToOtherUserProfile = () => {
-    console.log('image being pressed');
-    this.props.navigation.dispatch(StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'OtherUserProfile' })],
-    }));
-  }
-
   render() {
     var base64Image = '';
 
@@ -100,73 +94,76 @@ export default class RentableScreen extends React.Component {
               color='#6de3dc'
               size={40}
               onPress={() => {
-                this.props.navigation.navigate('OpenCamera', { param: 'fromRentableScreen'});
-                
-
-                NavigationService.navigate('Home');
+                this.props.navigation.dispatch(StackActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate({ routeName: 'OpenCamera' })],
+                }));
               }}
             />
           </View>
-          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
-            <Image
-              source={require('../assets/rowboat.jpg')}
-              style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
-            />
-            <View style={styles.small_container, {backgroundColor: '#e6fffe'}}>
-              <Text style={{fontSize: 18, fontWeight: '700', backgroundColor: '#e6fffe', marginTop: 5}}>Rowboat</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'column', flex: 0.25, justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
-              <View style={styles.condition_container}>
-                <View style={{paddingBottom: 1}, styles.small_container}>
-                  <Text style={{marginBottom: 0}}>Condition:</Text>
-                  <Text style={{color: '#6de3dc', fontWeight: '700', fontSize: 28}}>Fair</Text>
-                </View>
-                <View style={styles.small_container}>
-                  <Text style={{marginBottom: 0}}>Price (per day):</Text>
-                  <Text style={{color: '#6de3dc', fontWeight: '700', fontSize: 28}}>$25</Text>
+          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
+            <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.75}}>
+              <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                <Image
+                  source={require('../assets/billythekid.jpg')}
+                  style={{height: 90, width: 90, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 45}}
+                />
+                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 5}}>
+                  <Ionicons
+                    name='ios-star'
+                    color='#eec400'
+                    size={16}
+                  />
+                  <Ionicons
+                    name='ios-star'
+                    color='#eec400'
+                    size={16}
+                  />
+                  <Ionicons
+                    name='ios-star'
+                    color='#eec400'
+                    size={16}
+                  />
+                  <Ionicons
+                    name='ios-star'
+                    color='#eec400'
+                    size={16}
+                  />
+                  <Ionicons
+                    name='ios-star'
+                    color='#eec400'
+                    size={16}
+                  />
                 </View>
               </View>
+            </View>
+            <View style={{justifyContent: 'center', alignItems: 'flex-start', flex: 1, backgroundColor: '#e6fffe', marginTop: Platform.OS === 'ios' ? 30 : 10}}>
+              <Text style={{fontSize: 16, fontWeight: '700', backgroundColor: '#e6fffe'}}>eamon.white</Text>
+              <TouchableOpacity
+                style = {styles.submitTouchHeader}
+                onPress={() => {}}
+              >
+                <Text style = {styles.submitText}>CONTACT</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={{backgroundColor: 'white'}, styles.description_container}>
+            <View style={styles.small_container_description}>
+              <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Bio:</Text>
+              <Text style={{marginBottom: 10, marginLeft: 10}}>Hi, I like to rent things to make money, hit me up for stuff!.</Text>
+            </View>
+          </View>
+          <View style={{/*width: Dimensions.get('window').width,*/flex: 0.53, flexDirection: 'row', backgroundColor: '#e6fffe'}}>
+            <View style={styles.small_container_description}>
+              <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Renting:</Text>
             </View>
           </View>
           <View style={{backgroundColor: 'white'}, styles.description_container}>
             <View style={styles.small_container_description}>
-              <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Description:</Text>
-              <Text style={{marginBottom: 10, marginLeft: 10}}>This is a nice rowboat. It is worth $600.</Text>
+              <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Past Rentals:</Text>
             </View>
           </View>
-          <View style={{/*width: Dimensions.get('window').width,*/flex: 0.53, flexDirection: 'row', backgroundColor: '#e6fffe'}}>
-            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
-              <TouchableHighlight onPress={() => this.navigateToOtherUserProfile()}>
-                <Image
-                  source={require('../assets/rowboat.jpg')}
-                  style={{height: 90, width: 90, marginTop: 10, borderColor: '#6de3dc', borderWidth: 5, borderRadius: 45}}
-                  
-                />
-              </TouchableHighlight>
-              <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                <Text style={{fontWeight: '700'}}>Eamon White</Text>
-              </View>
-            </View>
-            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
-              <SimpleLineIcons
-                name='location-pin'
-                size={90}
-                style={{marginTop: 10}}
-                color='#6de3dc'
-              />
-              <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                <Text style={{marginTop: -10, fontWeight: '700'}}>3.2 mi.</Text>
-              </View>
-            </View>
-          </View>
-          <TouchableOpacity
-            style = {styles.submitTouch}
-            onPress={() => {}}
-          >
-            <Text style = {styles.submitText}>RENT</Text>
-          </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
     );
@@ -187,6 +184,14 @@ const styles = StyleSheet.create ({
       alignItems: 'center',
       backgroundColor: 'white',
       width: Dimensions.get('window').width * 0.5
+   },
+   small_container_header: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      flexDirection: 'row',
+      flex: 0.75,
+      backgroundColor: 'orange'
    },
    small_container_description: {
       flexDirection: 'column',
@@ -217,6 +222,11 @@ const styles = StyleSheet.create ({
     backgroundColor: '#6de3dc',
     color: 'white',
     fontWeight: '700',
+    flex: 0.3,
+    fontSize: 12,
+    paddingHorizontal: 5,
+    borderRadius: 4,
+    borderWidth: 0
    },
    submitTouch: {
     flex: 0.15,
@@ -224,6 +234,15 @@ const styles = StyleSheet.create ({
     justifyContent: 'center',
     alignItems: 'center',
     width: Dimensions.get('window').width,
+    backgroundColor: '#6de3dc'
+   },
+   submitTouchHeader: {
+    flex: 0.5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderWidth: 0,
     backgroundColor: '#6de3dc'
    }
 

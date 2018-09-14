@@ -5,6 +5,8 @@ import { createStackNavigator } from 'react-navigation';
 import RentScreen from '../pages/RentScreen';
 import CameraScreen from '../pages/CameraScreen';
 import RentableScreen from '../pages/RentableScreen';
+import OtherUserProfileScreen from '../pages/OtherUserProfileScreen';
+
 
 export default CameraNavigator = createStackNavigator(
   {
@@ -25,6 +27,13 @@ export default CameraNavigator = createStackNavigator(
     Rentable: {
       key: 'rentable',
       screen: RentableScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: null
+      }),
+    },
+    OtherUserProfile: {
+      key: 'otheruserprofile',
+      screen: OtherUserProfileScreen,
       navigationOptions: ({ navigation }) => ({
         header: null
       }),

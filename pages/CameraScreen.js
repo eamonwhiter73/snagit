@@ -3,6 +3,7 @@ import { RNCamera } from 'react-native-camera';
 import { AppState, StyleSheet, Text, View, Alert, Permissions, Linking, TouchableOpacity, Platform, ImageStore, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createStackNavigator, NavigationActions, StackActions } from 'react-navigation';
+import NavigationService from '../services/NavigationService';
 
 export default class CameraScreen extends React.Component {
 
@@ -31,12 +32,22 @@ export default class CameraScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    //this._sub.remove();
+    this._sub.remove();
   }
 
   //GET NAVIGATION PROPS HERE SOMEHOW
 
-  componentDidMount() {    
+  componentDidMount() {
+    this._sub = this.props.navigation.addListener(
+      'didFocus',
+      () => {
+        if(this.props.navigation.getParam('param', '') === 'fromRentableScreen') {
+          NavigationService.navigate('Home')
+
+          this.props.navigation.state.params = null;
+        }
+      }
+    );    
     /*this._sub = this.props.navigation.addListener(
       'didFocus',
       () => {*/
