@@ -99,6 +99,23 @@ export default class HomeScreen extends React.Component {
         })
       );
 
+     /*const { state } = this.props.navigation;
+     console.log(state);
+     const keyToGoTo = state.routes[2].key
+
+     this.props.navigation.dispatch(
+        StackActions.reset({
+          index: 0,
+          key: keyToGoTo,
+          actions: [
+            NavigationActions.navigate({
+              routeName: 'Rentable',
+            })
+          ]
+        })
+        
+      );*/
+
 
     /*const navigateAction = NavigationActions.navigate({
       routeName: 'Rent',

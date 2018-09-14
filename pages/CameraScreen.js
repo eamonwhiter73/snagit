@@ -30,11 +30,17 @@ export default class CameraScreen extends React.Component {
     });*/
   }
 
-  componentDidMount() {
-    this._sub = this.props.navigation.addListener(
+  componentWillUnmount() {
+    //this._sub.remove();
+  }
+
+  //GET NAVIGATION PROPS HERE SOMEHOW
+
+  componentDidMount() {    
+    /*this._sub = this.props.navigation.addListener(
       'didFocus',
-      () => {
-        if(this.props.navigation.getParam('param', '') === 'RentTab') {
+      () => {*/
+        /*if(this.props.navigation.getParam('param', '') === 'RentTab') {
           console.log('I HEARD YOU');
 
           this.navigator && this.navigator.dispatch(
@@ -43,8 +49,10 @@ export default class CameraScreen extends React.Component {
             })
           );
         }
+        else */
+        /*}
       }
-    );
+    );*/
   }
 
   takePicture = async () => {

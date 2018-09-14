@@ -32,6 +32,5 @@ export default CameraNavigator = createStackNavigator(
   },
   {
     initialRouteName: 'OpenCamera',
-    backBehavior: 'none'
   },
 );

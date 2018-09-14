@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -92,7 +92,10 @@ export default class RentableScreen extends React.Component {
               color='#6de3dc'
               size={40}
               onPress={() => {
-                NavigationService.navigate('Home');
+                this.props.navigation.dispatch(StackActions.reset({
+                  index: 0,
+                  actions: [NavigationActions.navigate({ routeName: 'OpenCamera' })],
+                }));
               }}
             />
           </View>
