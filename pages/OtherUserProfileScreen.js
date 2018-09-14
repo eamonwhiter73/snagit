@@ -101,8 +101,8 @@ export default class RentableScreen extends React.Component {
               }}
             />
           </View>
-          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
-            <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.75}}>
+          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
+            <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
               <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
                 <Image
                   source={require('../assets/billythekid.jpg')}
@@ -137,18 +137,24 @@ export default class RentableScreen extends React.Component {
                 </View>
               </View>
             </View>
-            <View style={{justifyContent: 'center', alignItems: 'flex-start', flex: 1, backgroundColor: '#e6fffe', marginTop: Platform.OS === 'ios' ? 30 : 10}}>
-              <Text style={{fontSize: 16, fontWeight: '700', backgroundColor: '#e6fffe'}}>eamon.white</Text>
-              <TouchableOpacity
-                style = {styles.submitTouchHeader}
-                onPress={() => {}}
-              >
-                <Text style = {styles.submitText}>CONTACT</Text>
-              </TouchableOpacity>
+            <View style={{flexDirection: 'column', backgroundColor: '#e6fffe', marginTop: Platform.OS === 'ios' ? 30 : 10, flex: 0.55}}>
+              <View style={{flexDirection: 'row', flex: 0.5}}>
+                <View style={{flex: 0}}>
+                  <Text style={{fontSize: 16, fontWeight: '700'}}>
+                    eamon.white
+                  </Text>
+                  <TouchableOpacity
+                    style = {styles.submitTouchHeader}
+                    onPress={() => {}}
+                  >
+                    <Text style = {styles.submitText}>CONTACT</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
 
-          <View style={{backgroundColor: 'white'}, styles.description_container}>
+          <View style={{backgroundColor: 'white'}, styles.bio_container}>
             <View style={styles.small_container_description}>
               <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Bio:</Text>
               <Text style={{marginBottom: 10, marginLeft: 10}}>Hi, I like to rent things to make money, hit me up for stuff!.</Text>
@@ -217,16 +223,25 @@ const styles = StyleSheet.create ({
       borderColor: '#6de3dc',
       flex: 0.5
    },
+   bio_container: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+      backgroundColor: 'white',
+      width: Dimensions.get('window').width,
+      borderWidth: 1,
+      borderColor: '#6de3dc',
+      flex: 0.25
+   },
    submitText: {
     textAlign: 'center',
     backgroundColor: '#6de3dc',
     color: 'white',
     fontWeight: '700',
-    flex: 0.3,
     fontSize: 12,
-    paddingHorizontal: 5,
+    //paddingHorizontal: 5,
     borderRadius: 4,
-    borderWidth: 0
+    borderWidth: 0,
    },
    submitTouch: {
     flex: 0.15,
@@ -237,13 +252,12 @@ const styles = StyleSheet.create ({
     backgroundColor: '#6de3dc'
    },
    submitTouchHeader: {
-    flex: 0.5,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex:1,
     borderRadius: 4,
     borderWidth: 0,
-    backgroundColor: '#6de3dc'
+    backgroundColor: '#6de3dc',
+    justifyContent: 'center',
+    alignItems: 'center'
    }
 
 })

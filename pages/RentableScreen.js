@@ -11,16 +11,18 @@ export default class RentableScreen extends React.Component {
 
   constructor() {
     super();
+    this.state = {
+      opacity: 1,
+      backgroundColor: '#6de3dc',
+      rentButtonBackground: '#6de3dc'
+      //condition: 'poor',
+      //items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
+    };
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
   }
 
   static navigatorStyle = { navBarHidden: true };
-
-  state = {
-    //condition: 'poor',
-    //items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
-  };
 
   componentDidMount() {
     // The user is an Object, so they're logged in
@@ -74,11 +76,17 @@ export default class RentableScreen extends React.Component {
   }
 
   navigateToOtherUserProfile = () => {
+    this.setState({opacity: 0.5});
     console.log('image being pressed');
-    this.props.navigation.dispatch(StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'OtherUserProfile' })],
-    }));
+    
+    setTimeout(() => {
+      this.setState({opacity: 1});
+
+      this.props.navigation.dispatch(StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: 'OtherUserProfile' })],
+      }));
+    }, 1)
   }
 
   render() {
@@ -97,13 +105,19 @@ export default class RentableScreen extends React.Component {
           <View style={{backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? 15 : 10, top: Platform.OS === 'ios' ? 25 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5}}>
             <SimpleLineIcons
               name='close'
-              color='#6de3dc'
+              color={this.state.backgroundColor}
               size={40}
               onPress={() => {
-                this.props.navigation.navigate('OpenCamera', { param: 'fromRentableScreen'});
+                this.setState({backgroundColor: '#94ebe6'});
+
+                setTimeout(() => {
+                  this.setState({backgroundColor: '#6de3dc'});
+                  this.props.navigation.navigate('OpenCamera', { param: 'fromRentableScreen'});
                 
 
-                NavigationService.navigate('Home');
+                  NavigationService.navigate('Home');
+                }, 1)
+                
               }}
             />
           </View>
@@ -116,10 +130,10 @@ export default class RentableScreen extends React.Component {
               <Text style={{fontSize: 18, fontWeight: '700', backgroundColor: '#e6fffe', marginTop: 5}}>Rowboat</Text>
             </View>
           </View>
-          <View style={{flexDirection: 'column', flex: 0.25, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{flexDirection: 'column', flex: 0.3, justifyContent: 'center', alignItems: 'center'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
               <View style={styles.condition_container}>
-                <View style={{paddingBottom: 1}, styles.small_container}>
+                <View style={{paddingBottom: 1}, styles.small_container_left}>
                   <Text style={{marginBottom: 0}}>Condition:</Text>
                   <Text style={{color: '#6de3dc', fontWeight: '700', fontSize: 28}}>Fair</Text>
                 </View>
@@ -136,36 +150,58 @@ export default class RentableScreen extends React.Component {
               <Text style={{marginBottom: 10, marginLeft: 10}}>This is a nice rowboat. It is worth $600.</Text>
             </View>
           </View>
-          <View style={{/*width: Dimensions.get('window').width,*/flex: 0.53, flexDirection: 'row', backgroundColor: '#e6fffe'}}>
+          <View style={{/*width: Dimensions.get('window').width,*/flex: Platform.OS === 'ios' ? 0.6 : 0.58, flexDirection: 'row', backgroundColor: '#e6fffe'}}>
             <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
-              <TouchableHighlight onPress={() => this.navigateToOtherUserProfile()}>
+              <TouchableWithoutFeedback onPress={() => this.navigateToOtherUserProfile()}>
                 <Image
                   source={require('../assets/rowboat.jpg')}
-                  style={{height: 90, width: 90, marginTop: 10, borderColor: '#6de3dc', borderWidth: 5, borderRadius: 45}}
-                  
+                  style={{height: 90, width: 90, marginTop: Platform.OS === 'ios' ? 8 : 5, borderColor: '#6de3dc', borderWidth: 5, borderRadius: 45, marginBottom: 5}}
+                  opacity={this.state.opacity}
                 />
-              </TouchableHighlight>
+              </TouchableWithoutFeedback>
               <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
                 <Text style={{fontWeight: '700'}}>Eamon White</Text>
               </View>
             </View>
-            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
+            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center', backgroundColor: '#d8fffd'}}>
               <SimpleLineIcons
                 name='location-pin'
                 size={90}
-                style={{marginTop: 10}}
+                style={{marginTop: Platform.OS === 'ios' ? 6 : 5, marginBottom: 5}}
                 color='#6de3dc'
               />
               <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                <Text style={{marginTop: -10, fontWeight: '700'}}>3.2 mi.</Text>
+                <Text style={{marginTop: Platform.OS === 'ios' ? -11 : 0, fontWeight: '700'}}>3.2 mi.</Text>
               </View>
             </View>
           </View>
           <TouchableOpacity
-            style = {styles.submitTouch}
-            onPress={() => {}}
+            activeOpacity={1}
+            style = {{backgroundColor: this.state.rentButtonBackground,
+                      flex: 0.2,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: Dimensions.get('window').width}}
+            onPress={() => {
+              this.setState({rentButtonBackground: '#94ebe6'});
+
+              setTimeout(() => {
+                this.setState({rentButtonBackground: '#6de3dc'});
+                
+                /*this.props.navigation.navigate('OpenCamera', { param: 'fromRentableScreen'});
+              
+
+                NavigationService.navigate('Home');*/
+              }, 1)
+            }}
           >
-            <Text style = {styles.submitText}>RENT</Text>
+            <Text style = {{backgroundColor: this.state.rentButtonBackground, 
+                            textAlign: 'center',
+                            color: 'white',
+                            fontWeight: '700'}}>
+              RENT
+            </Text>
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
@@ -173,7 +209,7 @@ export default class RentableScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
    container: {
       flexDirection: 'column',
       justifyContent: 'space-between',
@@ -181,12 +217,21 @@ const styles = StyleSheet.create ({
       backgroundColor: 'white',
       flex: 1,
    },
+   small_container_left: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      width: Dimensions.get('window').width * 0.5,
+      borderRightColor: '#6de3dc',
+      borderRightWidth: 1,
+   },
    small_container: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
-      width: Dimensions.get('window').width * 0.5
+      width: Dimensions.get('window').width * 0.5,
    },
    small_container_description: {
       flexDirection: 'column',
@@ -213,18 +258,10 @@ const styles = StyleSheet.create ({
       flex: 0.5
    },
    submitText: {
-    textAlign: 'center',
-    backgroundColor: '#6de3dc',
-    color: 'white',
-    fontWeight: '700',
+    
    },
    submitTouch: {
-    flex: 0.15,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: Dimensions.get('window').width,
-    backgroundColor: '#6de3dc'
+    
    }
 
 })

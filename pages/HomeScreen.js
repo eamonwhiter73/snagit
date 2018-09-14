@@ -24,7 +24,8 @@ export default class HomeScreen extends React.Component {
 
   state = {
     searchText: "",
-    items: [{key: 'item', name: 'Rowboat'}]
+    items: [{key: 'item', name: 'Rowboat'}],
+    backgroundColor: '#e6fffe'
   };
 
   componentDidMount() {
@@ -92,13 +93,18 @@ export default class HomeScreen extends React.Component {
         })
      )*/
 
-     this.props.navigation.dispatch(
+     this.setState({backgroundColor: '#d8fffd'});
+
+     setTimeout(() => {
+      this.props.navigation.dispatch(
         NavigationActions.navigate({
           routeName: 'Rent',
           params: { param: 'RentTab' },
         })
       );
 
+      this.setState({backgroundColor: '#e6fffe'});
+     }, 1)
      /*const { state } = this.props.navigation;
      console.log(state);
      const keyToGoTo = state.routes[2].key
@@ -141,7 +147,7 @@ export default class HomeScreen extends React.Component {
       <TouchableWithoutFeedback onPress={this.navigateToRentable}>
         <View style={{flex: 1,
                       flexDirection: 'row',
-                      backgroundColor: '#e6fffe',
+                      backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
                       paddingBottom: 10,
                       marginTop: 10,
                       borderColor: '#6de3dc',
@@ -151,14 +157,16 @@ export default class HomeScreen extends React.Component {
                       borderRadius: 4
                     }}
         >
+        <TouchableWithoutFeedback onPress={this.navigateToRentable}>
           <Image
             source={require('../assets/rowboat.jpg')}
             style={{height: 95, width: 95, marginTop: 10, marginLeft: 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
           />
+        </TouchableWithoutFeedback>
           <View style={{flexDirection: 'column', flex: 1}}>
             <View style={{alignItems: 'center', marginBottom: 10}}>
               <Text style={{marginTop: 10, flex: 1, fontSize: 18, fontWeight: '700'}}
-                  onPress={() => {}}
+                    onPress={this.navigateToRentable}
               >
                 {item.name} {/*distance/condition/price*/}
               </Text>
@@ -172,31 +180,31 @@ export default class HomeScreen extends React.Component {
                     Dist. (mi.)
                   </Text>
                   <Text style={{flex: 1, fontSize: 24, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
-                      onPress={() => {}}
+                        onPress={this.navigateToRentable}
                   >
                     3.2
                   </Text>
                 </View>
                 <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
                   <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', textAlign: 'center'}}
-                      onPress={() => {}}
+                        onPress={this.navigateToRentable}
                   >
                     Cond.
                   </Text>
                   <Text style={{flex: 1, fontSize: 24, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                      onPress={() => {}}
+                        onPress={this.navigateToRentable}
                   >
                     Fair
                   </Text>
                 </View>
                 <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
                   <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 14, fontWeight: '700', textAlign: 'center'}}
-                      onPress={() => {}}
+                        onPress={this.navigateToRentable}
                   >
                     Price
                   </Text>
                   <Text style={{flex: 1, fontSize: 24, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                      onPress={() => {}}
+                        onPress={this.navigateToRentable}
                   >
                     $25
                   </Text>
