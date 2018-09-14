@@ -96,7 +96,7 @@ export default class RentableScreen extends React.Component {
               onPress={() => {
                 this.props.navigation.dispatch(StackActions.reset({
                   index: 0,
-                  actions: [NavigationActions.navigate({ routeName: 'OpenCamera' })],
+                  actions: [NavigationActions.navigate({ routeName: 'Rentable' })],
                 }));
               }}
             />
