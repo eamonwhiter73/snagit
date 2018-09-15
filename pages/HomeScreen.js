@@ -1,8 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, Platform, FlatList, Image, Dimensions} from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert, Platform, FlatList, Image, Dimensions, ImageSource} from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import firebase from 'react-native-firebase';
 import { StackActions, NavigationActions } from 'react-navigation';
+import ResponsiveImage from 'react-native-responsive-image';
+import FitImage from 'react-native-fit-image';
+
 
 export const toRentable = () => {
   const resetToRentable = NavigationActions.navigate({
@@ -10,6 +13,11 @@ export const toRentable = () => {
       routeName: 'Rentable'
   });
   return resetToRentable;
+}
+
+export interface ISize {
+  width: number;
+  height: number;
 }
 
 export default class HomeScreen extends React.Component {
@@ -24,8 +32,10 @@ export default class HomeScreen extends React.Component {
 
   state = {
     searchText: "",
-    items: [{key: 'item', name: 'Rowboat'}],
-    backgroundColor: '#e6fffe'
+    items: [{key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item2', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item9', dist: '3.2 mi', condition: 'Fair', rate: '$25'}],
+    backgroundColor: '#e6fffe',
+    width: 150,
+    height: 150
   };
 
   componentDidMount() {
@@ -143,127 +153,69 @@ export default class HomeScreen extends React.Component {
   }
 
   renderListItems = (item) => {
-    return (
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
-        <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={{flex: 1,
-                        flexDirection: 'column',
-                        backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
-                        paddingBottom: 5,
-                        marginTop: 10,
-                        borderColor: '#6de3dc',
-                        borderBottomWidth: 2,
-                        borderStyle: 'solid',
-                        marginHorizontal: 10,
-                        borderRadius: 4
-                      }}
-          >
-            <Image
-              source={require('../assets/rowboat.jpg')}
-              style={{flex:1, width: undefined, height: 150, borderColor: '#6de3dc'}}
-              resizeMode='cover'
-            />
-            <View style={{flexDirection: 'row', /*flex: 0, justifyContent: 'center', alignItems: 'center',*/ marginTop: 5}}>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
-                    onPress={() => {}}
-                >
-                  Dist.
-                </Text>
-                <Text style={{flex: 1, fontSize: 14, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
-                      onPress={this.navigateToRentable}
-                >
-                  3.2 mi
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
-                      onPress={this.navigateToRentable}
-                >
-                  Cond.
-                </Text>
-                <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                      onPress={this.navigateToRentable}
-                >
-                  Fair
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
-                      onPress={this.navigateToRentable}
-                >
-                  Rate
-                </Text>
-                <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                      onPress={this.navigateToRentable}
-                >
-                  $25
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>              
-        <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={{flex: 1,
-                        flexDirection: 'column',
-                        backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
-                        paddingBottom: 5,
-                        marginTop: 10,
-                        borderColor: '#6de3dc',
-                        borderBottomWidth: 2,
-                        borderStyle: 'solid',
-                        marginHorizontal: 10,
-                        borderRadius: 4
-                      }}
-          >
-            <Image
-              source={require('../assets/rowboat.jpg')}
-              style={{flex:1, width: undefined, height: 150, borderColor: '#6de3dc'}}
-              resizeMode='cover'
-            />
-            
-            <View style={{flexDirection: 'row', /*flex: 0, justifyContent: 'center', alignItems: 'center',*/ marginTop: 5}}>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
-                    onPress={() => {}}
-                >
-                  Dist.
-                </Text>
-                <Text style={{flex: 1, fontSize: 14, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
-                      onPress={this.navigateToRentable}
-                >
-                  3.2 mi
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
-                      onPress={this.navigateToRentable}
-                >
-                  Cond.
-                </Text>
-                <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                      onPress={this.navigateToRentable}
-                >
-                  Fair
-                </Text>
-              </View>
-              <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
-                      onPress={this.navigateToRentable}
-                >
-                  Rate
-                </Text>
-                <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                      onPress={this.navigateToRentable}
-                >
-                  $25
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>   
-      </View>
-    )
+
+    const uri = 'http://snag.eamondev.com/assets/rowboat.png';
+
+      return (
+            <View style={{
+                          flexDirection: 'column',
+                          backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
+                          paddingBottom: 5,
+                          marginTop: 5,
+                          borderColor: '#6de3dc',
+                          borderBottomWidth: 2,
+                          borderStyle: 'solid',
+                          /*marginHorizontal: 10,*/
+                          borderRadius: 4,
+                          overflow: 'hidden',
+                          flex: 0.5,
+                          marginLeft: 5
+                        }}
+            >
+              <FitImage
+                source={{uri: 'http://snag.eamondev.com/assets/rowboat.png'}}
+                resizeMethod='resize'
+              />
+              <View style={{flexDirection: 'row', /*flex: 0, justifyContent: 'center', alignItems: 'center',*/ marginTop: 5}}>
+                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
+                      onPress={() => {}}
+                  >
+                    Dist.
+                  </Text>
+                  <Text style={{flex: 1, fontSize: 14, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
+                        onPress={this.navigateToRentable}
+                  >
+                    {item.dist}
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
+                        onPress={this.navigateToRentable}
+                  >
+                    Cond.
+                  </Text>
+                  <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                        onPress={this.navigateToRentable}
+                  >
+                    {item.condition}
+                  </Text>
+                </View>
+                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
+                        onPress={this.navigateToRentable}
+                  >
+                    Rate
+                  </Text>
+                  <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                        onPress={this.navigateToRentable}
+                  >
+                    {item.rate}
+                  </Text>
+                </View>
+              </View>  
+            </View> 
+          )
   }
 
   render() {
@@ -283,7 +235,8 @@ export default class HomeScreen extends React.Component {
                                 borderWidth: 1,
                                 borderColor: '#54e1d9',
                                 flex: 0.945,
-                                borderRadius: 4
+                                borderRadius: 4,
+                                marginBottom: 5
                               }}
               inputStyle={{backgroundColor: '#ffffff',
                            paddingTop: Platform.OS === 'android' ? 11 : 0,
@@ -298,6 +251,8 @@ export default class HomeScreen extends React.Component {
             style={{backgroundColor: '#fff'}}
             data={this.state.items}
             renderItem={({item}) => this.renderListItems(item)}
+            numColumns={2}
+            contentContainerStyle={{justifyContent: 'flex-end', paddingLeft: 5, paddingRight: 10, paddingBottom: 5}}
             //contentContainerStyle={{backgroundColor: '#1e4683'}}
           />
         </View>
