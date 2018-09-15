@@ -32,7 +32,16 @@ export default class HomeScreen extends React.Component {
 
   state = {
     searchText: "",
-    items: [{key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item2', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'}, {key: 'item9', dist: '3.2 mi', condition: 'Fair', rate: '$25'}],
+    items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item9', dist: '3.2 mi', condition: 'Fair', rate: '$25'}],
+
     backgroundColor: '#e6fffe',
     width: 150,
     height: 150
@@ -156,66 +165,67 @@ export default class HomeScreen extends React.Component {
 
     const uri = 'http://snag.eamondev.com/assets/rowboat.png';
 
-      return (
-            <View style={{
-                          flexDirection: 'column',
-                          backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
-                          paddingBottom: 5,
-                          marginTop: 5,
-                          borderColor: '#6de3dc',
-                          borderBottomWidth: 2,
-                          borderStyle: 'solid',
-                          /*marginHorizontal: 10,*/
-                          borderRadius: 4,
-                          overflow: 'hidden',
-                          flex: 0.5,
-                          marginLeft: 5
-                        }}
+    return (
+      <View style={{
+                    flexDirection: 'column',
+                    backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
+                    paddingBottom: 5,
+                    marginTop: 5,
+                    borderColor: '#6de3dc',
+                    borderBottomWidth: 2,
+                    borderStyle: 'solid',
+                    /*marginHorizontal: 10,*/
+                    borderRadius: 4,
+                    overflow: 'hidden',
+                    flex: 0.5,
+                    marginLeft: 5
+                  }}
+      >
+        <FitImage
+          source={{uri: item.uri}}
+          style={styles.fitImageWithSize}
+          resizeMethod='auto'
+        />
+        <View style={{flexDirection: 'row', /*flex: 0, justifyContent: 'center', alignItems: 'center',*/ marginTop: 5}}>
+          <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+            <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
+                onPress={() => {}}
             >
-              <FitImage
-                source={{uri: 'http://snag.eamondev.com/assets/rowboat.png'}}
-                resizeMethod='resize'
-              />
-              <View style={{flexDirection: 'row', /*flex: 0, justifyContent: 'center', alignItems: 'center',*/ marginTop: 5}}>
-                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
-                      onPress={() => {}}
-                  >
-                    Dist.
-                  </Text>
-                  <Text style={{flex: 1, fontSize: 14, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
-                        onPress={this.navigateToRentable}
-                  >
-                    {item.dist}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
-                        onPress={this.navigateToRentable}
-                  >
-                    Cond.
-                  </Text>
-                  <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                        onPress={this.navigateToRentable}
-                  >
-                    {item.condition}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
-                  <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
-                        onPress={this.navigateToRentable}
-                  >
-                    Rate
-                  </Text>
-                  <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                        onPress={this.navigateToRentable}
-                  >
-                    {item.rate}
-                  </Text>
-                </View>
-              </View>  
-            </View> 
-          )
+              Dist.
+            </Text>
+            <Text style={{flex: 1, fontSize: 14, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
+                  onPress={this.navigateToRentable}
+            >
+              {item.dist}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+            <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
+                  onPress={this.navigateToRentable}
+            >
+              Cond.
+            </Text>
+            <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                  onPress={this.navigateToRentable}
+            >
+              {item.condition}
+            </Text>
+          </View>
+          <View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+            <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
+                  onPress={this.navigateToRentable}
+            >
+              Rate
+            </Text>
+            <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                  onPress={this.navigateToRentable}
+            >
+              {item.rate}
+            </Text>
+          </View>
+        </View>  
+      </View> 
+    )
   }
 
   render() {
@@ -251,8 +261,8 @@ export default class HomeScreen extends React.Component {
             style={{backgroundColor: '#fff'}}
             data={this.state.items}
             renderItem={({item}) => this.renderListItems(item)}
-            numColumns={2}
-            contentContainerStyle={{justifyContent: 'flex-end', paddingLeft: 5, paddingRight: 10, paddingBottom: 5}}
+            numColumns={3}
+            contentContainerStyle={{paddingLeft: 5, paddingRight: 10, paddingBottom: 5}}
             //contentContainerStyle={{backgroundColor: '#1e4683'}}
           />
         </View>
@@ -268,5 +278,8 @@ const styles = StyleSheet.create ({
       justifyContent: 'space-between',
       backgroundColor: '#fff',
       paddingTop: Platform.OS === 'android' ? 10 : 30,
+   },
+   fitImageWithSize: {
+      flex: 1
    },
 });
