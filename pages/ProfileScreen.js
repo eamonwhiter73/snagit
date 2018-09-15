@@ -83,7 +83,7 @@ export default class ProfileScreen extends React.Component {
           </View>
           <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
             <Image
-              source={require('../assets/billythekid.jpg')/*uri: base64Image*/}
+              source={require('../assets/billythekid2.jpg')/*uri: base64Image*/}
               style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 90}}
             />
           </View>

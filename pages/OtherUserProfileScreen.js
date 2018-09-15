@@ -105,7 +105,7 @@ export default class RentableScreen extends React.Component {
             <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
               <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
                 <Image
-                  source={require('../assets/billythekid.jpg')}
+                  source={require('../assets/billythekid2.jpg')}
                   style={{height: 90, width: 90, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 45}}
                 />
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 5}}>
