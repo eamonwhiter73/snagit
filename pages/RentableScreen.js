@@ -1,11 +1,12 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
+import { Animated, StyleSheet, Text, TextInput, View, ScrollView, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import NavigationService from '../services/NavigationService.js';
+import FitImage from 'react-native-fit-image';
 
 export default class RentableScreen extends React.Component {
 
@@ -101,8 +102,8 @@ export default class RentableScreen extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <View style={{backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? 15 : 10, top: Platform.OS === 'ios' ? 25 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5}}>
+        <ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between', /*alignItems: 'center'*/ paddingBottom: 10}}>
+          <View style={{flex: 1, backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? -8 : 0, top: Platform.OS === 'ios' ? 0 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5, borderRadius: 8, borderWidth: 0}}>
             <SimpleLineIcons
               name='close'
               color={this.state.backgroundColor}
@@ -119,70 +120,24 @@ export default class RentableScreen extends React.Component {
                 }, 1)
                 
               }}
+              style={{marginRight: 17, marginLeft: 10, marginBottom: 4, marginTop: 14}}
             />
           </View>
-          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
-            <Image
-              source={require('../assets/rowboat.jpg')}
-              style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
+          <View style={{flex: 1, height: Dimensions.get('window').height/2, width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', /*borderBottomColor: '#6de3dc', borderBottomWidth: 1,*/ marginTop: Platform.OS === 'ios' ? 10 : 5}}>
+            <FitImage
+              source={{uri: 'http://snag.eamondev.com/assets/rowboat.png'}}
+              style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}
             />
-            <View style={styles.small_container, {backgroundColor: '#e6fffe'}}>
-              <Text style={{fontSize: 18, fontWeight: '700', backgroundColor: '#e6fffe', marginTop: 5}}>Rowboat</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'column', flex: 0.3, justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
-              <View style={styles.condition_container}>
-                <View style={{paddingBottom: 1}, styles.small_container_left}>
-                  <Text style={{marginBottom: 0}}>Condition:</Text>
-                  <Text style={{color: '#6de3dc', fontWeight: '700', fontSize: 28}}>Fair</Text>
-                </View>
-                <View style={styles.small_container}>
-                  <Text style={{marginBottom: 0}}>Price (per day):</Text>
-                  <Text style={{color: '#6de3dc', fontWeight: '700', fontSize: 28}}>$25</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={{backgroundColor: 'white'}, styles.description_container}>
-            <View style={styles.small_container_description}>
-              <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Description:</Text>
-              <Text style={{marginBottom: 10, marginLeft: 10}}>This is a nice rowboat. It is worth $600.</Text>
-            </View>
-          </View>
-          <View style={{/*width: Dimensions.get('window').width,*/flex: Platform.OS === 'ios' ? 0.6 : 0.58, flexDirection: 'row', backgroundColor: '#e6fffe'}}>
-            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
-              <TouchableWithoutFeedback onPress={() => this.navigateToOtherUserProfile()}>
-                <Image
-                  source={require('../assets/rowboat.jpg')}
-                  style={{height: 90, width: 90, marginTop: Platform.OS === 'ios' ? 8 : 5, borderColor: '#6de3dc', borderWidth: 5, borderRadius: 45, marginBottom: 5}}
-                  opacity={this.state.opacity}
-                />
-              </TouchableWithoutFeedback>
-              <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                <Text style={{fontWeight: '700'}}>Eamon White</Text>
-              </View>
-            </View>
-            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center', backgroundColor: '#d8fffd'}}>
-              <SimpleLineIcons
-                name='location-pin'
-                size={90}
-                style={{marginTop: Platform.OS === 'ios' ? 6 : 5, marginBottom: 5}}
-                color='#6de3dc'
-              />
-              <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                <Text style={{marginTop: Platform.OS === 'ios' ? -11 : 0, fontWeight: '700'}}>3.2 mi.</Text>
-              </View>
-            </View>
           </View>
           <TouchableOpacity
             activeOpacity={1}
             style = {{backgroundColor: this.state.rentButtonBackground,
-                      flex: 0.2,
+                      flex: 1,
                       flexDirection: 'row',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      width: Dimensions.get('window').width}}
+                      //width: Dimensions.get('window').width,
+                      height: 40}}
             onPress={() => {
               this.setState({rentButtonBackground: '#94ebe6'});
 
@@ -203,7 +158,52 @@ export default class RentableScreen extends React.Component {
               RENT
             </Text>
           </TouchableOpacity>
-        </View>
+          <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
+              <View style={styles.condition_container}>
+                <View style={{paddingBottom: 1}, styles.small_container_left}>
+                  <Text style={{marginBottom: 0}}>Condition:</Text>
+                  <Text style={{color: '#6de3dc', fontWeight: '700', fontSize: 28}}>Fair</Text>
+                </View>
+                <View style={styles.small_container}>
+                  <Text style={{marginBottom: 0}}>Price (per day):</Text>
+                  <Text style={{color: '#6de3dc', fontWeight: '700', fontSize: 28}}>$25</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={{backgroundColor: 'white'}, styles.description_container}>
+            <View style={styles.small_container_description}>
+              <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Description:</Text>
+              <Text style={{marginBottom: 10, marginLeft: 10}}>This is a nice rowboat. It is worth $600. This is a long description. This is a nice rowboat. It is worth $600. This is a long description. This is a nice rowboat. It is worth $600. This is a long description. This is a nice rowboat. It is worth $600. This is a long description.</Text>
+            </View>
+          </View>
+          <View style={{flex: 1, /*width: Dimensions.get('window').width,*//*flex: Platform.OS === 'ios' ? 0.68 : 0.58,*/ flexDirection: 'row', backgroundColor: '#e6fffe'}}>
+            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
+              <TouchableWithoutFeedback onPress={() => this.navigateToOtherUserProfile()}>
+                <Image
+                  source={{uri: 'http://snag.eamondev.com/assets/billythekid2.jpg'}}
+                  style={{height: 70, width: 70, marginTop: Platform.OS === 'ios' ? 8 : 5, borderColor: '#6de3dc', borderWidth: 5, borderRadius: 35, marginBottom: 5}}
+                  opacity={this.state.opacity}
+                />
+              </TouchableWithoutFeedback>
+              <View style={{justifyContent: 'center', alignItems: 'center', flex: 1, marginBottom: 4}}>
+                <Text style={{fontWeight: '700'}}>Eamon White</Text>
+              </View>
+            </View>
+            <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 1, alignItems: 'center', backgroundColor: '#d8fffd'}}>
+              <SimpleLineIcons
+                name='location-pin'
+                size={70}
+                style={{marginTop: Platform.OS === 'ios' ? 6 : 5, marginBottom: 5}}
+                color='#6de3dc'
+              />
+              <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                <Text style={{marginTop: Platform.OS === 'ios' ? -8 : 0, fontWeight: '700', marginBottom: 4}}>3.2 mi.</Text>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     );
   }
@@ -212,10 +212,9 @@ export default class RentableScreen extends React.Component {
 const styles = StyleSheet.create({
    container: {
       flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: 'white',
-      flex: 1,
+      backgroundColor: '#e6fffe',
+      paddingTop: 10,
+      //flex: 1,
    },
    small_container_left: {
       flexDirection: 'column',
@@ -225,6 +224,7 @@ const styles = StyleSheet.create({
       width: Dimensions.get('window').width * 0.5,
       borderRightColor: '#6de3dc',
       borderRightWidth: 1,
+      padding: 10
    },
    small_container: {
       flexDirection: 'column',
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
    },
    condition_container: {
       flexDirection: 'row',
-      /*flex: 1,*/
+      flex: 1,
       justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: 'white',
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
       width: Dimensions.get('window').width,
       borderWidth: 1,
       borderColor: '#6de3dc',
-      flex: 0.5
+      flex: 1
    },
    submitText: {
     

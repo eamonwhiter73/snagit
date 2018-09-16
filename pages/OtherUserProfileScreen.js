@@ -1,11 +1,13 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
+import { Animated, StyleSheet, FlatList, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import autobind from 'autobind-decorator';
+import FitImage from 'react-native-fit-image';
 
 import NavigationService from '../services/NavigationService.js';
 
@@ -20,8 +22,16 @@ export default class RentableScreen extends React.Component {
   static navigatorStyle = { navBarHidden: true };
 
   state = {
-    //condition: 'poor',
-    //items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
+    items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$250'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '50 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'}
+           ],
+    backgroundColor: '#e6fffe',
   };
 
   componentDidMount() {
@@ -75,6 +85,135 @@ export default class RentableScreen extends React.Component {
     //this.authSubscription();
   }
 
+  navigateToRentable = () => {
+    console.log('in navigateToRentable');
+
+    /*this.props
+     .navigation
+     .dispatch(
+        NavigationActions.navigate({
+          key: 'renttab',
+          routeName: 'RentTab',
+          action: toRentable
+        })
+     )*/
+
+     this.setState({backgroundColor: '#d8fffd'});
+
+     setTimeout(() => {
+      this.props.navigation.dispatch(
+        NavigationActions.navigate({
+          routeName: 'Rent',
+          params: { param: 'RentTab' },
+        })
+      );
+
+      this.setState({backgroundColor: '#e6fffe'});
+     }, 1)
+     /*const { state } = this.props.navigation;
+     console.log(state);
+     const keyToGoTo = state.routes[2].key
+
+     this.props.navigation.dispatch(
+        StackActions.reset({
+          index: 0,
+          key: keyToGoTo,
+          actions: [
+            NavigationActions.navigate({
+              routeName: 'Rentable',
+            })
+          ]
+        })
+        
+      );*/
+
+
+    /*const navigateAction = NavigationActions.navigate({
+      routeName: 'Rent',
+
+      params: {},
+
+      action: NavigationActions.navigate({ routeName: 'Rentable' }),
+    });
+
+    this.props.navigation.dispatch(navigateAction);*/
+   
+    /*this.props.navigation.dispatch(NavigationActions.navigate({
+      routeName: 'Rent',
+      action: NavigationActions.navigate({
+        routeName: 'Rentable'
+      })
+    }));
+    */
+  }
+
+  @autobind
+  renderListItems({item, index}) {
+    return (
+      <TouchableOpacity onPress={this.navigateToRentable}>
+        <View style={{
+                    flexDirection: 'column',
+                    backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
+                    paddingBottom: 5,
+                    marginTop: 5,
+                    borderColor: '#6de3dc',
+                    borderBottomWidth: 2,
+                    borderStyle: 'solid',
+                    /*marginHorizontal: 10,*/
+                    borderRadius: 4,
+                    overflow: 'hidden',
+                    flex: 0.5,
+                    marginLeft: 5
+                  }}
+        >
+          <FitImage
+            source={{uri: item.uri}}
+            style={styles.fitImageWithSize}
+            resizeMethod='resize'
+          />
+          <View style={{flexDirection: 'row', /*flex: 0, justifyContent: 'center', alignItems: 'center',*/ marginTop: 5}}>
+            <View style={{flexDirection: 'column', flex: 0.5, justifyContent: 'space-between'}}>
+              <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 9, fontWeight: '700', marginLeft: 10, textAlign: 'center'}}
+                  onPress={() => {}}
+              >
+                Dist.
+              </Text>
+              <Text style={{flex: 1, fontSize: 10, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
+                    onPress={this.navigateToRentable}
+              >
+                {item.dist}
+              </Text>
+            </View>
+            {/*<View style={{flexDirection: 'column', flex: 0.33, justifyContent: 'space-between'}}>
+              <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
+                    onPress={this.navigateToRentable}
+              >
+                Cond.
+              </Text>
+              <Text style={{flex: 1, fontSize: 14, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                    onPress={this.navigateToRentable}
+              >
+                {item.condition}
+              </Text>
+            </View>*/}
+            <View style={{flexDirection: 'column', flex: 0.5, justifyContent: 'space-between'}}>
+              <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 9, fontWeight: '700', textAlign: 'center'}}
+                    onPress={this.navigateToRentable}
+              >
+                Rate
+              </Text>
+              <Text style={{flex: 1, fontSize: 10, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
+                    onPress={this.navigateToRentable}
+              >
+                {item.rate}
+              </Text>
+            </View>
+          </View>  
+        </View> 
+      </TouchableOpacity>
+    );
+  }
+
   render() {
     var base64Image = '';
 
@@ -101,8 +240,8 @@ export default class RentableScreen extends React.Component {
               }}
             />
           </View>
-          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
-            <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
+          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
+            <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.33}}>
               <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
                 <Image
                   source={require('../assets/billythekid2.jpg')}
@@ -157,17 +296,49 @@ export default class RentableScreen extends React.Component {
           <View style={{backgroundColor: 'white'}, styles.bio_container}>
             <View style={styles.small_container_description}>
               <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Bio:</Text>
-              <Text style={{marginBottom: 10, marginLeft: 10}}>Hi, I like to rent things to make money, hit me up for stuff!.</Text>
+              <Text style={{marginBottom: 10, marginLeft: 10}}>Hi, I like to rent things to make money, hit me up for stuff!</Text>
             </View>
           </View>
           <View style={{/*width: Dimensions.get('window').width,*/flex: 0.53, flexDirection: 'row', backgroundColor: '#e6fffe'}}>
             <View style={styles.small_container_description}>
               <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Renting:</Text>
+              <MultiSelectList
+                style={{backgroundColor: '#ffe4c4'}}
+                data={this.state.items}
+                renderItem={this.renderListItems}
+                numColumns={4}
+                contentContainerStyle={{}}
+                onEndReachedThreshold={0.5}
+                maxToRenderPerBatch={4}
+                initialNumToRender={4}
+                ListHeaderComponent={this.renderHeader}
+                getItemLayout={(data, index) => (
+                  {length: Dimensions.get('window').height/4, offset: Dimensions.get('window').height/4 * index, index}
+                )}
+                backgroundColor={this.state.backgroundColor}
+                //contentContainerStyle={{backgroundColor: '#1e4683'}}
+              />
             </View>
           </View>
           <View style={{backgroundColor: 'white'}, styles.description_container}>
             <View style={styles.small_container_description}>
               <Text style={{marginBottom: 5, marginLeft: 10, marginTop: 10, textDecorationLine: 'underline'}}>Past Rentals:</Text>
+              <MultiSelectList
+                style={{backgroundColor: '#ffe4c4'}}
+                data={this.state.items}
+                renderItem={this.renderListItems}
+                numColumns={4}
+                contentContainerStyle={{}}
+                onEndReachedThreshold={0.5}
+                maxToRenderPerBatch={4}
+                initialNumToRender={4}
+                ListHeaderComponent={this.renderHeader}
+                getItemLayout={(data, index) => (
+                  {length: Dimensions.get('window').height/4, offset: Dimensions.get('window').height/4 * index, index}
+                )}
+                backgroundColor={this.state.backgroundColor}
+                //contentContainerStyle={{backgroundColor: '#1e4683'}}
+              />
             </View>
           </View>
         </View>
@@ -219,8 +390,6 @@ const styles = StyleSheet.create ({
       alignItems: 'flex-start',
       backgroundColor: 'white',
       width: Dimensions.get('window').width,
-      borderWidth: 1,
-      borderColor: '#6de3dc',
       flex: 0.5
    },
    bio_container: {
@@ -229,8 +398,6 @@ const styles = StyleSheet.create ({
       alignItems: 'flex-start',
       backgroundColor: 'white',
       width: Dimensions.get('window').width,
-      borderWidth: 1,
-      borderColor: '#6de3dc',
       flex: 0.25
    },
    submitText: {
@@ -258,6 +425,34 @@ const styles = StyleSheet.create ({
     backgroundColor: '#6de3dc',
     justifyContent: 'center',
     alignItems: 'center'
-   }
-
+   },
+   fitImageWithSize: {
+      width: Dimensions.get('window').width/4 - 6.25,
+      height: Dimensions.get('window').height/8
+   },
 })
+
+//DUBLICATE CODE!!!!!
+class MultiSelectList extends React.PureComponent {
+  state = {selected: (new Map(): Map<string, boolean>)};
+
+  _keyExtractor = (item, index) => item.key;
+
+  render() {
+    return (
+      <FlatList
+        data={this.props.data}
+        extraData={this.state}
+        keyExtractor={this._keyExtractor}
+        renderItem={this.props.renderItem}
+        numColumns={this.props.numColumns}
+        contentContainerStyle={this.props.contentContainerStyle}
+        ListHeaderComponent={this.props.ListHeaderComponent}
+        //stickyHeaderIndices={[0]}
+        getItemLayout={this.props.getItemLayout}
+        onEndReachedThreshold={this.props.onEndReachedThreshold}
+        removeClippedSubviews={false}
+      />
+    );
+  }
+}

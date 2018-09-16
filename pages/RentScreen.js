@@ -1,11 +1,12 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
+import { Animated, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import NavigationService from '../services/NavigationService';
+import FitImage from 'react-native-fit-image';
 
 
 export default class RentScreen extends React.Component {
@@ -19,11 +20,20 @@ export default class RentScreen extends React.Component {
   static navigatorStyle = { navBarHidden: true };
 
   state = {
+    yPosition: new Animated.Value(0),  // Initial value for opacity: 0
+    //fadeAnim: new Animated.Value(1),  // Initial value for opacity: 0
+    backgroundColor: '#6de3dc',
     condition: 'poor',
     items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
   };
 
   componentDidMount() {
+    Keyboard.addListener('keyboardWillHide', () => {
+      Animated.timing(this.state.yPosition, {
+        toValue: 0,
+        duration: 1,
+      }).start();
+    })
     // The user is an Object, so they're logged in
     /*if (!this.state.user) {
       const { navigate } = this.props.navigation;
@@ -74,6 +84,46 @@ export default class RentScreen extends React.Component {
     //this.authSubscription();
   }
 
+  animateUp = () => {
+    console.log("animateUp");
+
+    Animated.timing(this.state.yPosition, {
+        toValue: -120,
+        duration: 300,
+    }).start();
+
+    /*Animated.timing(this.state.fadeAnim, {
+        toValue: 0,
+        duration: 1,
+    }).start();*/
+  }
+
+  submitEdit = () => {
+    //const { navigate } = this.props.navigation;
+
+    /*Animated.timing(this.state.fadeAnim, {
+      toValue: 1,
+      duration: 1,
+    }).start();*/
+
+    Animated.timing(this.state.yPosition, {
+      toValue: 0,
+      duration: 1,
+    }).start();
+
+    /*if(this.state.email == "") {
+      Alert.alert("Please enter a valid email address, if you do not have an account please select the 'Sign Up' link below");
+    }
+    else {
+      firebase.auth().signInAndRetrieveDataWithEmailAndPassword(this.state.email, this.state.password).then(() => {
+        navigate('Inventory', { mode: 'fromLogIn' });
+      }).catch(err => {
+        Alert.alert(err.message);
+      });
+    }*/
+  }
+
+
   render() {
     var base64Image = '';
 
@@ -85,53 +135,71 @@ export default class RentScreen extends React.Component {
     }
 
     return (
+      <Animated.View style={{alignItems: 'center', marginTop: this.state.yPosition, position: 'relative'}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <View style={{backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? 15 : 10, top: Platform.OS === 'ios' ? 25 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5}}>
+        <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center',}}>
+          <View style={{flex: 1, backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? -8 : 0, top: Platform.OS === 'ios' ? 10 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5, borderRadius: 8, borderWidth: 0}}>
             <SimpleLineIcons
               name='close'
-              color='#6de3dc'
+              color={this.state.backgroundColor}
               size={40}
               onPress={() => {
+                this.setState({backgroundColor: '#94ebe6'});
 
-                this.props.navigation.dispatch(StackActions.reset({
-                  index: 0,
-                  key: null,
-                  actions: [NavigationActions.navigate({ routeName: 'OpenCamera' })],
-                }));
+                setTimeout(() => {
+                  this.setState({backgroundColor: '#6de3dc'});
+                  this.props.navigation.navigate('OpenCamera', { param: 'fromRentableScreen'});
+                
 
-                //NavigationService.navigate('Home');
+                  NavigationService.navigate('Home');
+                }, 1)
+                
               }}
+              style={{marginRight: 17, marginLeft: 10, marginBottom: 4, marginTop: 14}}
             />
           </View>
-          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
-            <Image
+          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
+            <FitImage
               source={{uri: base64Image}}
-              style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 4}}
+              style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width, marginTop: Platform.OS === 'ios' ? 20 : 10, borderColor: '#6de3dc', borderWidth: 0, borderRadius: 4}}
             />
           </View>
-          <View style={styles.small_container}>
-            <Text style={{marginBottom: 5}}>Item Name:</Text>
-            <TextInput
-              style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-              onChangeText={(text) => this.setState({item_name: text})}
-              value={this.state.item_name}
-              placeholder="ex. rowboat"
-            />
+          <View style={styles.small_container_top}>
+            <View style={styles.small_container_nowidth, {backgroundColor: 'fff',}}>
+              <Text style={{marginBottom: 5, textAlign: 'center'}}>Item Name:</Text>
+              <TextInput
+                style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                onChangeText={(text) => this.setState({item_name: text})}
+                value={this.state.item_name}
+                placeholder="ex. rowboat"
+                onFocus={this.animateUp}
+              />
+            </View>
+            <View style={styles.small_container, {backgroundColor: '#fff',}}>
+              <Text style={{marginBottom: 5, textAlign: 'center'}}>Price (per day):</Text>
+              <TextInput
+                style={{width: 120, height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                onChangeText={(text) => this.setState({price: text})}
+                value={this.state.price}
+                placeholder="ex. 20"
+                onFocus={this.animateUp}
+              />
+            </View>
           </View>
-          <View style={{paddingBottom: 1}, styles.small_container}>
+          <View style={{paddingBottom: 1}, styles.small_container_description}>
             <Text style={{marginBottom: 5}}>Item Description:</Text>
             <TextInput
-              style={{width: 180, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+              style={{width: Dimensions.get('window').width - 50, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
               onChangeText={(text) => this.setState({item_description: text})}
               value={this.state.item_description}
               placeholder="ex. 10 feet long"
               multiline = {true}
               numberOfLines = {2}
+              onFocus={this.animateUp}
             />
           </View>
-          <View style={styles.small_container}>
-            <Text style={{marginBottom: 5}}>Condition:</Text>
+          <View style={styles.small_container_condition}>
+            <Text style={{marginBottom: 5, /*textAlign: 'center'*/}}>Condition:</Text>
             <RNPickerSelect
               placeholder={{
                   label: 'Select',
@@ -147,7 +215,7 @@ export default class RentScreen extends React.Component {
               selectedValue={this.state.condition}
             />
           </View>
-          <View style={styles.small_container}>
+          {/*<View style={styles.small_container}>
             <Text style={{marginBottom: 5}}>Price (per day):</Text>
             <TextInput
               style={{width: 180, height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
@@ -155,11 +223,12 @@ export default class RentScreen extends React.Component {
               value={this.state.price}
               placeholder="ex. 20"
             />
-          </View>
+          </View>*/}
           <View style={{borderRadius: 8,
                         borderWidth: 1,
                         borderColor: '#6de3dc',
                         backgroundColor: '#6de3dc',
+                        marginBottom: 10
                       }}
           >
             <TouchableOpacity
@@ -169,8 +238,9 @@ export default class RentScreen extends React.Component {
               <Text style = {styles.submitText}>SUBMIT</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
+      </Animated.View>
     );
   }
 }
@@ -178,10 +248,8 @@ export default class RentScreen extends React.Component {
 const styles = StyleSheet.create ({
    container: {
       flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
       backgroundColor: 'white',
-      flex: 1,
+      flexGrow: 1,
       paddingBottom: Platform.OS === 'ios' ? 15 : 6,
    },
    small_container: {
@@ -189,7 +257,48 @@ const styles = StyleSheet.create ({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
-      width: 180
+      width: 180,
+      flex: 1
+   },
+   small_container_description: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      /*alignItems: 'center',*/
+      paddingHorizontal: 25,
+      backgroundColor: '#d8fffd',
+      flex: 1,
+      width: Dimensions.get('window').width,
+      paddingTop: 5,
+      paddingBottom: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: '#6de3dc'
+   },
+   small_container_nowidth: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      flex: 1
+   },
+   small_container_top: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      width: Dimensions.get('window').width,
+      flex: 1,
+      paddingHorizontal: 12.5,
+      paddingVertical: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: '#6de3dc'
+   },
+   small_container_condition: {
+      flexDirection: 'column',
+      backgroundColor: '#fff',
+      width: Dimensions.get('window').width,
+      paddingHorizontal: 25,
+      paddingTop: 5,
+      paddingBottom: 10
    },
    submitText: {
     flex: 1,
@@ -202,7 +311,7 @@ const styles = StyleSheet.create ({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 180,
+    width: Dimensions.get('window').width - 50,
     height: 40,
    }
 
@@ -219,6 +328,6 @@ const pickerSelectStyles = StyleSheet.create({
         borderRadius: 4,
         backgroundColor: 'white',
         color: 'black',
-        width: 180
+        width: Dimensions.get('window').width - 50
     },
 });

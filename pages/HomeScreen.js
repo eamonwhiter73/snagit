@@ -40,9 +40,8 @@ export default class HomeScreen extends React.Component {
             {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
             {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
             {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item9', dist: '3.2 mi', condition: 'Fair', rate: '$25'}],
-
+            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'}
+           ],
     backgroundColor: '#e6fffe',
     width: 150,
     height: 150
@@ -168,7 +167,7 @@ export default class HomeScreen extends React.Component {
     const uri = 'http://snag.eamondev.com/assets/rowboat.png';
 
     return (
-      <TouchableOpacity onPress={this._onPress}>
+      <TouchableOpacity onPress={this.navigateToRentable}>
         <View style={{
                     flexDirection: 'column',
                     backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
@@ -243,19 +242,20 @@ export default class HomeScreen extends React.Component {
                           //marginBottom: Platform.OS === 'android' ? 10 : 0,
                           height: Platform.OS === 'android' ? 58 : 48,
                           backgroundColor: '#ffe4c4',
-                          borderWidth: 0,
+                          borderWidth: 1,
                           borderColor: '#6de3dc',
-                          borderTopWidth: 0,
-                          borderBottomWidth: 0,
+                          /*borderTopWidth: 0,
+                          borderBottomWidth: 0,*/
                           flex: 0.945,
                           borderRadius: 4,
-                          paddingHorizontal: 5
+                          marginHorizontal: 5
                         }}
         inputStyle={{backgroundColor: '#ffffff',
                      paddingTop: Platform.OS === 'android' ? 11 : 0,
                      paddingBottom: Platform.OS === 'android' ? 11 : 0,
+                     paddingLeft: 35,
                      margin: 0,
-                     height: Platform.OS === 'android' ? 58 : 48,
+                     height: Platform.OS === 'android' ? 58 : 46,
                    }}
         value={this.state.searchText}
         lightTheme={true}
@@ -274,7 +274,7 @@ export default class HomeScreen extends React.Component {
             renderItem={this.renderListItems}
             numColumns={2}
             contentContainerStyle={{}}
-            onEndReachedThreshold={1200}
+            onEndReachedThreshold={0.5}
             maxToRenderPerBatch={2}
             initialNumToRender={4}
             ListHeaderComponent={this.renderHeader}
@@ -295,16 +295,6 @@ class MultiSelectList extends React.PureComponent {
 
   _keyExtractor = (item, index) => item.key;
 
-  _onPressItem = (id: string) => {
-    // updater functions are preferred for transactional updates
-    this.setState((state) => {
-      // copy the map rather than modifying state.
-      const selected = new Map(state.selected);
-      selected.set(id, !selected.get(id)); // toggle
-      return {selected};
-    });
-  };
-
   render() {
     return (
       <FlatList
@@ -317,6 +307,8 @@ class MultiSelectList extends React.PureComponent {
         ListHeaderComponent={this.props.ListHeaderComponent}
         stickyHeaderIndices={[0]}
         getItemLayout={this.props.getItemLayout}
+        onEndReachedThreshold={this.props.onEndReachedThreshold}
+        removeClippedSubviews={false}
       />
     );
   }

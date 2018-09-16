@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Dimensions, Image, Alert, Platform } from 'react-native';
+import { Animated, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Dimensions, Image, Alert, Platform } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Icon } from 'react-native-elements';
 
@@ -14,10 +14,55 @@ export default class ProfileScreen extends React.Component {
   static navigatorStyle = { navBarHidden: true };
 
   state = {
-    
+    yPosition: new Animated.Value(0),  // Initial value for opacity: 0
   };
 
+  animateUp = () => {
+    console.log("animateUp");
+
+    Animated.timing(this.state.yPosition, {
+        toValue: -120,
+        duration: 300,
+    }).start();
+
+    /*Animated.timing(this.state.fadeAnim, {
+        toValue: 0,
+        duration: 1,
+    }).start();*/
+  }
+
+  submitEdit = () => {
+    //const { navigate } = this.props.navigation;
+
+    /*Animated.timing(this.state.fadeAnim, {
+      toValue: 1,
+      duration: 1,
+    }).start();*/
+
+    Animated.timing(this.state.yPosition, {
+      toValue: 0,
+      duration: 1,
+    }).start();
+
+    /*if(this.state.email == "") {
+      Alert.alert("Please enter a valid email address, if you do not have an account please select the 'Sign Up' link below");
+    }
+    else {
+      firebase.auth().signInAndRetrieveDataWithEmailAndPassword(this.state.email, this.state.password).then(() => {
+        navigate('Inventory', { mode: 'fromLogIn' });
+      }).catch(err => {
+        Alert.alert(err.message);
+      });
+    }*/
+  }
+
   componentDidMount() {
+    Keyboard.addListener('keyboardWillHide', () => {
+      Animated.timing(this.state.yPosition, {
+        toValue: 0,
+        duration: 1,
+      }).start();
+    })
     // The user is an Object, so they're logged in
     /*if (!this.state.user) {
       const { navigate } = this.props.navigation;
@@ -70,8 +115,9 @@ export default class ProfileScreen extends React.Component {
 
   render() {
     return (
+      <Animated.View style={{marginTop: this.state.yPosition, position: 'relative'}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}
+        <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-between', flexGrow: 1, alignItems: 'center',}}
         >
           <View style={{backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? 15 : 10, top: Platform.OS === 'ios' ? 25 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5}}>
             <Icon
@@ -81,13 +127,13 @@ export default class ProfileScreen extends React.Component {
               size={40}
             />
           </View>
-          <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 1}}>
+          <View style={{paddingTop: 50, width: Dimensions.get('window').width, height: 160, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
             <Image
               source={require('../assets/billythekid2.jpg')/*uri: base64Image*/}
-              style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 90}}
+              style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 1, borderRadius: 90, /*position: 'absolute', left: Dimensions.get('window').width /2 - 90*/}}
             />
           </View>
-          <View style={styles.small_container}>
+          <View style={styles.small_container_username}>
             <Text style={{marginBottom: 5}}>Username:</Text>
             <TextInput
               style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
@@ -127,12 +173,14 @@ export default class ProfileScreen extends React.Component {
               placeholder="ex. I am a farmer."
               multiline = {true}
               numberOfLines = {2}
+              onFocus={this.animateUp}
             />
           </View>
           <View style={{borderRadius: 8,
                         borderWidth: 1,
                         borderColor: '#6de3dc',
                         backgroundColor: '#6de3dc',
+                        marginTop: 10
                       }}
           >
             <TouchableOpacity
@@ -146,6 +194,7 @@ export default class ProfileScreen extends React.Component {
                         borderWidth: 1,
                         borderColor: '#6de3dc',
                         backgroundColor: '#6de3dc',
+                        marginTop: 10
                       }}
           >
             <TouchableOpacity
@@ -155,8 +204,9 @@ export default class ProfileScreen extends React.Component {
               <Text style = {styles.submitText}>LOGOUT</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
+      </Animated.View>
     );
   }
 }
@@ -164,18 +214,26 @@ export default class ProfileScreen extends React.Component {
 const styles = StyleSheet.create ({
    container: {
       flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      backgroundColor: 'white',
-      flex: 1,
+      backgroundColor: '#fff',
+      //flex: 1,
       paddingBottom: Platform.OS === 'ios' ? 8 : 5,
    },
    small_container: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'white',
-      width: 180
+      backgroundColor: '#fff',
+      width: 180,
+      marginTop: 5
+   },
+   small_container_username: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      width: 180,
+      marginTop: 40,
+      marginTop: 50
    },
    submitText: {
     flex: 1,
