@@ -135,7 +135,6 @@ export default class RentScreen extends React.Component {
     }
 
     return (
-      <Animated.View style={{alignItems: 'center', marginTop: this.state.yPosition, position: 'relative'}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center',}}>
           <View style={{flex: 1, backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? -8 : 0, top: Platform.OS === 'ios' ? 10 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5, borderRadius: 8, borderWidth: 0}}>
@@ -164,57 +163,59 @@ export default class RentScreen extends React.Component {
               style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width, marginTop: Platform.OS === 'ios' ? 20 : 10, borderColor: '#6de3dc', borderWidth: 0, borderRadius: 4}}
             />
           </View>
-          <View style={styles.small_container_top}>
-            <View style={styles.small_container_nowidth, {backgroundColor: 'fff',}}>
-              <Text style={{marginBottom: 5, textAlign: 'center'}}>Item Name:</Text>
+          <Animated.View style={styles.small_container_top_animated, {marginTop: this.state.yPosition}}>
+            <View style={styles.small_container_top}>
+              <View style={styles.small_container_nowidth, {backgroundColor: 'e6fffe',}}>
+                <Text style={{marginBottom: 5, textAlign: 'center', fontWeight: '700'}}>Item Name:</Text>
+                <TextInput
+                  style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 0, backgroundColor: '#fff', paddingLeft: 5, borderRadius: 4}}
+                  onChangeText={(text) => this.setState({item_name: text})}
+                  value={this.state.item_name}
+                  placeholder="ex. rowboat"
+                  onFocus={this.animateUp}
+                />
+              </View>
+              <View style={styles.small_container, {backgroundColor: '#d8fffd'}}>
+                <Text style={{marginBottom: 5, textAlign: 'center', fontWeight: '700'}}>Price (per day):</Text>
+                <TextInput
+                  style={{width: 120, height: 40, borderColor: 'gray', borderWidth: 0, backgroundColor: '#fff', paddingLeft: 5, borderRadius: 4}}
+                  onChangeText={(text) => this.setState({price: text})}
+                  value={this.state.price}
+                  placeholder="ex. 20"
+                  onFocus={this.animateUp}
+                />
+              </View>
+            </View>
+            <View style={{paddingBottom: 1}, styles.small_container_description}>
+              <Text style={{marginBottom: 5, fontWeight: '700'}}>Item Description:</Text>
               <TextInput
-                style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-                onChangeText={(text) => this.setState({item_name: text})}
-                value={this.state.item_name}
-                placeholder="ex. rowboat"
+                style={{width: Dimensions.get('window').width - 50, height: 60, borderColor: 'gray', borderWidth: 0, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                onChangeText={(text) => this.setState({item_description: text})}
+                value={this.state.item_description}
+                placeholder="ex. 10 feet long"
+                multiline = {true}
+                numberOfLines = {2}
                 onFocus={this.animateUp}
               />
             </View>
-            <View style={styles.small_container, {backgroundColor: '#fff',}}>
-              <Text style={{marginBottom: 5, textAlign: 'center'}}>Price (per day):</Text>
-              <TextInput
-                style={{width: 120, height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-                onChangeText={(text) => this.setState({price: text})}
-                value={this.state.price}
-                placeholder="ex. 20"
-                onFocus={this.animateUp}
+            <View style={styles.small_container_condition}>
+              <Text style={{fontWeight: '700', marginBottom: 5, /*textAlign: 'center'*/}}>Condition:</Text>
+              <RNPickerSelect
+                placeholder={{
+                    label: 'Select',
+                    value: null,
+                }}
+                items={this.state.items}
+                onValueChange={(value) => {
+                    this.setState({
+                        condtion: value,
+                    });
+                }}
+                style={{ ...pickerSelectStyles }}
+                selectedValue={this.state.condition}
               />
             </View>
-          </View>
-          <View style={{paddingBottom: 1}, styles.small_container_description}>
-            <Text style={{marginBottom: 5}}>Item Description:</Text>
-            <TextInput
-              style={{width: Dimensions.get('window').width - 50, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-              onChangeText={(text) => this.setState({item_description: text})}
-              value={this.state.item_description}
-              placeholder="ex. 10 feet long"
-              multiline = {true}
-              numberOfLines = {2}
-              onFocus={this.animateUp}
-            />
-          </View>
-          <View style={styles.small_container_condition}>
-            <Text style={{marginBottom: 5, /*textAlign: 'center'*/}}>Condition:</Text>
-            <RNPickerSelect
-              placeholder={{
-                  label: 'Select',
-                  value: null,
-              }}
-              items={this.state.items}
-              onValueChange={(value) => {
-                  this.setState({
-                      condtion: value,
-                  });
-              }}
-              style={{ ...pickerSelectStyles }}
-              selectedValue={this.state.condition}
-            />
-          </View>
+          </Animated.View>
           {/*<View style={styles.small_container}>
             <Text style={{marginBottom: 5}}>Price (per day):</Text>
             <TextInput
@@ -240,7 +241,6 @@ export default class RentScreen extends React.Component {
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
-      </Animated.View>
     );
   }
 }
@@ -266,7 +266,7 @@ const styles = StyleSheet.create ({
       /*alignItems: 'center',*/
       paddingHorizontal: 25,
       backgroundColor: '#d8fffd',
-      flex: 1,
+      flex: 0,
       width: Dimensions.get('window').width,
       paddingTop: 5,
       paddingBottom: 10,
@@ -284,13 +284,16 @@ const styles = StyleSheet.create ({
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      backgroundColor: 'white',
+      backgroundColor: '#d8fffd',
       width: Dimensions.get('window').width,
-      flex: 1,
+      flex: 0,
       paddingHorizontal: 12.5,
       paddingVertical: 10,
-      borderBottomWidth: 1,
+      borderBottomWidth: 0,
       borderBottomColor: '#6de3dc'
+   },
+   small_container_top_animated: {
+      flex: 1,
    },
    small_container_condition: {
       flexDirection: 'column',

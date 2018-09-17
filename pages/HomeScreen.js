@@ -195,7 +195,7 @@ export default class HomeScreen extends React.Component {
               >
                 Dist.
               </Text>
-              <Text style={{flex: 1, fontSize: 15, fontWeight: '900', marginLeft: 10, textAlign: 'center', color: '#6de3dc'}}
+              <Text style={{flex: 1, fontSize: 15, marginLeft: 10, textAlign: 'center', color: '#6de3dc', fontWeight: '900'}}
                     onPress={this.navigateToRentable}
               >
                 {item.dist}
@@ -242,7 +242,7 @@ export default class HomeScreen extends React.Component {
                           //marginBottom: Platform.OS === 'android' ? 10 : 0,
                           height: Platform.OS === 'android' ? 58 : 48,
                           backgroundColor: '#ffe4c4',
-                          borderWidth: 1,
+                          borderWidth: 0,
                           borderColor: '#6de3dc',
                           /*borderTopWidth: 0,
                           borderBottomWidth: 0,*/

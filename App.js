@@ -12,6 +12,15 @@ import ProfileScreen from './pages/ProfileScreen';
 //import CameraScreen from './pages/CameraScreen';
 import CameraScreenNavigator from './components/CameraScreenNavigator';
 //import RentScreenNavigator from './components/RentScreenNavigator';
+import { setCustomText } from 'react-native-global-props';
+
+const customTextProps = { 
+  style: { 
+    fontFamily: 'OpenSans-Regular'
+  }
+}
+
+setCustomText(customTextProps);
 
 YellowBox.ignoreWarnings(['Class RCTCxxModule']);
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);

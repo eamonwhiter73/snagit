@@ -115,98 +115,98 @@ export default class ProfileScreen extends React.Component {
 
   render() {
     return (
-      <Animated.View style={{marginTop: this.state.yPosition, position: 'relative'}}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-between', flexGrow: 1, alignItems: 'center',}}
         >
-          <View style={{backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? 15 : 10, top: Platform.OS === 'ios' ? 25 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5}}>
-            <Icon
-              name='mail'
-              color='#6de3dc'
-              type='feather'
-              size={40}
-            />
-          </View>
-          <View style={{paddingTop: 50, width: Dimensions.get('window').width, height: 160, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
-            <Image
-              source={require('../assets/billythekid2.jpg')/*uri: base64Image*/}
-              style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 1, borderRadius: 90, /*position: 'absolute', left: Dimensions.get('window').width /2 - 90*/}}
-            />
-          </View>
-          <View style={styles.small_container_username}>
-            <Text style={{marginBottom: 5}}>Username:</Text>
-            <TextInput
-              style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-              onChangeText={(text) => this.setState({username: text})}
-              value={this.state.username}
-              placeholder="ex. user123"
-              textContentType='username'
-            />
-          </View>
-          <View style={{paddingBottom: 1}, styles.small_container}>
-            <Text style={{marginBottom: 5}}>Password:</Text>
-            <TextInput
-              style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-              onChangeText={(text) => this.setState({password: text})}
-              value={this.state.password}
-              placeholder="ex. 8xkjs98!"
-              secureTextEntry={true}
-              textContentType='password'
-            />
-          </View>
-          <View style={styles.small_container}>
-            <Text style={{marginBottom: 5}}>Email:</Text>
-            <TextInput
-              style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-              onChangeText={(text) => this.setState({email: text})}
-              value={this.state.email}
-              placeholder="ex. user@user.com"
-              textContentType='emailAddress'
-            />
-          </View>
-          <View style={styles.small_container}>
-            <Text style={{marginBottom: 5}}>Bio:</Text>
-            <TextInput
-              style={{width: 180, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
-              onChangeText={(text) => this.setState({bio: text})}
-              value={this.state.bio}
-              placeholder="ex. I am a farmer."
-              multiline = {true}
-              numberOfLines = {2}
-              onFocus={this.animateUp}
-            />
-          </View>
-          <View style={{borderRadius: 8,
-                        borderWidth: 1,
-                        borderColor: '#6de3dc',
-                        backgroundColor: '#6de3dc',
-                        marginTop: 10
-                      }}
-          >
-            <TouchableOpacity
-              style = {styles.submitTouch}
-              onPress={() => {}}
+          <Animated.View style={{marginTop: this.state.yPosition, alignItems: 'center'}}>
+            <View style={{backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? 15 : 10, top: Platform.OS === 'ios' ? 25 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5}}>
+              <Icon
+                name='mail'
+                color='#6de3dc'
+                type='feather'
+                size={40}
+              />
+            </View>
+            <View style={{paddingTop: 50, width: Dimensions.get('window').width, height: 160, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
+              <Image
+                source={require('../assets/billythekid2.jpg')/*uri: base64Image*/}
+                style={{height: 180, width: 180, marginTop: Platform.OS === 'ios' ? 30 : 10, borderColor: '#6de3dc', borderWidth: 1, borderRadius: 90, /*position: 'absolute', left: Dimensions.get('window').width /2 - 90*/}}
+              />
+            </View>
+            <View style={styles.small_container_username}>
+              <Text style={{marginBottom: 5}}>Username:</Text>
+              <TextInput
+                style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                onChangeText={(text) => this.setState({username: text})}
+                value={this.state.username}
+                placeholder="ex. user123"
+                textContentType='username'
+              />
+            </View>
+            <View style={{paddingBottom: 1}, styles.small_container}>
+              <Text style={{marginBottom: 5}}>Password:</Text>
+              <TextInput
+                style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                onChangeText={(text) => this.setState({password: text})}
+                value={this.state.password}
+                placeholder="ex. 8xkjs98!"
+                secureTextEntry={true}
+                textContentType='password'
+              />
+            </View>
+            <View style={styles.small_container}>
+              <Text style={{marginBottom: 5}}>Email:</Text>
+              <TextInput
+                style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                onChangeText={(text) => this.setState({email: text})}
+                value={this.state.email}
+                placeholder="ex. user@user.com"
+                textContentType='emailAddress'
+              />
+            </View>
+            <View style={styles.small_container}>
+              <Text style={{marginBottom: 5}}>Bio:</Text>
+              <TextInput
+                style={{width: 180, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                onChangeText={(text) => this.setState({bio: text})}
+                value={this.state.bio}
+                placeholder="ex. I am a farmer."
+                multiline = {true}
+                numberOfLines = {2}
+                onFocus={this.animateUp}
+              />
+            </View>
+            <View style={{borderRadius: 8,
+                          borderWidth: 1,
+                          borderColor: '#6de3dc',
+                          backgroundColor: '#6de3dc',
+                          marginTop: 10
+                        }}
             >
-              <Text style = {styles.submitText}>SAVE</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{borderRadius: 8,
-                        borderWidth: 1,
-                        borderColor: '#6de3dc',
-                        backgroundColor: '#6de3dc',
-                        marginTop: 10
-                      }}
-          >
-            <TouchableOpacity
-              style = {styles.submitTouch}
-              onPress={() => {}}
+              <TouchableOpacity
+                style = {styles.submitTouch}
+                onPress={() => {}}
+              >
+                <Text style = {styles.submitText}>SAVE</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{borderRadius: 8,
+                          borderWidth: 1,
+                          borderColor: '#6de3dc',
+                          backgroundColor: '#6de3dc',
+                          marginTop: 10
+                        }}
             >
-              <Text style = {styles.submitText}>LOGOUT</Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style = {styles.submitTouch}
+                onPress={() => {}}
+              >
+                <Text style = {styles.submitText}>LOGOUT</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
         </ScrollView>
       </TouchableWithoutFeedback>
-      </Animated.View>
     );
   }
 }
