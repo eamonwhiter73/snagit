@@ -8,6 +8,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import NavigationService from '../services/NavigationService.js';
 import FitImage from 'react-native-fit-image';
 import type { RemoteMessage } from 'react-native-firebase';
+import InitiateRent from '../components/InitiateRent.js';
 
 export default class RentableScreen extends React.Component {
 
@@ -16,13 +17,17 @@ export default class RentableScreen extends React.Component {
     this.state = {
       opacity: 1,
       backgroundColor: '#6de3dc',
-      rentButtonBackground: '#6de3dc'
+      rentButtonBackground: '#6de3dc',
+      someVar: 0
       //condition: 'poor',
       //items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
     };
+
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
   }
+
+  
 
   static navigatorStyle = { navBarHidden: true };
 
@@ -203,6 +208,55 @@ export default class RentableScreen extends React.Component {
     }, 1)
   }
 
+  sendRentMessage(dataChat, dataMessage) {
+    
+    /**ADD BACK**/
+
+    var timestamp = new Date().getTime().toString();
+
+    // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
+    var addChat = firebase.firestore().collection('chats').doc(timestamp);
+    // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
+    var addMessage = firebase.firestore().collection('messages').doc(timestamp);
+
+
+    /*dataChat = {
+      "title": "Rental Negotiation",
+      "lastMessage": "The relay seems to be malfunctioning.",
+      "timestamp": timestamp
+    }
+
+    dataMessage = {}
+    dataMessage[timestamp] = {
+      "name": "eamon",
+      "message": "The relay seems to be malfunctioning.",
+      "timestamp": timestamp
+    };*/
+
+    // Set the 'capital' field of the city
+    addChat.update(dataChat).then(() => {
+                    // Set the 'capital' field of the city
+      addMessage.update(dataMessage).catch((error) => {
+        //alert(error);
+        addMessage.set(dataMessage).catch((error) => {
+          alert(error);
+        });
+      });
+    }).catch((error) => {
+      //alert(error);
+      addChat.set(dataChat).catch((error) => {
+        alert(error);
+      }).then(() => {
+        addMessage.update(dataMessage).catch((error) => {
+          //alert(error);
+          addMessage.set(dataMessage).catch((error) => {
+            alert(error);
+          });
+        });
+      })
+    });
+  }
+
   render() {
     var base64Image = '';
 
@@ -250,81 +304,11 @@ export default class RentableScreen extends React.Component {
               style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width}}
             />
           </View>
-          <TouchableOpacity
-            activeOpacity={1}
-            style = {{backgroundColor: this.state.rentButtonBackground,
-                      flex: 1,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      //width: Dimensions.get('window').width,
-                      height: 44 }}
-            onPress={() => {
-              this.setState({rentButtonBackground: '#94ebe6'});
-
-              setTimeout(() => {
-                this.setState({rentButtonBackground: '#6de3dc'});
-
-                var timestamp = new Date().getTime().toString();
-
-                // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
-                var addChat = firebase.firestore().collection('chats').doc(timestamp);
-                // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
-                var addMessage = firebase.firestore().collection('messages').doc(timestamp);
-
-
-                dataChat = {
-                  "title": "Test Chat",
-                  "lastMessage": "The relay seems to be malfunctioning.",
-                  "timestamp": timestamp
-                }
-
-                dataMessage = {}
-                dataMessage[timestamp] = {
-                  "name": "eamon",
-                  "message": "The relay seems to be malfunctioning.",
-                  "timestamp": timestamp
-                };
-
-                // Set the 'capital' field of the city
-                addChat.update(dataChat).then(() => {
-                                // Set the 'capital' field of the city
-                  addMessage.update(dataMessage).catch((error) => {
-                    //alert(error);
-                    addMessage.set(dataMessage).catch((error) => {
-                      alert(error);
-                    });
-                  });
-                }).catch((error) => {
-                  //alert(error);
-                  addChat.set(dataChat).catch((error) => {
-                    alert(error);
-                  }).then(() => {
-                    addMessage.update(dataMessage).catch((error) => {
-                      //alert(error);
-                      addMessage.set(dataMessage).catch((error) => {
-                        alert(error);
-                      });
-                    });
-                  })
-                });
-                
-                /*this.props.navigation.navigate('OpenCamera', { param: 'fromRentableScreen'});
-              
-
-                NavigationService.navigate('Home');*/
-              }, 1)
-            }}
-          >
-            <Text style = {{backgroundColor: this.state.rentButtonBackground, 
-                            textAlign: 'center',
-                            color: 'white',
-                            fontWeight: '900',
-                            fontSize: 18
-                          }}>
-              RENT
-            </Text>
-          </TouchableOpacity>
+          <InitiateRent
+            initiateRentMessage={this.sendRentMessage.bind(this)}
+            modalHeight={200}
+            modalWidth={200}
+          />
           <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center', backgroundColor: '#fffbf5'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
               <View style={styles.condition_container}>

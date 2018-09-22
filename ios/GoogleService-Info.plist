@@ -7,34 +7,34 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>599782590095-ptaat4fnms6i4fci8gd2e6m5gd2qri5m.apps.googleusercontent.com</string>
+	<string>757347444448-voobof8v1r2gif4vko17lptr5u424kkl.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.599782590095-ptaat4fnms6i4fci8gd2e6m5gd2qri5m</string>
+	<string>com.googleusercontent.apps.757347444448-voobof8v1r2gif4vko17lptr5u424kkl</string>
 	<key>API_KEY</key>
-	<string>AAAAi6XUBo8:APA91bEtuBBlS77ksrTjZVjOggj7-zi83elyuMPptqltnK-y8WFkqNiQOa-QDDeaRVBkjOXn-d1Sj5GgxlaaTm5d0D3ffQ7uw4XwP5GdAC6wlD4-BwkEyTkye8Gpv_Wz1gPbbxzCdHwf</string>
+	<string>AIzaSyDie4xdoFxEC_2YlIWQAc7v5_feqKL7tF4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>599782590095</string>
+	<string>757347444448</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.eamon.snag</string>
 	<key>PROJECT_ID</key>
-	<string>snag-b2b2d</string>
+	<string>snagit-e2928</string>
 	<key>STORAGE_BUCKET</key>
-	<string>snag-b2b2d.appspot.com</string>
+	<string>snagit-e2928.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:599782590095:ios:69cdc7feb62137c8</string>
+	<string>1:757347444448:ios:69cdc7feb62137c8</string>
 	<key>DATABASE_URL</key>
-	<string>https://snag-b2b2d.firebaseio.com</string>
+	<string>https://snagit-e2928.firebaseio.com</string>
 </dict>
 </plist>

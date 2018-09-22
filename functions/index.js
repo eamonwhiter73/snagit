@@ -1,7 +1,7 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require('firebase-functions');
 const firebaseHelper = require('firebase-functions-helper');
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = require('./serviceAccountJson.json');
 var toPlainObject = require('lodash.toplainobject');
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
@@ -11,7 +11,10 @@ const admin = require('firebase-admin');
 //firebaseHelper.firebase.initializeApp(serviceAccount, 'https://snag-b2b2d.firebaseio.com');
 
 //if (!admin.apps.length) {
-admin.initializeApp();
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://snagit-e2928.firebaseio.com"
+});
 admin.firestore().settings({timestampsInSnapshots: true});
 var db = admin.firestore();
 

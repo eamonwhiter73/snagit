@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "snag-b2b2d"
+    "default": "snag-b2b2d",
+    "snagit": "snag-b2b2d",
+    "staging": "snagit-e2928"
   }
 }

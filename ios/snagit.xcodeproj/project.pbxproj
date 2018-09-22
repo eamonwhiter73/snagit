@@ -55,7 +55,7 @@
 		C5D3CDD47AF540FEB1150DE6 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FFB89FF48FB144B8B10A253E /* Ionicons.ttf */; };
 		CC9AE73CA96F4C6B8C7B358C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 274CB54256B14B2794E48793 /* Octicons.ttf */; };
 		DD2F11E9214FEDEB00E9A50C /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
-		DD66415E215199D80030F214 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD66415D215199D80030F214 /* GoogleService-Info.plist */; };
+		DDBF262521546605008F66FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DDBF262421546605008F66FB /* GoogleService-Info.plist */; };
 		DDFADAAE214FC6BD00A0675B /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DDFADAAD214FC6BD00A0675B /* OpenSans-Regular.ttf */; };
 		E3CDDBD6E9D9453187AD600C /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5ED8FE0129CE450293E69650 /* FontAwesome5_Solid.ttf */; };
 		F9B2C7CDE9B845D09189FCB7 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A05807165AE24B0AAB66F394 /* Feather.ttf */; };
@@ -281,7 +281,7 @@
 		DD2F11E4214FE3AB00E9A50C /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD664075215161B30030F214 /* snagit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = snagit.entitlements; path = snagit/snagit.entitlements; sourceTree = "<group>"; };
 		DD6640762151669D0030F214 /* libFirebaseMessaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseMessaging.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD66415D215199D80030F214 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "snagit/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DDBF262421546605008F66FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DDFADAAD214FC6BD00A0675B /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		E3B3C233B42A4E32BA2F8014 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		E982963FD72A4BA2B2B2CAF9 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Regular.ttf"; path = "../assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -427,7 +427,7 @@
 		13B07FAE1A68108700A75B9A /* snagit */ = {
 			isa = PBXGroup;
 			children = (
-				DD66415D215199D80030F214 /* GoogleService-Info.plist */,
+				DDBF262421546605008F66FB /* GoogleService-Info.plist */,
 				DD664075215161B30030F214 /* snagit.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -972,6 +972,7 @@
 				E3CDDBD6E9D9453187AD600C /* FontAwesome5_Solid.ttf in Resources */,
 				65170F8382074478955EBCFB /* Foundation.ttf in Resources */,
 				C5D3CDD47AF540FEB1150DE6 /* Ionicons.ttf in Resources */,
+				DDBF262521546605008F66FB /* GoogleService-Info.plist in Resources */,
 				41D5963C6A9249358099AE89 /* MaterialCommunityIcons.ttf in Resources */,
 				220CD9A932CA4190B2F9E773 /* MaterialIcons.ttf in Resources */,
 				CC9AE73CA96F4C6B8C7B358C /* Octicons.ttf in Resources */,
@@ -980,7 +981,6 @@
 				9A411BEDA3014A0BA2656DE8 /* Zocial.ttf in Resources */,
 				A8EF4F5585D14BF99B4691C5 /* OpenSans-Bold.ttf in Resources */,
 				356975C2B4BC468686D8D8D1 /* OpenSans-ExtraBold.ttf in Resources */,
-				DD66415E215199D80030F214 /* GoogleService-Info.plist in Resources */,
 				53C8D9ECA25340E18048773A /* OpenSans-Light.ttf in Resources */,
 				245C789D0BCE46909EA0401A /* OpenSans-SemiBold.ttf in Resources */,
 				3F0518A8D24D41EEA79611B1 /* OpenSans-Regular.ttf in Resources */,

@@ -24,8 +24,12 @@
   "dependencies": {
     "autobind-decorator": "^2.1.0",
     "fbjs": "^0.8.17",
+    "firebase-admin": "^6.0.0",
+    "firebase-functions": "^2.0.5",
+    "immutable": "^3.8.2",
     "react": "^16.3.2",
     "react-native": "^0.55.4",
+    "react-native-calendars": "^1.20.0",
     "react-native-camera": "^1.2.0",
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^4.3.6",

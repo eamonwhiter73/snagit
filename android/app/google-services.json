@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "599782590095",
-    "firebase_url": "https://snag-b2b2d.firebaseio.com",
-    "project_id": "snag-b2b2d",
-    "storage_bucket": "snag-b2b2d.appspot.com"
+    "project_number": "757347444448",
+    "firebase_url": "https://snagit-e2928.firebaseio.com",
+    "project_id": "snagit-e2928",
+    "storage_bucket": "snagit-e2928.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:599782590095:android:69cdc7feb62137c8",
+        "mobilesdk_app_id": "1:757347444448:android:69cdc7feb62137c8",
         "android_client_info": {
           "package_name": "com.eamon.snag"
         }
       },
       "oauth_client": [
         {
-          "client_id": "599782590095-f4544cmeanuj2usot96fc8jj4v0680i1.apps.googleusercontent.com",
+          "client_id": "757347444448-i3ltqu20p80vq943q7h9hcbc4qlrurbb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2EzkqmhZAbfkGw-owrU6B20KldGh6v2c"
+          "current_key": "AIzaSyCTTe1V3k22w72IvXPnW8qskLk3UMmnM1M"
         }
       ],
       "services": {
