@@ -18,7 +18,8 @@ export default class RentableScreen extends React.Component {
       opacity: 1,
       backgroundColor: '#6de3dc',
       rentButtonBackground: '#6de3dc',
-      someVar: 0
+      someVar: 0,
+      setRentVisibile: false
       //condition: 'poor',
       //items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
     };
@@ -257,6 +258,12 @@ export default class RentableScreen extends React.Component {
     });
   }
 
+  onOutsideTouch() {
+    console.log("in onOutsideTouch");
+    Keyboard.dismiss();
+    this.setState({setRentVisibile: false});
+  }
+
   render() {
     var base64Image = '';
 
@@ -268,7 +275,7 @@ export default class RentableScreen extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <TouchableWithoutFeedback onPress={this.onOutsideTouch.bind(this)}>
         <ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between', /*alignItems: 'center'*/ paddingBottom: 10}}>
           <View style={{flex: 1, backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? -8 : 0, top: Platform.OS === 'ios' ? 0 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5, borderRadius: 8, borderWidth: 0}}>
             <SimpleLineIcons
@@ -308,6 +315,7 @@ export default class RentableScreen extends React.Component {
             initiateRentMessage={this.sendRentMessage.bind(this)}
             modalHeight={200}
             modalWidth={200}
+            setModalVisible={this.state.setRentVisibile}
           />
           <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center', backgroundColor: '#fffbf5'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>

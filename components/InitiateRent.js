@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
 import {
-  Modal,
   Text,
   TextInput,
   TouchableOpacity,
   TouchableHighlight,
+  TouchableWithoutFeedback,
   View,
   Dimensions,
+  Keyboard
 } from 'react-native'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Map } from 'immutable';
+import Modal from 'react-native-modal';
 
 export default class InitiateRent extends React.PureComponent {
   constructor() {
     super()
     this.state = {
-      _markedDates: this.initialState,
+      _markedDates: {},
+      //_selectedDay: new Date().dateString,
       someVar: 0,
       modalVisible: false,
       message: 'Hi, I would like to rent an item from you.',
@@ -25,9 +28,19 @@ export default class InitiateRent extends React.PureComponent {
     this.onDayPress = this.onDayPress.bind(this)
   }
 
-  initialState = {
-      [new Date()]: {disabled: true}
-  }
+  /*initialState = {
+      [new Date()]: { 'selected': false, 
+                        customStyles: {
+                        container: {
+                          backgroundColor: '#6de3dc',
+                        },
+                        text: {
+                          color: 'white',
+                          fontWeight: 'bold'
+                        },
+                      },
+                    }
+  }*/
 
   showCalendar = () => {
     return (
@@ -89,12 +102,11 @@ export default class InitiateRent extends React.PureComponent {
         // Already in marked dates, so reverse current marked state
         marked = !this.state._markedDates[_selectedDay].selected;
         console.log('marked:', marked);
-      }
-      
-      // Create a new object using object property spread since it should be immutable
-      // Reading: https://davidwalsh.name/merge-objects
-      const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': marked, 
-                                                                                      customStyles: {
+
+        // Create a new object using object property spread since it should be immutable
+        // Reading: https://davidwalsh.name/merge-objects
+        const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': marked, 
+                                                                                        customStyles: {
                                                                                         container: {
                                                                                           backgroundColor: '#6de3dc',
                                                                                         },
@@ -104,9 +116,32 @@ export default class InitiateRent extends React.PureComponent {
                                                                                         },
                                                                                       }, 
                                   } } }
-      
-      // Triggers component to render again, picking up the new state
-      this.setState({ _markedDates: updatedMarkedDates });
+
+        // Triggers component to render again, picking up the new state
+        this.setState({ _markedDates: updatedMarkedDates }, () => {
+          console.log('updatedMarkedDates:', this.state._markedDates);
+        });
+      }
+      else {
+        // Create a new object using object property spread since it should be immutable
+        // Reading: https://davidwalsh.name/merge-objects
+        const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': true, 
+                                                                                        customStyles: {
+                                                                                        container: {
+                                                                                          backgroundColor: '#6de3dc',
+                                                                                        },
+                                                                                        text: {
+                                                                                          color: 'white',
+                                                                                          fontWeight: 'bold'
+                                                                                        },
+                                                                                      }, 
+                                  } } }
+
+        // Triggers component to render again, picking up the new state
+        this.setState({ _markedDates: updatedMarkedDates }, () => {
+          console.log('updatedMarkedDates:', this.state._markedDates);
+        });
+      }
   }
 
   setModalVisible(visible) {
@@ -123,102 +158,108 @@ export default class InitiateRent extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('componentDidUpdate in InitiateRent:', prevProps, prevState, snapshot)
+    console.log('componentDidUpdate in InitiateRent:', this.props, prevProps, prevState, snapshot)
   }
+
+  _renderModalContent = () => (
+    <TouchableWithoutFeedback onPress={() => {console.log('tapped')}}>
+      <View
+        style={{
+          paddingTop: 5,
+          paddingBottom: 10,
+          paddingLeft: 10,
+          paddingRight: 10,
+          marginTop: 0,
+          flex: 0.824,
+          marginLeft: (Dimensions.get('window').width - 300) / 4,
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          width: 300,
+          borderRadius: 4,
+          borderWidth: 0,
+        }}>
+        <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
+          <View style={{ flexDirection: 'column', flex: 1 }}>
+            <Text
+              style={{
+                flex: 0,
+                width: Dimensions.get('window').width,
+                color: 'white',
+                fontWeight: '700',
+                marginBottom: 5,
+              }}>
+              Date(s) Needed:
+            </Text>
+            {this.showCalendar()}
+          </View>
+          <View style={{ flexDirection: 'column', flex: 0.2, marginBottom: 10 }}>
+            <TextInput
+              style={{
+                width: 280,
+                flex: 1,
+                borderColor: 'gray',
+                borderWidth: 1,
+                backgroundColor: '#ffffff',
+                paddingLeft: 5,
+                borderRadius: 4,
+              }}
+              onChangeText={text => this.setState({ message: text })}
+              value={this.state.message}
+              multiline={true}
+              numberOfLines={2}
+            />
+          </View>
+          <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0 }}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={{
+                backgroundColor: this.state.rentButtonBackground,
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 280,
+                borderRadius: 4,
+                borderWidth: 0,
+              }}
+              onPress={() => {
+                this.setState({ rentButtonBackground: '#94ebe6' })
+
+                setTimeout(() => {
+                  this.setState({ rentButtonBackground: '#6de3dc' })
+
+                  this.setModalVisible(false)
+                }, 1)
+              }}>
+              <Text
+                style={{
+                  backgroundColor: this.state.rentButtonBackground,
+                  textAlign: 'center',
+                  color: 'white',
+                  fontWeight: '900',
+                  fontSize: 18,
+                  borderRadius: 4,
+                  borderWidth: 0,
+                }}>
+                SEND
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 
   render() {
     return (
-      <View style={{ flex: 0 }}>
+      <View style={{}}>
         <Modal
           animationType="slide"
-          transparent={true}
+          transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={() => {
-            alert('Modal has been closed.')
-          }}>
-          {/*presentationStyle='overFullScreen'*/}
-          <View
-            style={{
-              padding: 10,
-              marginTop: 84,
-              flex: 0.9,
-              marginLeft: (Dimensions.get('window').width - 300) / 2,
-              backgroundColor: 'rgba(0,0,0,0.8)',
-              width: 300,
-              borderRadius: 4,
-              borderWidth: 0,
-            }}>
-            <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-              <View style={{ flexDirection: 'column', flex: 1 }}>
-                <Text
-                  style={{
-                    flex: 0,
-                    width: Dimensions.get('window').width,
-                    color: 'white',
-                    fontWeight: '700',
-                    marginBottom: 5,
-                  }}>
-                  Date(s) Needed:
-                </Text>
-                {this.showCalendar()}
-              </View>
-              <View style={{ flexDirection: 'column', flex: 0.2, marginBottom: 10 }}>
-                <TextInput
-                  style={{
-                    width: 280,
-                    flex: 1,
-                    borderColor: 'gray',
-                    borderWidth: 1,
-                    backgroundColor: '#ffffff',
-                    paddingLeft: 5,
-                    borderRadius: 4,
-                  }}
-                  onChangeText={text => this.setState({ message: text })}
-                  value={this.state.message}
-                  multiline={true}
-                  numberOfLines={2}
-                />
-              </View>
-              <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0 }}>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  style={{
-                    backgroundColor: this.state.rentButtonBackground,
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: 280,
-                    borderRadius: 4,
-                    borderWidth: 0,
-                  }}
-                  onPress={() => {
-                    this.setState({ rentButtonBackground: '#94ebe6' })
-
-                    setTimeout(() => {
-                      this.setState({ rentButtonBackground: '#6de3dc' })
-
-                      this.setModalVisible(false)
-                    }, 1)
-                  }}>
-                  <Text
-                    style={{
-                      backgroundColor: this.state.rentButtonBackground,
-                      textAlign: 'center',
-                      color: 'white',
-                      fontWeight: '900',
-                      fontSize: 18,
-                      borderRadius: 4,
-                      borderWidth: 0,
-                    }}>
-                    SEND
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+          onBackdropPress ={() => {console.log("backdrop pressed"); this.setModalVisible(false)}}>
+          {this._renderModalContent()}
         </Modal>
 
-        {!this.modalVisible && (
+        {!this.state.modalVisible && (
           <TouchableOpacity
             style={{
               backgroundColor: this.state.rentButtonBackground,
