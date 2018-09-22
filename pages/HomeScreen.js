@@ -7,6 +7,8 @@ import FitImage from 'react-native-fit-image';
 import autobind from 'autobind-decorator';
 import RNPickerSelect from 'react-native-picker-select';
 import type { RemoteMessage } from 'react-native-firebase';
+import InitiateRent from '../components/InitiateRent.js';
+import RespondToInquiry from '../components/RespondToInquiry.js';
 
 export const toRentable = () => {
   const resetToRentable = NavigationActions.navigate({
@@ -31,24 +33,7 @@ export default class HomeScreen extends React.Component {
         
     });
 
-    this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
-        // Process your message as required
-        Alert.alert(
-          'NEW MESSAGE',
-          message.data.message,
-          [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ],
-          { cancelable: false }
-        )
-    });
-    //this.ref = firebase.firestore().collection('items');
-    //this.authSubscription = null;
-  }
-
-  static navigatorStyle = { navBarHidden: true };
-
-  state = {
+    this.state = {
     searchText: "",
     items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$250'},
             {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '50 mi', condition: 'Fair', rate: '$25'},
@@ -66,10 +51,27 @@ export default class HomeScreen extends React.Component {
     highPrice: '',
     lowPrice: '',
     yPosition: new Animated.Value(0),
-    showFilterArea: false
+    showFilterArea: false,
+    showRespondTo: false
   };
+    //this.ref = firebase.firestore().collection('items');
+    //this.authSubscription = null;
+    this.displayMessage = this.displayMessage.bind(this)
+  }
+
+  static navigatorStyle = { navBarHidden: true };
 
   componentDidMount() {
+
+    this._sub = this.props.navigation.addListener(
+      'didFocus',
+      () => {
+        if(this.props.navigation.getParam('data', '') != '') {
+          console.log('showRespondTo fired.');
+          this.setState({showRespondTo: true});
+        }
+      }
+    );
 
     console.log('componentDidMount');
 
@@ -133,39 +135,6 @@ export default class HomeScreen extends React.Component {
         )
       });
   };
-    // The user is an Object, so they're logged in
-    /*if (!this.state.user) {
-      const { navigate } = this.props.navigation;
-
-      navigate('LogIn');
-    }*/
-
-    /*this._sub = this.props.navigation.addListener(
-      'didFocus',
-      () => {
-        if(this.props.navigation.state.params.mode == 'fromEditItem') {
-          this.removeInitialItem = true;
-        }
-        else if(this.props.navigation.state.params.mode == 'fromPrice') {
-          Animated.timing(this.state.fadeAnim, {
-            toValue: 0.2,
-            duration: 1,
-          }).start(() => {
-            Animated.timing(this.state.fadeAnim, {
-              toValue: 1,
-              duration: 500,
-            }).start();
-          });
-        }
-        else if(this.props.navigation.state.params.mode == 'fromPriceManualSale') {
-          Animated.timing(this.state.fadeAnim, {
-            toValue: 0.2,
-            duration: 1,
-          }).start();
-        }
-      }
-    );*/
-  //}
 
   componentWillUnmount() {
     this.onTokenRefreshListener();
@@ -296,7 +265,7 @@ export default class HomeScreen extends React.Component {
                     flexDirection: 'column',
                     backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
                     paddingBottom: 5,
-                    marginTop: 5,
+                    marginTop: 0,
                     borderColor: '#6de3dc',
                     borderBottomWidth: 2,
                     borderStyle: 'solid',
@@ -304,7 +273,8 @@ export default class HomeScreen extends React.Component {
                     borderRadius: 4,
                     overflow: 'hidden',
                     flex: 0.5,
-                    marginLeft: 5
+                    marginLeft: 5,
+                    marginBottom: 5
                   }}
         >
           <FitImage source={{uri: item.uri}} style={styles.fitImageWithSize} resizeMethod='resize'/>
@@ -353,8 +323,8 @@ export default class HomeScreen extends React.Component {
 
   renderHeader = () => {
     return (
-      <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 0}}>
-        <View style={{flexDirection: 'row', flex: 0.8, justifyContent: 'space-between'}}>
+      <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 0, backgroundColor: '#ffe4c4', paddingBottom: 5}}>
+        <View style={{flexDirection: 'row', flex: 0.8, justifyContent: 'space-between', backgroundColor: '#ffe4c4'}}>
           <SearchBar
             onChangeText={(text) => this.setState({searchText: text})}
             //onClear={this.clear.bind(this)}
@@ -455,28 +425,38 @@ export default class HomeScreen extends React.Component {
     )
   };
 
+  displayMessage() {
+    if(this.state.showRespondTo) {
+      console.log('this.state.showRespondTo:', this.state.showRespondTo);
+      return ( <RespondToInquiry/> )
+    }
+  }
+
   render() {
+    //console.log('this.state.showRespondTo:',this.state.showRespondTo);
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <MultiSelectList
-            style={{backgroundColor: '#ffe4c4'}}
-            data={this.state.items}
-            renderItem={this.renderListItems}
-            numColumns={2}
-            contentContainerStyle={{}}
-            onEndReachedThreshold={0.5}
-            maxToRenderPerBatch={2}
-            initialNumToRender={4}
-            ListHeaderComponent={this.renderHeader}
-            getItemLayout={(data, index) => (
-              {length: Dimensions.get('window').height/2, offset: Dimensions.get('window').height/2 * index, index}
-            )}
-            backgroundColor={this.state.backgroundColor}
-            //contentContainerStyle={{backgroundColor: '#1e4683'}}
-          />
-        </View>
-      </TouchableWithoutFeedback>
+      <View style={{flex:1}}>
+        {this.displayMessage()}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
+            <MultiSelectList
+              style={{backgroundColor: '#ffe4c4'}}
+              data={this.state.items}
+              renderItem={this.renderListItems}
+              numColumns={2}
+              contentContainerStyle={{}}
+              onEndReachedThreshold={0.5}
+              maxToRenderPerBatch={2}
+              initialNumToRender={4}
+              ListHeaderComponent={this.renderHeader}
+              getItemLayout={(data, index) => (
+                {length: Dimensions.get('window').height/2, offset: Dimensions.get('window').height/2 * index, index}
+              )}
+              backgroundColor={this.state.backgroundColor}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
     );
   }
 }
@@ -496,7 +476,7 @@ class MultiSelectList extends React.PureComponent {
         numColumns={this.props.numColumns}
         contentContainerStyle={this.props.contentContainerStyle}
         ListHeaderComponent={this.props.ListHeaderComponent}
-        //stickyHeaderIndices={[0]}
+        stickyHeaderIndices={[0]}
         getItemLayout={this.props.getItemLayout}
         onEndReachedThreshold={this.props.onEndReachedThreshold}
         removeClippedSubviews={false}

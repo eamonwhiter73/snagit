@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
+import { Alert, StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon } from 'react-native-elements';
 import { createBottomTabNavigator, StackActions, NavigationActions } from 'react-navigation';
@@ -81,6 +81,42 @@ function getActiveRouteName(navigationState) {
 
 export default class App extends React.Component {
   
+  constructor() {
+    super();
+    this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
+        console.log(message);
+
+        // prevent infite look
+        if (!message.local_notification) {
+          let count = 1;
+          let string = '';
+          for(date of JSON.parse(message.data.dates)) {
+
+            if(count == JSON.parse(message.data.dates).length)
+              string += date;
+            else {
+              string += date+'\n';
+            }
+
+            count++;
+          }
+          // Process your message as required
+          Alert.alert(
+            'New Rental Inquiry',
+            'Dates Requested:\n\n'+string,
+            [
+              {text: 'RESPOND', onPress: () => {
+                //console.log("this.props.ref:", NavigationService.state());
+                NavigationService.navigate('Home', { data: JSON.parse(message.data.dates) });
+              }},
+              {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
+            ],
+            { cancelable: false }
+          )
+        }
+    });
+  }
+
   /*componentDidMount() {
     firebase.messaging().hasPermission()
         .then(enabled => {

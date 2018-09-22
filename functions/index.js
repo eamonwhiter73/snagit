@@ -37,8 +37,8 @@ function renameObjectKey(oldObj, oldName, newName) {
 }
 
 class ParamsObject {
-    constructor(value, tempId) {
-        this.data = {message: value, tempId: tempId};
+    constructor(value, tempId, dates) {
+        this.data = {message: value, tempId: tempId, dates:dates};
     }
 }
 
@@ -61,7 +61,7 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 
 		var topic = 'all';
 
-		let params = toPlainObject(new ParamsObject(newValue[context.params.messageId].message, context.params.messageId.toString()));
+		let params = toPlainObject(new ParamsObject(newValue[context.params.messageId].message, context.params.messageId.toString(), newValue[context.params.messageId].dates));
 		//params.data = toPlainObject(new WebObject());
 
 	    /*var payload = {
@@ -88,8 +88,6 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 			    // Boolean value of the result 
 			    //return new Promise((resolve, reject) => {
 				  if(result.exists) {
-			    	console.log( JSON.stringify("result.data:", result.data) ); // return an object of or document
-			    	console.log( JSON.stringify("result.data.length:", result.data.length) ); // return an object of or document
 			    	// If the document exist, you can get the document content 
 
 					if(Object.keys(result.data)[0] == newObj[Object.keys(newObj)[0]].timestamp) {

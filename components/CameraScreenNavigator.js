@@ -33,6 +33,17 @@ export default class CameraScreenNavigator extends React.Component {
 
           this.props.navigation.state.params = null;
         }
+        else if(this.props.navigation.getParam('data', '') != '') {
+          console.log('CameraNavigator picked didFocus up:', this.props.navigation.getParam('data', ''));
+
+          /*this.navigator && this.navigator.dispatch(
+            NavigationActions.navigate({
+              routeName: 'Home',
+            })
+          );*/
+
+          this.props.navigation.state.params = null;
+        }
       }
     );
 

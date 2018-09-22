@@ -15,9 +15,14 @@ function navigate(routeName, params) {
   );
 }
 
+function state() {
+	console.log(_navigator);
+}
+
 // add other navigation functions that you need and export them
 
 export default {
   navigate,
   setTopLevelNavigator,
+  state
 };

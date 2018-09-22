@@ -9,6 +9,7 @@ import NavigationService from '../services/NavigationService.js';
 import FitImage from 'react-native-fit-image';
 import type { RemoteMessage } from 'react-native-firebase';
 import InitiateRent from '../components/InitiateRent.js';
+import RespondToInquiry from '../components/RespondToInquiry.js';
 
 export default class RentableScreen extends React.Component {
 
@@ -18,12 +19,45 @@ export default class RentableScreen extends React.Component {
       opacity: 1,
       backgroundColor: '#6de3dc',
       rentButtonBackground: '#6de3dc',
-      someVar: 0,
-      setRentVisibile: false
+      respondToInquiry: false
       //condition: 'poor',
       //items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
     };
 
+    //this.ref = firebase.firestore().collection('items');
+    //this.authSubscription = null;
+
+    /*this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
+        console.log(message);
+
+        // prevent infite look
+        if (!message.local_notification) {
+          let count = 1;
+          let string = '';
+          for(date of JSON.parse(message.data.dates)) {
+
+            if(count == JSON.parse(message.data.dates).length)
+              string += date;
+            else {
+              string += date+'\n';
+            }
+
+            count++;
+          }
+          // Process your message as required
+          Alert.alert(
+            'New Rental Inquiry',
+            'Dates Requested:\n\n'+string,
+            [
+              {text: 'RESPOND', onPress: () => {
+                console.log(this._getCurrentRouteName());
+              }},
+              {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
+            ],
+            { cancelable: false }
+          )
+        }
+    });*/
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
   }
@@ -99,80 +133,11 @@ export default class RentableScreen extends React.Component {
       navigate('LogIn');
     }*/
 
-    /*this._sub = this.props.navigation.addListener(
-      'didFocus',
-      () => {
-        if(this.props.navigation.state.params.mode == 'fromEditItem') {
-          this.removeInitialItem = true;
-        }
-        else if(this.props.navigation.state.params.mode == 'fromPrice') {
-          Animated.timing(this.state.fadeAnim, {
-            toValue: 0.2,
-            duration: 1,
-          }).start(() => {
-            Animated.timing(this.state.fadeAnim, {
-              toValue: 1,
-              duration: 500,
-            }).start();
-          });
-        }
-        else if(this.props.navigation.state.params.mode == 'fromPriceManualSale') {
-          Animated.timing(this.state.fadeAnim, {
-            toValue: 0.2,
-            duration: 1,
-          }).start();
-        }
-      }
-    );*/
+    
   //}
 
   componentDidMount() {
-
-    firebase.messaging()
-      .hasPermission()
-      .then(enabled => {
-        if (!enabled) {
-          console.log('permissions disabled');
-          this._getPermission();
-        }
-
-        console.log('permissions enabled');
-
-        firebase.messaging().subscribeToTopic('all').catch((error) => {alert(error)});
-
-        firebase.messaging().getToken()
-          .then(fcmToken => {
-            if (fcmToken) {
-              //USE THIS FOR INDIVIDUAL DEVICE MESSAGES?
-              console.log(fcmToken);
-            } else {
-              alert("User doesn't have a token yet");
-            } 
-
-          }).catch((error) => {
-            alert(error);
-          });
-
-      }).then(() => {
-        
-      }).catch((error) => {alert(error)});
-  }
-
-  _getPermission = () => {
-    firebase.messaging()
-      .requestPermission()
-      .catch(error => {
-        // User has rejected permissions
-        // this._getPermission();
-        Alert.alert(
-          'ERROR',
-          "You must enable push notifications for the messaging system to work! If you don't you won't be able to use SnagIt! Please enable notificaitons in your phone - go to: Settings > Notifications > SnagIt.",
-          [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ],
-          { cancelable: false }
-        )
-      });
+    
   };
 
   componentWillMount() {
@@ -189,10 +154,11 @@ export default class RentableScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.onTokenRefreshListener();
+    /*this.onTokenRefreshListener();
     this.messageListener();
-    firebase.messaging().unsubscribeFromTopic('all');
+    firebase.messaging().unsubscribeFromTopic('all');*/
     //this.authSubscription();
+    //this._sub.remove();
   }
 
   navigateToOtherUserProfile = () => {
@@ -209,61 +175,6 @@ export default class RentableScreen extends React.Component {
     }, 1)
   }
 
-  sendRentMessage(dataChat, dataMessage) {
-    
-    /**ADD BACK**/
-
-    var timestamp = new Date().getTime().toString();
-
-    // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
-    var addChat = firebase.firestore().collection('chats').doc(timestamp);
-    // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
-    var addMessage = firebase.firestore().collection('messages').doc(timestamp);
-
-
-    /*dataChat = {
-      "title": "Rental Negotiation",
-      "lastMessage": "The relay seems to be malfunctioning.",
-      "timestamp": timestamp
-    }
-
-    dataMessage = {}
-    dataMessage[timestamp] = {
-      "name": "eamon",
-      "message": "The relay seems to be malfunctioning.",
-      "timestamp": timestamp
-    };*/
-
-    // Set the 'capital' field of the city
-    addChat.update(dataChat).then(() => {
-                    // Set the 'capital' field of the city
-      addMessage.update(dataMessage).catch((error) => {
-        //alert(error);
-        addMessage.set(dataMessage).catch((error) => {
-          alert(error);
-        });
-      });
-    }).catch((error) => {
-      //alert(error);
-      addChat.set(dataChat).catch((error) => {
-        alert(error);
-      }).then(() => {
-        addMessage.update(dataMessage).catch((error) => {
-          //alert(error);
-          addMessage.set(dataMessage).catch((error) => {
-            alert(error);
-          });
-        });
-      })
-    });
-  }
-
-  onOutsideTouch() {
-    console.log("in onOutsideTouch");
-    Keyboard.dismiss();
-    this.setState({setRentVisibile: false});
-  }
-
   render() {
     var base64Image = '';
 
@@ -275,7 +186,7 @@ export default class RentableScreen extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={this.onOutsideTouch.bind(this)}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between', /*alignItems: 'center'*/ paddingBottom: 10}}>
           <View style={{flex: 1, backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? -8 : 0, top: Platform.OS === 'ios' ? 0 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5, borderRadius: 8, borderWidth: 0}}>
             <SimpleLineIcons
@@ -312,11 +223,15 @@ export default class RentableScreen extends React.Component {
             />
           </View>
           <InitiateRent
-            initiateRentMessage={this.sendRentMessage.bind(this)}
             modalHeight={200}
             modalWidth={200}
-            setModalVisible={this.state.setRentVisibile}
           />
+          { this.respondToInquiry && (
+            <RespondToInquiry
+              modalHeight={200}
+              modalWidth={200}
+            />
+          )}
           <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center', backgroundColor: '#fffbf5'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
               <View style={styles.condition_container}>
@@ -419,11 +334,5 @@ const styles = StyleSheet.create({
       borderColor: '#6de3dc',
       flex: 1
    },
-   submitText: {
-    
-   },
-   submitTouch: {
-    
-   }
 
 })

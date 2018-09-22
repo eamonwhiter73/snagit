@@ -14,13 +14,13 @@ import { Map } from 'immutable';
 import Modal from 'react-native-modal';
 import firebase from 'react-native-firebase';
 
-export default class InitiateRent extends React.PureComponent {
+export default class RespondToInquiry extends React.PureComponent {
   constructor() {
     super()
     this.state = {
       _markedDates: {},
       //_selectedDay: new Date().dateString,
-      modalVisible: false,
+      modalVisible: true,
       message: 'Hi, I would like to rent an item from you.',
       rentButtonBackground: '#6de3dc',
       datesArray: []
@@ -190,7 +190,7 @@ export default class InitiateRent extends React.PureComponent {
           backgroundColor: 'rgba(0,0,0,0.8)',
           width: 300,
           borderRadius: 4,
-          borderWidth: 0,
+          borderWidth: 0
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
           <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -334,7 +334,7 @@ export default class InitiateRent extends React.PureComponent {
   sendRentMessage(dataChat, dataMessage, timestamp) {
     
     // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
-    let addChat = firebase.firestore().collection('chats').doc(timestamp);
+    /*let addChat = firebase.firestore().collection('chats').doc(timestamp);
     // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
     let addMessage = firebase.firestore().collection('messages').doc(timestamp);
 
@@ -359,12 +359,12 @@ export default class InitiateRent extends React.PureComponent {
           });
         });
       })
-    });
+    });*/
   }
 
   render() {
     return (
-      <View style={{}}>
+      <View style={{flex: 0, zIndex: 99}}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -372,38 +372,6 @@ export default class InitiateRent extends React.PureComponent {
           onBackdropPress ={() => {console.log("backdrop pressed"); this.setModalVisible(false)}}>
           {this._renderModalContent()}
         </Modal>
-
-        {!this.state.modalVisible && (
-          <TouchableOpacity
-            style={{
-              backgroundColor: this.state.rentButtonBackground,
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: Dimensions.get('window').width,
-              height: 44,
-            }}
-            onPress={() => {
-              this.setState({ rentButtonBackground: '#94ebe6' })
-
-              setTimeout(() => {
-                this.setState({ rentButtonBackground: '#6de3dc' })
-                this.setModalVisible(true)
-              }, 1)
-            }}>
-            <Text
-              style={{
-                backgroundColor: this.state.rentButtonBackground,
-                textAlign: 'center',
-                color: 'white',
-                fontWeight: '900',
-                fontSize: 18,
-              }}>
-              RENT
-            </Text>
-          </TouchableOpacity>
-        )}
       </View>
     )
   }
