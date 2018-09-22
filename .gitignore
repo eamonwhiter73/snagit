@@ -35,6 +35,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+!node_modules/react-native-calendars/src/calendar/day/custom/index.js 
 
 # BUCK
 buck-out/

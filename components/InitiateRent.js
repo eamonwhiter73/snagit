@@ -21,6 +21,8 @@ export default class InitiateRent extends React.PureComponent {
       message: 'Hi, I would like to rent an item from you.',
       rentButtonBackground: '#6de3dc',
     }
+
+    this.onDayPress = this.onDayPress.bind(this)
   }
 
   initialState = {
@@ -85,7 +87,8 @@ export default class InitiateRent extends React.PureComponent {
       let marked = true;
       if (this.state._markedDates[_selectedDay]) {
         // Already in marked dates, so reverse current marked state
-        marked = !this.state._markedDates[_selectedDay].marked;
+        marked = !this.state._markedDates[_selectedDay].selected;
+        console.log('marked:', marked);
       }
       
       // Create a new object using object property spread since it should be immutable
