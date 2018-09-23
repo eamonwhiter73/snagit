@@ -97,6 +97,7 @@ export default class InitiateRent extends React.PureComponent {
 
   onDayPress = (day) => {
       const _selectedDay = day.dateString;
+      console.log('this is _selectedDay:', _selectedDay);
       
       let marked = true;
       if (this.state._markedDates[_selectedDay]) {
@@ -107,6 +108,7 @@ export default class InitiateRent extends React.PureComponent {
         // Create a new object using object property spread since it should be immutable
         // Reading: https://davidwalsh.name/merge-objects
         const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': marked, 
+                                                                                       'dontAllowDeselect': false,
                                                                                         customStyles: {
                                                                                         container: {
                                                                                           backgroundColor: '#6de3dc',
@@ -363,6 +365,7 @@ export default class InitiateRent extends React.PureComponent {
   }
 
   render() {
+    console.log('this.state._markedDates in InitiateRent:', this.state._markedDates);
     return (
       <View style={{}}>
         <Modal

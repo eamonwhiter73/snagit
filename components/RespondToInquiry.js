@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   TextInput,
@@ -15,18 +16,29 @@ import Modal from 'react-native-modal';
 import firebase from 'react-native-firebase';
 
 export default class RespondToInquiry extends React.PureComponent {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
+    this.onDayPress = this.onDayPress.bind(this);
+    console.log('props:', props);
+
     this.state = {
       _markedDates: {},
       //_selectedDay: new Date().dateString,
       modalVisible: true,
-      message: 'Hi, I would like to rent an item from you.',
+      message: 'Sounds good!',
+      messageFromSender: '',
       rentButtonBackground: '#6de3dc',
-      datesArray: []
+      datesArray: [],
+      datesObject: {}
     }
-
-    this.onDayPress = this.onDayPress.bind(this)
+    //console.log("this.state.datesObject in compDidMount:",this.state.datesObject);
+    // Triggers component to render again, picking up the new state
+    /*this.setState({ _markedDates: this.state.datesObject }, () => {
+      console.log('updatedMarkedDates:', this.state._markedDates);
+    });*/
+    this.processMarkedDates = this.processMarkedDates.bind(this);
+    this.waitToShowDates = this.waitToShowDates.bind(this);
   }
 
   /*initialState = {
@@ -99,14 +111,14 @@ export default class RespondToInquiry extends React.PureComponent {
       const _selectedDay = day.dateString;
       
       let marked = true;
-      if (this.state._markedDates[_selectedDay]) {
+      if (this.state._markedDates[_selectedDay] && this.state._markedDates[_selectedDay].allowDeselect) {
         // Already in marked dates, so reverse current marked state
         marked = !this.state._markedDates[_selectedDay].selected;
         console.log('marked:', marked);
 
         // Create a new object using object property spread since it should be immutable
         // Reading: https://davidwalsh.name/merge-objects
-        const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': marked, 
+        const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': marked,
                                                                                         customStyles: {
                                                                                         container: {
                                                                                           backgroundColor: '#6de3dc',
@@ -123,10 +135,11 @@ export default class RespondToInquiry extends React.PureComponent {
           console.log('updatedMarkedDates:', this.state._markedDates);
         });
       }
-      else {
+      /*else if(!this.state._markedDates[_selectedDay]) {
         // Create a new object using object property spread since it should be immutable
         // Reading: https://davidwalsh.name/merge-objects
-        const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': true, 
+        const updatedMarkedDates = {...this.state._markedDates, ...{ [_selectedDay]: { 'selected': true,
+                                                                                       'allowDeselect': true,
                                                                                         customStyles: {
                                                                                         container: {
                                                                                           backgroundColor: '#6de3dc',
@@ -142,30 +155,11 @@ export default class RespondToInquiry extends React.PureComponent {
         this.setState({ _markedDates: updatedMarkedDates }, () => {
           console.log('updatedMarkedDates:', this.state._markedDates);
         });
-      }
+      }*/
   }
 
-  waitToStoreDates = () => new Promise((resolve) => {
-    let x = 0;
-    let datesArray = [];
-    for(date in this.state._markedDates) {
-      console.log("Date Object: ",date);
-      if(this.state._markedDates[date].selected) {
-        datesArray.push(date);
-      }
-      x++;
-    }
-
-    if(x == Object.keys(this.state._markedDates).length) {
-      console.log("x:",x);
-      console.log('datesArray in waitToStoreDates:', datesArray);
-      this.state.datesArray = datesArray;
-      resolve();
-    }
-  })
-
-  async processMarkedDates() {
-    await this.waitToStoreDates();
+  async processMarkedDates(propsIn) {
+    return await this.waitToShowDates(propsIn);
   }
 
   setModalVisible(visible) {
@@ -173,7 +167,7 @@ export default class RespondToInquiry extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('componentDidUpdate in InitiateRent:', this.props, prevProps, prevState, snapshot)
+    console.log('componentDidUpdate in RespondToInquiry:', this.props, prevProps, prevState, snapshot)
   }
 
   _renderModalContent = () => (
@@ -185,15 +179,39 @@ export default class RespondToInquiry extends React.PureComponent {
           paddingLeft: 10,
           paddingRight: 10,
           marginTop: 0,
-          flex: 0.824,
+          flex: 1,
           marginLeft: (Dimensions.get('window').width - 300) / 4,
           backgroundColor: 'rgba(0,0,0,0.8)',
           width: 300,
           borderRadius: 4,
           borderWidth: 0
         }}>
+
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-          <View style={{ flexDirection: 'column', flex: 1 }}>
+          <View style={{ flexDirection: 'column', flex: 0, marginBottom: 10 }}>
+            <Text
+              style={{
+                flex: 0,
+                width: Dimensions.get('window').width,
+                color: 'white',
+                fontWeight: '700',
+                marginBottom: 5,
+              }}>
+              Message from inquirer:
+            </Text>
+            <Text
+              style={{
+                width: 280,
+                flex: 0,
+                backgroundColor: 'transparent',
+                paddingLeft: 5,
+                borderRadius: 4,
+                color: '#ffffff'
+              }}>
+                {this.state.messageFromSender}
+            </Text>
+          </View>
+          <View style={{ flexDirection: 'column', flex: 1, marginBottom: 5 }}>
             <Text
               style={{
                 flex: 0,
@@ -206,7 +224,7 @@ export default class RespondToInquiry extends React.PureComponent {
             </Text>
             {this.showCalendar()}
           </View>
-          <View style={{ flexDirection: 'column', flex: 0.2, marginBottom: 10 }}>
+          <View style={{ flexDirection: 'column', flex: 0.1, marginBottom: 10 }}>
             <TextInput
               style={{
                 width: 280,
@@ -223,7 +241,7 @@ export default class RespondToInquiry extends React.PureComponent {
               numberOfLines={2}
             />
           </View>
-          <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0 }}>
+          <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0, marginBottom: 10 }}>
             <TouchableOpacity
               activeOpacity={1}
               style={{
@@ -236,7 +254,7 @@ export default class RespondToInquiry extends React.PureComponent {
                 borderWidth: 0,
               }}
               onPress={() => {
-                this.setState({ rentButtonBackground: '#94ebe6' })
+                /*this.setState({ rentButtonBackground: '#94ebe6' })
 
                 setTimeout(() => {
                   this.setState({ rentButtonBackground: '#6de3dc' })
@@ -262,7 +280,7 @@ export default class RespondToInquiry extends React.PureComponent {
 
                   this.sendRentMessage(dataChat, dataMessage, timestamp)
                   this.setModalVisible(false)
-                }, 1)
+                }, 1)*/
               }}>
               <Text
                 style={{
@@ -274,7 +292,117 @@ export default class RespondToInquiry extends React.PureComponent {
                   borderRadius: 4,
                   borderWidth: 0,
                 }}>
-                SEND
+                RESPOND
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0, marginBottom: 10 }}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={{
+                backgroundColor: this.state.rentButtonBackground,
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 280,
+                borderRadius: 4,
+                borderWidth: 0,
+              }}
+              onPress={() => {
+                /*this.setState({ rentButtonBackground: '#94ebe6' })
+
+                setTimeout(() => {
+                  this.setState({ rentButtonBackground: '#6de3dc' })
+
+                  let timestamp = new Date().getTime().toString();
+
+                  this.processMarkedDates();
+                  console.log("this.state.datesArray", this.state.datesArray);
+                  
+                  dataChat = {
+                    "title": "Rental Inquiry",
+                    "lastMessage": this.state.message,
+                    "timestamp": timestamp
+                  }
+
+                  dataMessage = {}
+                  dataMessage[timestamp] = {
+                    "name": "eamon",
+                    "message": this.state.message,
+                    "timestamp": timestamp,
+                    "dates": JSON.stringify(this.state.datesArray)
+                  };
+
+                  this.sendRentMessage(dataChat, dataMessage, timestamp)
+                  this.setModalVisible(false)
+                }, 1)*/
+              }}>
+              <Text
+                style={{
+                  backgroundColor: this.state.rentButtonBackground,
+                  textAlign: 'center',
+                  color: 'white',
+                  fontWeight: '900',
+                  fontSize: 18,
+                  borderRadius: 4,
+                  borderWidth: 0,
+                }}>
+                ACCEPT
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0 }}>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={{
+                backgroundColor: this.state.rentButtonBackground,
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: 280,
+                borderRadius: 4,
+                borderWidth: 0,
+              }}
+              onPress={() => {
+                /*this.setState({ rentButtonBackground: '#94ebe6' })
+
+                setTimeout(() => {
+                  this.setState({ rentButtonBackground: '#6de3dc' })
+
+                  let timestamp = new Date().getTime().toString();
+
+                  this.processMarkedDates();
+                  console.log("this.state.datesArray", this.state.datesArray);
+                  
+                  dataChat = {
+                    "title": "Rental Inquiry",
+                    "lastMessage": this.state.message,
+                    "timestamp": timestamp
+                  }
+
+                  dataMessage = {}
+                  dataMessage[timestamp] = {
+                    "name": "eamon",
+                    "message": this.state.message,
+                    "timestamp": timestamp,
+                    "dates": JSON.stringify(this.state.datesArray)
+                  };
+
+                  this.sendRentMessage(dataChat, dataMessage, timestamp)
+                  this.setModalVisible(false)
+                }, 1)*/
+              }}>
+              <Text
+                style={{
+                  backgroundColor: this.state.rentButtonBackground,
+                  textAlign: 'center',
+                  color: 'white',
+                  fontWeight: '900',
+                  fontSize: 18,
+                  borderRadius: 4,
+                  borderWidth: 0,
+                }}>
+                DECLINE
               </Text>
             </TouchableOpacity>
           </View>
@@ -283,7 +411,46 @@ export default class RespondToInquiry extends React.PureComponent {
     </TouchableWithoutFeedback>
   );
 
+  waitToShowDates = (propsIn) => new Promise((resolve) => {
+    console.log('propsIn.messageInfo:', propsIn.messageInfo);
+    let updatedMarkedDates;
+    for(let [index, value] of JSON.parse(propsIn.messageInfo.dates).entries()) {
+      // Create a new object using object property spread since it should be immutable
+      // Reading: https://davidwalsh.name/merge-objects
+      updatedMarkedDates = {...updatedMarkedDates, ...{ [value]: { 'selected': true, 
+                                                                   'dontAllowDeselect': true, 
+                                                                    customStyles: {
+                                                                      container: {
+                                                                        backgroundColor: '#6de3dc',
+                                                                      },
+                                                                      text: {
+                                                                        color: 'white',
+                                                                        fontWeight: 'bold'
+                                                                      },
+                                                                    }, 
+                                } } }
+
+      console.log(index);                          
+      console.log('updatedMarkedDatesInside:',updatedMarkedDates);
+
+      if(JSON.parse(propsIn.messageInfo.dates).length - 1 ==  index){
+        console.log("finished async in RespondToInquiry");
+        const toUpdate = {...updatedMarkedDates};
+        this.setState({_markedDates: toUpdate});
+        resolve();
+      }
+    }
+  })
+
+  displayMessage() {
+    this.setState({messageFromSender: this.props.messageInfo.message})
+  }
+
   componentDidMount() {
+
+    this.processMarkedDates(this.props);
+    this.displayMessage(this.props.messageInfo.message);
+
     firebase.messaging()
       .hasPermission()
       .then(enabled => {
@@ -363,6 +530,7 @@ export default class RespondToInquiry extends React.PureComponent {
   }
 
   render() {
+    console.log('this.state._markedDates in render:', this.state._markedDates);
     return (
       <View style={{flex: 0, zIndex: 99}}>
         <Modal
@@ -375,4 +543,8 @@ export default class RespondToInquiry extends React.PureComponent {
       </View>
     )
   }
+}
+
+RespondToInquiry.propTypes = {
+  dates: PropTypes.array
 }

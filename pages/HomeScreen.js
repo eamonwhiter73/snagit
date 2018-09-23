@@ -140,6 +140,7 @@ export default class HomeScreen extends React.Component {
     this.onTokenRefreshListener();
     this.messageListener();
     firebase.messaging().unsubscribeFromTopic('all');
+    this._sub.remove();
     //this.authSubscription();
   
     /*this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
@@ -425,18 +426,18 @@ export default class HomeScreen extends React.Component {
     )
   };
 
-  displayMessage() {
+  displayMessage(info) {
     if(this.state.showRespondTo) {
-      console.log('this.state.showRespondTo:', this.state.showRespondTo);
-      return ( <RespondToInquiry/> )
+      console.log('displayMessageInHomeScreen:', info);
+      return ( <RespondToInquiry messageInfo={info}/> )
     }
   }
 
   render() {
-    //console.log('this.state.showRespondTo:',this.state.showRespondTo);
+    console.log('in render of HomeScreen',this.props.navigation.getParam('data', ''));
     return (
       <View style={{flex:1}}>
-        {this.displayMessage()}
+        {this.displayMessage(this.props.navigation.getParam('data', ''))}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
             <MultiSelectList

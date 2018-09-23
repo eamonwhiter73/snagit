@@ -106,8 +106,8 @@ export default class App extends React.Component {
             'Dates Requested:\n\n'+string,
             [
               {text: 'RESPOND', onPress: () => {
-                //console.log("this.props.ref:", NavigationService.state());
-                NavigationService.navigate('Home', { data: JSON.parse(message.data.dates) });
+                console.log("this.props.ref:", message.data);
+                NavigationService.navigate('Home', { data: JSON.parse(JSON.stringify(message.data)) });
               }},
               {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
             ],
