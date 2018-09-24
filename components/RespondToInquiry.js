@@ -11,7 +11,8 @@ import {
   Keyboard,
   Image,
   Platform,
-  Animated
+  Animated,
+  ScrollView
 } from 'react-native'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Map } from 'immutable';
@@ -39,7 +40,8 @@ export default class RespondToInquiry extends React.PureComponent {
       datesObject: {},
       keyboardOpen: false,
       yPosition: new Animated.Value(0),
-      yPositionPositive: new Animated.Value(0)
+      yPositionPositive: new Animated.Value(0),
+      height: 0
     }
     ////console.log("this.state.datesObject in compDidMount:",this.state.datesObject);
     // Triggers component to render again, picking up the new state
@@ -69,7 +71,8 @@ export default class RespondToInquiry extends React.PureComponent {
       <Calendar
         style={{
           borderWidth: 0,
-          borderRadius: 4
+          borderRadius: 4,
+          marginBottom: 10
         }}
         theme={{
           todayTextColor: '#6de3dc',
@@ -198,8 +201,8 @@ export default class RespondToInquiry extends React.PureComponent {
     }).start();*/
   }
 
-  _renderModalContent = () => (
-    <TouchableWithoutFeedback onPress={() => {if(this.state.keyboardOpen) {Keyboard.dismiss()}}}>
+  _renderModalContent = () => {
+    return ( 
       <Animated.View
         style={{
           paddingTop: 5,
@@ -215,102 +218,110 @@ export default class RespondToInquiry extends React.PureComponent {
           borderRadius: 4,
           borderWidth: 0,
         }}>
-
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-          <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 0, backgroundColor: '#e6fffe', marginTop: 5}}>
-            <View style={{flex: 0, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
-              <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
-                <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
-                  <Image
-                    source={require('../assets/billythekid2.jpg')}
-                    style={{height: 60, width: 60, marginTop: Platform.OS === 'ios' ? 10 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 30}}
-                  />
-                  <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 5}}>
-                    <Ionicons
-                      name='ios-star'
-                      color='#eec400'
-                      size={14}
+          <View style={{height: 126}}>
+            <ScrollView contentContainerStyle={{flexGrow:1}} style={{flex: 1, flexDirection: 'column', backgroundColor: '#e6fffe', marginTop: 5}}>
+              <View style={{flex: 0, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 5, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
+                <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
+                  <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                    <Image
+                      source={require('../assets/billythekid2.jpg')}
+                      style={{height: 60, width: 60, marginTop: Platform.OS === 'ios' ? 10 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 30}}
                     />
-                    <Ionicons
-                      name='ios-star'
-                      color='#eec400'
-                      size={14}
-                    />
-                    <Ionicons
-                      name='ios-star'
-                      color='#eec400'
-                      size={14}
-                    />
-                    <Ionicons
-                      name='ios-star'
-                      color='#eec400'
-                      size={14}
-                    />
-                    <Ionicons
-                      name='ios-star'
-                      color='#eec400'
-                      size={14}
-                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 5}}>
+                      <Ionicons
+                        name='ios-star'
+                        color='#eec400'
+                        size={14}
+                      />
+                      <Ionicons
+                        name='ios-star'
+                        color='#eec400'
+                        size={14}
+                      />
+                      <Ionicons
+                        name='ios-star'
+                        color='#eec400'
+                        size={14}
+                      />
+                      <Ionicons
+                        name='ios-star'
+                        color='#eec400'
+                        size={14}
+                      />
+                      <Ionicons
+                        name='ios-star'
+                        color='#eec400'
+                        size={14}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <View style={{flexDirection: 'column', backgroundColor: '#e6fffe', marginTop: Platform.OS === 'ios' ? 10 : 10, flex: 0.5}}>
+                  <View style={{flexDirection: 'row', flex: 0.5}}>
+                    <View style={{flex: 0, alignSelf: 'center'}}>
+                      <Text style={{fontSize: 16, fontWeight: '700'}}>
+                        eamon.white
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
-              <View style={{flexDirection: 'column', backgroundColor: '#e6fffe', marginTop: Platform.OS === 'ios' ? 10 : 10, flex: 0.5}}>
-                <View style={{flexDirection: 'row', flex: 0.5}}>
-                  <View style={{flex: 0, alignSelf: 'center'}}>
-                    <Text style={{fontSize: 16, fontWeight: '700'}}>
-                      eamon.white
-                    </Text>
-                  </View>
-                </View>
+              <View style={{flex: 0, marginBottom: 5, backgroundColor: '#e6fffe'}}>
+                <Text
+                  style={{
+                    width: 280,
+                    flex: 0,
+                    backgroundColor: '#e6fffe',
+                    paddingLeft: 5,
+                    borderWidth: 0,
+                    borderRadius: 4,
+                    color: '#000',
+                    fontSize: 14,
+                  }}>
+                    {this.state.messageFromSender}
+                </Text>
               </View>
-            </View>
-            <View style={{flex: 0, marginBottom: 5, backgroundColor: '#e6fffe'}}>
-              <Text
+            </ScrollView>
+          </View>
+          <View style={{flex: 1}} onLayout={(event) => {
+            this.setState({height: event.nativeEvent.layout.height});
+          }}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={{ flexDirection: 'column', flex: 1 }}>
+                <Text
+                  style={{
+                    flex: 0,
+                    width: Dimensions.get('window').width,
+                    color: 'white',
+                    fontWeight: '700',
+                    marginTop: 5,
+                    marginBottom: 5
+                  }}>
+                  Date(s) Needed:
+                </Text>
+                {this.showCalendar()}
+              </View>
+            </TouchableWithoutFeedback>
+            <View style={{ flex: 0, marginBottom: 10, justifyContent: 'center', flexDirection: 'column', marginTop: 0 }}>
+              <TextInput
                 style={{
                   width: 280,
-                  flex: 0,
-                  backgroundColor: '#e6fffe',
+                  borderColor: 'gray',
+                  borderWidth: 1,
+                  backgroundColor: '#ffffff',
                   paddingLeft: 5,
-                  borderWidth: 0,
                   borderRadius: 4,
-                  color: '#000'
-                }}>
-                  {this.state.messageFromSender}
-              </Text>
+                  height: this.state.height - 313
+                }}
+                onChangeText={text => this.setState({ message: text })}
+                value={this.state.message}
+                multiline={true}
+                numberOfLines={2}
+                onFocus={this.animateUp}
+                placeholder='Type a message...'
+              />
             </View>
-          </View>
-          <View style={{ flexDirection: 'column', flex: 1, marginBottom: 5 }}>
-            <Text
-              style={{
-                flex: 0,
-                width: Dimensions.get('window').width,
-                color: 'white',
-                fontWeight: '700',
-                marginTop: 5,
-                marginBottom: 5
-              }}>
-              Date(s) Needed:
-            </Text>
-            {this.showCalendar()}
-          </View>
-          <View style={{ flexDirection: 'column', flex: 0.1, marginBottom: 10 }}>
-            <TextInput
-              style={{
-                width: 280,
-                flex: 1,
-                borderColor: 'gray',
-                borderWidth: 1,
-                backgroundColor: '#ffffff',
-                paddingLeft: 5,
-                borderRadius: 4,
-              }}
-              onChangeText={text => this.setState({ message: text })}
-              value={this.state.message}
-              multiline={true}
-              numberOfLines={2}
-              onFocus={this.animateUp}
-              placeholder='Type a message...'
-            />
           </View>
           <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0, marginBottom: 10 }}>
             <TouchableOpacity
@@ -401,8 +412,8 @@ export default class RespondToInquiry extends React.PureComponent {
           </View>
         </View>
       </Animated.View>
-    </TouchableWithoutFeedback>
-  );
+    );
+  }
 
   waitToShowDates = (propsIn) => new Promise((resolve) => {
     //console.log('propsIn.messageInfo:', propsIn.messageInfo);
@@ -530,7 +541,7 @@ export default class RespondToInquiry extends React.PureComponent {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={this.state.modalVisible}                                                           //THIS NEEDS TO BE TRUE WHEN I COME BACK
+        isVisible={this.state.modalVisible}                                                           //THIS NEEDS TO BE TRUE WHEN I COME BACK
         onBackdropPress ={() => {/*console.log("backdrop pressed");*/ if(!this.state.keyboardOpen) {this.setModalVisible(false)} else {Keyboard.dismiss()}}}>
         {this._renderModalContent()}
       </Modal>

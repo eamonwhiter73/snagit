@@ -186,7 +186,8 @@ export default class RentableScreen extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{flex: 1}}>
+      {/*<TouchableWithoutFeedback onPress={Keyboard.dismiss}>*/}
         <ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between', /*alignItems: 'center'*/ paddingBottom: 10}}>
           <View style={{flex: 1, backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? -8 : 0, top: Platform.OS === 'ios' ? 0 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5, borderRadius: 8, borderWidth: 0}}>
             <SimpleLineIcons
@@ -222,10 +223,7 @@ export default class RentableScreen extends React.Component {
               style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width}}
             />
           </View>
-          <InitiateRent
-            modalHeight={200}
-            modalWidth={200}
-          />
+          <InitiateRent/>
           <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center', backgroundColor: '#fffbf5'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
               <View style={styles.condition_container}>
@@ -272,7 +270,8 @@ export default class RentableScreen extends React.Component {
             </View>
           </View>
         </ScrollView>
-      </TouchableWithoutFeedback>
+      {/*</TouchableWithoutFeedback>*/}
+      </View>
     );
   }
 }

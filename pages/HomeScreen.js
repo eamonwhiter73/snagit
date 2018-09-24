@@ -81,9 +81,8 @@ export default class HomeScreen extends React.Component {
     this._sub2 = this.props.navigation.addListener(
       'didBlur',
       () => {
-        console.log('in didBlur for HomeScreen');
-        this.setState({info: this.props.navigation.getParam('data', '')})
         this.setState({showRespondTo: false});
+        this.setState({info: this.props.navigation.getParam('data', '')})
       }
     );
 

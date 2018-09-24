@@ -56,6 +56,7 @@ export default class InitiateRent extends React.PureComponent {
         theme={{
           todayTextColor: '#6de3dc',
           selectedDayBackgroundColor: '#6de3dc',
+          borderRadius: 16
         }}
         markingType={'custom'}
         markedDates={this.state._markedDates}
@@ -202,7 +203,7 @@ export default class InitiateRent extends React.PureComponent {
   }
 
   _renderModalContent = () => (
-    <TouchableWithoutFeedback onPress={() => {console.log('tapped')}}>
+    <View style={{flex: 1, justifyContent: 'center'}}>
       <Animated.View
         style={{
           paddingTop: 5,
@@ -211,7 +212,7 @@ export default class InitiateRent extends React.PureComponent {
           paddingRight: 10,
           marginTop: this.state.yPosition,
           marginBottom: this.state.yPositionPositive,
-          flex: 0.765,
+          flex: 0.708,
           marginLeft: (Dimensions.get('window').width - 300) / 4,
           backgroundColor: 'rgba(0,0,0,0.8)',
           width: 300,
@@ -219,19 +220,22 @@ export default class InitiateRent extends React.PureComponent {
           borderWidth: 0,
         }}>
         <View style={{ flexDirection: 'column', flex: 1 }}>
-          <View style={{ flexDirection: 'column', flex: 0.7 }}>
-            <Text
-              style={{
-                flex: 0,
-                width: Dimensions.get('window').width,
-                color: 'white',
-                fontWeight: '700',
-                marginBottom: 5,
-              }}>
-              Date(s) Needed:
-            </Text>
-            {this.showCalendar()}
-          </View>
+          <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss}}>
+            <View style={{ flexDirection: 'column', flex: 0.7 }}>
+              <Text
+                style={{
+                  flex: 0,
+                  width: Dimensions.get('window').width,
+                  color: 'white',
+                  fontWeight: '700',
+                  marginBottom: 5,
+                }}>
+                Date(s) Needed:
+              </Text>
+              {this.showCalendar()}
+            </View>
+          </TouchableWithoutFeedback>
+
           <Animated.View style={{flexDirection: 'column',
                         flex: 0.2,
                         marginBottom: 10,
@@ -310,7 +314,7 @@ export default class InitiateRent extends React.PureComponent {
           </View>
         </View>
       </Animated.View>
-    </TouchableWithoutFeedback>
+    </View>
   );
 
   componentWillUnmount() {
