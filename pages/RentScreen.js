@@ -28,6 +28,8 @@ export default class RentScreen extends React.Component {
   };
 
   componentDidMount() {
+    console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
+    
     Keyboard.addListener('keyboardWillHide', () => {
       Animated.timing(this.state.yPosition, {
         toValue: 0,

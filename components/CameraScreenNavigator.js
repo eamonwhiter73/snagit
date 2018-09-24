@@ -10,6 +10,10 @@ export default class CameraScreenNavigator extends React.Component {
   }
 
   componentDidMount() {
+    console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
+    console.log('key for stack navigator not dangeroous:',this.props.navigation.state.key);
+
+
     this._sub = this.props.navigation.addListener(
       'didFocus',
       () => {

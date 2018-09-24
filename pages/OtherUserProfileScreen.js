@@ -35,6 +35,7 @@ export default class RentableScreen extends React.Component {
   };
 
   componentDidMount() {
+    console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
     // The user is an Object, so they're logged in
     /*if (!this.state.user) {
       const { navigate } = this.props.navigation;

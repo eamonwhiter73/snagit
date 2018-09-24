@@ -7,7 +7,8 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
-  Keyboard
+  Keyboard,
+  Animated
 } from 'react-native'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Map } from 'immutable';
@@ -23,7 +24,9 @@ export default class InitiateRent extends React.PureComponent {
       modalVisible: false,
       message: 'Hi, I would like to rent an item from you.',
       rentButtonBackground: '#6de3dc',
-      datesArray: []
+      datesArray: [],
+      yPosition: new Animated.Value(0),
+      yPositionPositive: new Animated.Value(0)
     }
 
     this.onDayPress = this.onDayPress.bind(this)
@@ -178,24 +181,45 @@ export default class InitiateRent extends React.PureComponent {
     console.log('componentDidUpdate in InitiateRent:', this.props, prevProps, prevState, snapshot)
   }
 
+  animateUp = () => {
+    console.log("animateUp");
+
+    Animated.parallel([
+        Animated.timing(this.state.yPositionPositive, {
+          toValue: 120,
+          duration: 300,
+        }),
+        Animated.timing(this.state.yPosition, {
+          toValue: -120,
+          duration: 300,
+        })
+      ]).start()
+
+    /*Animated.timing(this.state.fadeAnim, {
+        toValue: 0,
+        duration: 1,
+    }).start();*/
+  }
+
   _renderModalContent = () => (
     <TouchableWithoutFeedback onPress={() => {console.log('tapped')}}>
-      <View
+      <Animated.View
         style={{
           paddingTop: 5,
           paddingBottom: 10,
           paddingLeft: 10,
           paddingRight: 10,
-          marginTop: 0,
-          flex: 0.824,
+          marginTop: this.state.yPosition,
+          marginBottom: this.state.yPositionPositive,
+          flex: 0.765,
           marginLeft: (Dimensions.get('window').width - 300) / 4,
           backgroundColor: 'rgba(0,0,0,0.8)',
           width: 300,
           borderRadius: 4,
           borderWidth: 0,
         }}>
-        <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-          <View style={{ flexDirection: 'column', flex: 1 }}>
+        <View style={{ flexDirection: 'column', flex: 1 }}>
+          <View style={{ flexDirection: 'column', flex: 0.7 }}>
             <Text
               style={{
                 flex: 0,
@@ -208,7 +232,10 @@ export default class InitiateRent extends React.PureComponent {
             </Text>
             {this.showCalendar()}
           </View>
-          <View style={{ flexDirection: 'column', flex: 0.2, marginBottom: 10 }}>
+          <Animated.View style={{flexDirection: 'column',
+                        flex: 0.2,
+                        marginBottom: 10,
+                      }}>
             <TextInput
               style={{
                 width: 280,
@@ -223,8 +250,9 @@ export default class InitiateRent extends React.PureComponent {
               value={this.state.message}
               multiline={true}
               numberOfLines={2}
+              onFocus={this.animateUp}
             />
-          </View>
+          </Animated.View>
           <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0 }}>
             <TouchableOpacity
               activeOpacity={1}
@@ -281,11 +309,29 @@ export default class InitiateRent extends React.PureComponent {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardWillHide');
+  }
+
   componentDidMount() {
+    Keyboard.addListener('keyboardWillHide', () => {
+
+      Animated.parallel([
+        Animated.timing(this.state.yPositionPositive, {
+          toValue: 0,
+          duration: 1,
+        }),
+        Animated.timing(this.state.yPosition, {
+          toValue: 0,
+          duration: 1,
+        })
+      ]).start()
+    })
+
     firebase.messaging()
       .hasPermission()
       .then(enabled => {
@@ -367,7 +413,7 @@ export default class InitiateRent extends React.PureComponent {
   render() {
     console.log('this.state._markedDates in InitiateRent:', this.state._markedDates);
     return (
-      <View style={{}}>
+      <View>
         <Modal
           animationType="slide"
           transparent={true}

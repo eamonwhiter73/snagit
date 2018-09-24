@@ -83,96 +83,44 @@ export default class App extends React.Component {
   
   constructor() {
     super();
-    this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
-        console.log(message);
-
-        // prevent infite look
-        if (!message.local_notification) {
-          let count = 1;
-          let string = '';
-          for(date of JSON.parse(message.data.dates)) {
-
-            if(count == JSON.parse(message.data.dates).length)
-              string += date;
-            else {
-              string += date+'\n';
-            }
-
-            count++;
-          }
-          // Process your message as required
-          Alert.alert(
-            'New Rental Inquiry',
-            'Dates Requested:\n\n'+string,
-            [
-              {text: 'RESPOND', onPress: () => {
-                console.log("this.props.ref:", message.data);
-                NavigationService.navigate('Home', { data: JSON.parse(JSON.stringify(message.data)) });
-              }},
-              {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
-            ],
-            { cancelable: false }
-          )
-        }
-    });
   }
 
-  /*componentDidMount() {
-    firebase.messaging().hasPermission()
-        .then(enabled => {
-          if (enabled) {
-            firebase.messaging().getToken()
-              .then(fcmToken => {
-                if (fcmToken) {
-                  // user has a device token
-                } else {
-                  // user doesn't have a device token yet
-                } 
-              });
+  componentDidMount() {
+    this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
+      console.log(message);
 
-            firebase.messaging().subscribeToTopic('all');
+      // prevent infite look
+      //if (!message.local_notification) {
+        let count = 1;
+        let string = '';
+        for(date of JSON.parse(message.data.dates)) {
 
-            this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
-                // Process your token as required
-                
-            });
+          if(count == JSON.parse(message.data.dates).length)
+            string += date;
+          else {
+            string += date+'\n';
+          }
 
-            this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
-                // Process your message as required
-                alert(message);
-            });
-            // user has permissions
-          } else {
-            firebase.messaging().requestPermission()
-              .then(() => {
-                firebase.messaging().getToken()
-                  .then(fcmToken => {
-                    if (fcmToken) {
-                      // user has a device token
-                    } else {
-                      // user doesn't have a device token yet
-                    } 
-                  });
-
-                firebase.messaging().subscribeToTopic('all');
-
-                this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
-                    // Process your token as required
-                    
-                });
-
-                this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
-                  console.log("message received");
-                    // Process your message as required
-                    alert(message);
-                });
-              })
-              .catch(error => {
-                alert(error);
-              });
-          } 
-        });
-  }*/
+          count++;
+        }
+        // Process your message as required
+        Alert.alert(
+          'New Rental Inquiry',
+          'Dates Requested:\n\n'+string,
+          [
+            {text: 'RESPOND', onPress: () => {
+              console.log("message.data:", message.data);
+              console.log("this.props.ref:", this.props.ref);
+              //NavigationService.reset('Home', { data: JSON.parse(JSON.stringify(message.data)) })
+              NavigationService.navigate('Home', { data: JSON.parse(JSON.stringify(message.data)) });
+            }},
+            {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
+          ],
+          { cancelable: false }
+        )
+      //}
+    });
+  }
 
   componentWillUnmount() {
     /*this.onTokenRefreshListener();

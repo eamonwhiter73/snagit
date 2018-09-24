@@ -34,42 +34,56 @@ export default class HomeScreen extends React.Component {
     });
 
     this.state = {
-    searchText: "",
-    items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$250'},
-            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '50 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-            {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'}
-           ],
-    conditions: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}],
-    backgroundColor: '#e6fffe',
-    radius: '25',
-    condition: null,
-    highPrice: '',
-    lowPrice: '',
-    yPosition: new Animated.Value(0),
-    showFilterArea: false,
-    showRespondTo: false
-  };
+      searchText: "",
+      items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$250'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '50 mi', condition: 'Fair', rate: '$25'},
+              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
+              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'}
+             ],
+      conditions: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}],
+      backgroundColor: '#e6fffe',
+      radius: '25',
+      condition: null,
+      highPrice: '',
+      lowPrice: '',
+      yPosition: new Animated.Value(0),
+      showFilterArea: false,
+      showRespondTo: false,
+      info: {message: "", dates: []}
+    };
+
+    this.returnRespond = this.returnRespond.bind(this);
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
-    this.displayMessage = this.displayMessage.bind(this)
   }
 
   static navigatorStyle = { navBarHidden: true };
 
   componentDidMount() {
+    console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
 
     this._sub = this.props.navigation.addListener(
       'didFocus',
       () => {
+        console.log('in didFocus for HomeScreen');
         if(this.props.navigation.getParam('data', '') != '') {
           console.log('showRespondTo fired.');
+          this.setState({info: this.props.navigation.getParam('data', '')})
           this.setState({showRespondTo: true});
         }
+      }
+    );
+
+    this._sub2 = this.props.navigation.addListener(
+      'didBlur',
+      () => {
+        console.log('in didBlur for HomeScreen');
+        this.setState({info: this.props.navigation.getParam('data', '')})
+        this.setState({showRespondTo: false});
       }
     );
 
@@ -141,6 +155,7 @@ export default class HomeScreen extends React.Component {
     this.messageListener();
     firebase.messaging().unsubscribeFromTopic('all');
     this._sub.remove();
+    this._sub2.remove();
     //this.authSubscription();
   
     /*this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
@@ -426,18 +441,20 @@ export default class HomeScreen extends React.Component {
     )
   };
 
-  displayMessage(info) {
-    if(this.state.showRespondTo) {
-      console.log('displayMessageInHomeScreen:', info);
-      return ( <RespondToInquiry messageInfo={info}/> )
-    }
+  returnRespond() {
+    return ( <RespondToInquiry messageInfo={this.state.info}/> )
+  }
+
+  onChanged = () => {
+    this.setState({showRespondTo: true});
+    this.setState({info: this.props.navigation.getParam('data', '')});
   }
 
   render() {
-    console.log('in render of HomeScreen',this.props.navigation.getParam('data', ''));
+    console.log('in render of HomeScreen',this.props.navigation.getParam('data', ''),this.state.showRespondTo);
     return (
       <View style={{flex:1}}>
-        {this.displayMessage(this.props.navigation.getParam('data', ''))}
+        {this.state.showRespondTo && this.returnRespond()}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
             <MultiSelectList

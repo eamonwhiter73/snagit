@@ -137,7 +137,7 @@ export default class RentableScreen extends React.Component {
   //}
 
   componentDidMount() {
-    
+    console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
   };
 
   componentWillMount() {
@@ -226,12 +226,6 @@ export default class RentableScreen extends React.Component {
             modalHeight={200}
             modalWidth={200}
           />
-          { this.respondToInquiry && (
-            <RespondToInquiry
-              modalHeight={200}
-              modalWidth={200}
-            />
-          )}
           <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center', backgroundColor: '#fffbf5'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
               <View style={styles.condition_container}>

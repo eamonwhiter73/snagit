@@ -8,34 +8,43 @@ import {
   TouchableWithoutFeedback,
   View,
   Dimensions,
-  Keyboard
+  Keyboard,
+  Image,
+  Platform,
+  Animated
 } from 'react-native'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Map } from 'immutable';
 import Modal from 'react-native-modal';
 import firebase from 'react-native-firebase';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import NavigationService from '../services/NavigationService.js';
 
 export default class RespondToInquiry extends React.PureComponent {
   constructor(props) {
+    console.log('RespondToInquiry props', props);
     super(props)
 
     this.onDayPress = this.onDayPress.bind(this);
-    console.log('props:', props);
+    //console.log('props:', props);
 
     this.state = {
       _markedDates: {},
       //_selectedDay: new Date().dateString,
       modalVisible: true,
-      message: 'Sounds good!',
+      message: '',
       messageFromSender: '',
       rentButtonBackground: '#6de3dc',
       datesArray: [],
-      datesObject: {}
+      datesObject: {},
+      keyboardOpen: false,
+      yPosition: new Animated.Value(0),
+      yPositionPositive: new Animated.Value(0)
     }
-    //console.log("this.state.datesObject in compDidMount:",this.state.datesObject);
+    ////console.log("this.state.datesObject in compDidMount:",this.state.datesObject);
     // Triggers component to render again, picking up the new state
     /*this.setState({ _markedDates: this.state.datesObject }, () => {
-      console.log('updatedMarkedDates:', this.state._markedDates);
+      //console.log('updatedMarkedDates:', this.state._markedDates);
     });*/
     this.processMarkedDates = this.processMarkedDates.bind(this);
     this.waitToShowDates = this.waitToShowDates.bind(this);
@@ -60,7 +69,7 @@ export default class RespondToInquiry extends React.PureComponent {
       <Calendar
         style={{
           borderWidth: 0,
-          borderRadius: 4,
+          borderRadius: 4
         }}
         theme={{
           todayTextColor: '#6de3dc',
@@ -76,13 +85,13 @@ export default class RespondToInquiry extends React.PureComponent {
         onDayPress={day => this.onDayPress(day)}
         // Handler which gets executed on day long press. Default = undefined
         onDayLongPress={day => {
-          console.log('selected day', day)
+          //console.log('selected day', day)
         }}
         // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
         monthFormat={'MMM d, yyyy'}
         // Handler which gets executed when visible month changes in calendar. Default = undefined
         onMonthChange={month => {
-          console.log('month changed', month)
+          //console.log('month changed', month)
         }}
         // Hide month navigation arrows. Default = false
         //hideArrows={true}
@@ -114,7 +123,7 @@ export default class RespondToInquiry extends React.PureComponent {
       if (this.state._markedDates[_selectedDay] && this.state._markedDates[_selectedDay].allowDeselect) {
         // Already in marked dates, so reverse current marked state
         marked = !this.state._markedDates[_selectedDay].selected;
-        console.log('marked:', marked);
+        //console.log('marked:', marked);
 
         // Create a new object using object property spread since it should be immutable
         // Reading: https://davidwalsh.name/merge-objects
@@ -132,7 +141,7 @@ export default class RespondToInquiry extends React.PureComponent {
 
         // Triggers component to render again, picking up the new state
         this.setState({ _markedDates: updatedMarkedDates }, () => {
-          console.log('updatedMarkedDates:', this.state._markedDates);
+          //console.log('updatedMarkedDates:', this.state._markedDates);
         });
       }
       /*else if(!this.state._markedDates[_selectedDay]) {
@@ -153,7 +162,7 @@ export default class RespondToInquiry extends React.PureComponent {
 
         // Triggers component to render again, picking up the new state
         this.setState({ _markedDates: updatedMarkedDates }, () => {
-          console.log('updatedMarkedDates:', this.state._markedDates);
+          //console.log('updatedMarkedDates:', this.state._markedDates);
         });
       }*/
   }
@@ -167,49 +176,108 @@ export default class RespondToInquiry extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('componentDidUpdate in RespondToInquiry:', this.props, prevProps, prevState, snapshot)
+    //console.log('componentDidUpdate in RespondToInquiry:', this.props, prevProps, prevState, snapshot)
+  }
+
+  animateUp = () => {
+    //console.log("animateUp");
+
+    Animated.timing(this.state.yPosition, {
+        toValue: -120,
+        duration: 300,
+    }).start();
+
+    Animated.timing(this.state.yPositionPositive, {
+        toValue: 120,
+        duration: 300,
+    }).start();
+
+    /*Animated.timing(this.state.fadeAnim, {
+        toValue: 0,
+        duration: 1,
+    }).start();*/
   }
 
   _renderModalContent = () => (
-    <TouchableWithoutFeedback onPress={() => {console.log('tapped')}}>
-      <View
+    <TouchableWithoutFeedback onPress={() => {if(this.state.keyboardOpen) {Keyboard.dismiss()}}}>
+      <Animated.View
         style={{
           paddingTop: 5,
           paddingBottom: 10,
           paddingLeft: 10,
           paddingRight: 10,
-          marginTop: 0,
+          marginTop: this.state.yPosition,
+          marginBottom: this.state.yPositionPositive,
           flex: 1,
           marginLeft: (Dimensions.get('window').width - 300) / 4,
           backgroundColor: 'rgba(0,0,0,0.8)',
           width: 300,
           borderRadius: 4,
-          borderWidth: 0
+          borderWidth: 0,
         }}>
 
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-          <View style={{ flexDirection: 'column', flex: 0, marginBottom: 10 }}>
-            <Text
-              style={{
-                flex: 0,
-                width: Dimensions.get('window').width,
-                color: 'white',
-                fontWeight: '700',
-                marginBottom: 5,
-              }}>
-              Message from inquirer:
-            </Text>
-            <Text
-              style={{
-                width: 280,
-                flex: 0,
-                backgroundColor: 'transparent',
-                paddingLeft: 5,
-                borderRadius: 4,
-                color: '#ffffff'
-              }}>
-                {this.state.messageFromSender}
-            </Text>
+          <View style={{flexDirection: 'column', justifyContent: 'space-between', flex: 0, backgroundColor: '#e6fffe', marginTop: 5}}>
+            <View style={{flex: 0, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 10, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
+              <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
+                <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
+                  <Image
+                    source={require('../assets/billythekid2.jpg')}
+                    style={{height: 60, width: 60, marginTop: Platform.OS === 'ios' ? 10 : 10, borderColor: '#6de3dc', borderWidth: 2, borderRadius: 30}}
+                  />
+                  <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 5}}>
+                    <Ionicons
+                      name='ios-star'
+                      color='#eec400'
+                      size={14}
+                    />
+                    <Ionicons
+                      name='ios-star'
+                      color='#eec400'
+                      size={14}
+                    />
+                    <Ionicons
+                      name='ios-star'
+                      color='#eec400'
+                      size={14}
+                    />
+                    <Ionicons
+                      name='ios-star'
+                      color='#eec400'
+                      size={14}
+                    />
+                    <Ionicons
+                      name='ios-star'
+                      color='#eec400'
+                      size={14}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View style={{flexDirection: 'column', backgroundColor: '#e6fffe', marginTop: Platform.OS === 'ios' ? 10 : 10, flex: 0.5}}>
+                <View style={{flexDirection: 'row', flex: 0.5}}>
+                  <View style={{flex: 0, alignSelf: 'center'}}>
+                    <Text style={{fontSize: 16, fontWeight: '700'}}>
+                      eamon.white
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={{flex: 0, marginBottom: 5, backgroundColor: '#e6fffe'}}>
+              <Text
+                style={{
+                  width: 280,
+                  flex: 0,
+                  backgroundColor: '#e6fffe',
+                  paddingLeft: 5,
+                  borderWidth: 0,
+                  borderRadius: 4,
+                  color: '#000'
+                }}>
+                  {this.state.messageFromSender}
+              </Text>
+            </View>
           </View>
           <View style={{ flexDirection: 'column', flex: 1, marginBottom: 5 }}>
             <Text
@@ -218,7 +286,8 @@ export default class RespondToInquiry extends React.PureComponent {
                 width: Dimensions.get('window').width,
                 color: 'white',
                 fontWeight: '700',
-                marginBottom: 5,
+                marginTop: 5,
+                marginBottom: 5
               }}>
               Date(s) Needed:
             </Text>
@@ -239,6 +308,8 @@ export default class RespondToInquiry extends React.PureComponent {
               value={this.state.message}
               multiline={true}
               numberOfLines={2}
+              onFocus={this.animateUp}
+              placeholder='Type a message...'
             />
           </View>
           <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0, marginBottom: 10 }}>
@@ -254,33 +325,7 @@ export default class RespondToInquiry extends React.PureComponent {
                 borderWidth: 0,
               }}
               onPress={() => {
-                /*this.setState({ rentButtonBackground: '#94ebe6' })
 
-                setTimeout(() => {
-                  this.setState({ rentButtonBackground: '#6de3dc' })
-
-                  let timestamp = new Date().getTime().toString();
-
-                  this.processMarkedDates();
-                  console.log("this.state.datesArray", this.state.datesArray);
-                  
-                  dataChat = {
-                    "title": "Rental Inquiry",
-                    "lastMessage": this.state.message,
-                    "timestamp": timestamp
-                  }
-
-                  dataMessage = {}
-                  dataMessage[timestamp] = {
-                    "name": "eamon",
-                    "message": this.state.message,
-                    "timestamp": timestamp,
-                    "dates": JSON.stringify(this.state.datesArray)
-                  };
-
-                  this.sendRentMessage(dataChat, dataMessage, timestamp)
-                  this.setModalVisible(false)
-                }, 1)*/
               }}>
               <Text
                 style={{
@@ -309,33 +354,7 @@ export default class RespondToInquiry extends React.PureComponent {
                 borderWidth: 0,
               }}
               onPress={() => {
-                /*this.setState({ rentButtonBackground: '#94ebe6' })
 
-                setTimeout(() => {
-                  this.setState({ rentButtonBackground: '#6de3dc' })
-
-                  let timestamp = new Date().getTime().toString();
-
-                  this.processMarkedDates();
-                  console.log("this.state.datesArray", this.state.datesArray);
-                  
-                  dataChat = {
-                    "title": "Rental Inquiry",
-                    "lastMessage": this.state.message,
-                    "timestamp": timestamp
-                  }
-
-                  dataMessage = {}
-                  dataMessage[timestamp] = {
-                    "name": "eamon",
-                    "message": this.state.message,
-                    "timestamp": timestamp,
-                    "dates": JSON.stringify(this.state.datesArray)
-                  };
-
-                  this.sendRentMessage(dataChat, dataMessage, timestamp)
-                  this.setModalVisible(false)
-                }, 1)*/
               }}>
               <Text
                 style={{
@@ -364,33 +383,7 @@ export default class RespondToInquiry extends React.PureComponent {
                 borderWidth: 0,
               }}
               onPress={() => {
-                /*this.setState({ rentButtonBackground: '#94ebe6' })
 
-                setTimeout(() => {
-                  this.setState({ rentButtonBackground: '#6de3dc' })
-
-                  let timestamp = new Date().getTime().toString();
-
-                  this.processMarkedDates();
-                  console.log("this.state.datesArray", this.state.datesArray);
-                  
-                  dataChat = {
-                    "title": "Rental Inquiry",
-                    "lastMessage": this.state.message,
-                    "timestamp": timestamp
-                  }
-
-                  dataMessage = {}
-                  dataMessage[timestamp] = {
-                    "name": "eamon",
-                    "message": this.state.message,
-                    "timestamp": timestamp,
-                    "dates": JSON.stringify(this.state.datesArray)
-                  };
-
-                  this.sendRentMessage(dataChat, dataMessage, timestamp)
-                  this.setModalVisible(false)
-                }, 1)*/
               }}>
               <Text
                 style={{
@@ -407,12 +400,12 @@ export default class RespondToInquiry extends React.PureComponent {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 
   waitToShowDates = (propsIn) => new Promise((resolve) => {
-    console.log('propsIn.messageInfo:', propsIn.messageInfo);
+    //console.log('propsIn.messageInfo:', propsIn.messageInfo);
     let updatedMarkedDates;
     for(let [index, value] of JSON.parse(propsIn.messageInfo.dates).entries()) {
       // Create a new object using object property spread since it should be immutable
@@ -430,11 +423,11 @@ export default class RespondToInquiry extends React.PureComponent {
                                                                     }, 
                                 } } }
 
-      console.log(index);                          
-      console.log('updatedMarkedDatesInside:',updatedMarkedDates);
+      //console.log(index);                          
+      //console.log('updatedMarkedDatesInside:',updatedMarkedDates);
 
       if(JSON.parse(propsIn.messageInfo.dates).length - 1 ==  index){
-        console.log("finished async in RespondToInquiry");
+        //console.log("finished async in RespondToInquiry");
         const toUpdate = {...updatedMarkedDates};
         this.setState({_markedDates: toUpdate});
         resolve();
@@ -446,7 +439,36 @@ export default class RespondToInquiry extends React.PureComponent {
     this.setState({messageFromSender: this.props.messageInfo.message})
   }
 
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardDidShow');
+    Keyboard.removeListener('keyboardDidHide');
+    Keyboard.removeListener('keyboardWillHide');
+  }
+
   componentDidMount() {
+
+    Keyboard.addListener('keyboardDidShow', () => {
+      this.setState({keyboardOpen: true});
+    })
+
+    Keyboard.addListener('keyboardDidHide', () => {
+      this.setState({keyboardOpen: false});
+    })
+
+    Keyboard.addListener('keyboardWillHide', () => {
+
+      Animated.parallel([
+        Animated.timing(this.state.yPosition, {
+          toValue: 0,
+          duration: 1,
+        }),
+
+        Animated.timing(this.state.yPositionPositive, {
+          toValue: 0,
+          duration: 1,
+        })
+      ]).start()
+    })
 
     this.processMarkedDates(this.props);
     this.displayMessage(this.props.messageInfo.message);
@@ -455,11 +477,11 @@ export default class RespondToInquiry extends React.PureComponent {
       .hasPermission()
       .then(enabled => {
         if (!enabled) {
-          console.log('permissions disabled');
+          //console.log('permissions disabled');
           this._getPermission();
         }
 
-        console.log('permissions enabled');
+        //console.log('permissions enabled');
 
         firebase.messaging().subscribeToTopic('all').catch((error) => {alert(error)});
 
@@ -467,7 +489,7 @@ export default class RespondToInquiry extends React.PureComponent {
           .then(fcmToken => {
             if (fcmToken) {
               //USE THIS FOR INDIVIDUAL DEVICE MESSAGES?
-              console.log(fcmToken);
+              //console.log(fcmToken);
             } else {
               alert("User doesn't have a token yet");
             } 
@@ -491,7 +513,7 @@ export default class RespondToInquiry extends React.PureComponent {
           'ERROR',
           "You must enable push notifications for the messaging system to work! If you don't you won't be able to use SnagIt! Please enable notificaitons in your phone - go to: Settings > Notifications > SnagIt.",
           [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
+            {text: 'OK', onPress: () => {/*console.log('OK Pressed')*/}},
           ],
           { cancelable: false }
         )
@@ -499,48 +521,19 @@ export default class RespondToInquiry extends React.PureComponent {
   }
 
   sendRentMessage(dataChat, dataMessage, timestamp) {
-    
-    // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
-    /*let addChat = firebase.firestore().collection('chats').doc(timestamp);
-    // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
-    let addMessage = firebase.firestore().collection('messages').doc(timestamp);
 
-    // Set the 'capital' field of the city
-    addChat.update(dataChat).then(() => {
-                    // Set the 'capital' field of the city
-      addMessage.update(dataMessage).catch((error) => {
-        //alert(error);
-        addMessage.set(dataMessage).catch((error) => {
-          alert(error);
-        });
-      });
-    }).catch((error) => {
-      //alert(error);
-      addChat.set(dataChat).catch((error) => {
-        alert(error);
-      }).then(() => {
-        addMessage.update(dataMessage).catch((error) => {
-          //alert(error);
-          addMessage.set(dataMessage).catch((error) => {
-            alert(error);
-          });
-        });
-      })
-    });*/
   }
 
   render() {
-    console.log('this.state._markedDates in render:', this.state._markedDates);
+    //console.log('this.state._markedDates in render:', this.state._markedDates);
     return (
-      <View style={{flex: 0, zIndex: 99}}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
-          onBackdropPress ={() => {console.log("backdrop pressed"); this.setModalVisible(false)}}>
-          {this._renderModalContent()}
-        </Modal>
-      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={this.state.modalVisible}                                                           //THIS NEEDS TO BE TRUE WHEN I COME BACK
+        onBackdropPress ={() => {/*console.log("backdrop pressed");*/ if(!this.state.keyboardOpen) {this.setModalVisible(false)} else {Keyboard.dismiss()}}}>
+        {this._renderModalContent()}
+      </Modal>
     )
   }
 }
