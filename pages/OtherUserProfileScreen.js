@@ -313,7 +313,7 @@ export default class RentableScreen extends React.Component {
                 onEndReachedThreshold={0.5}
                 maxToRenderPerBatch={4}
                 initialNumToRender={4}
-                ListHeaderComponent={this.renderHeader}
+                //ListHeaderComponent={this.renderHeader}
                 getItemLayout={(data, index) => (
                   {length: Dimensions.get('window').height/4, offset: Dimensions.get('window').height/4 * index, index}
                 )}
@@ -334,7 +334,7 @@ export default class RentableScreen extends React.Component {
                 onEndReachedThreshold={0.5}
                 maxToRenderPerBatch={4}
                 initialNumToRender={4}
-                ListHeaderComponent={this.renderHeader}
+                //ListHeaderComponent={this.renderHeader}
                 getItemLayout={(data, index) => (
                   {length: Dimensions.get('window').height/4, offset: Dimensions.get('window').height/4 * index, index}
                 )}

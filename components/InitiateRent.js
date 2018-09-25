@@ -8,7 +8,8 @@ import {
   View,
   Dimensions,
   Keyboard,
-  Animated
+  Animated,
+  KeyboardAvoidingView
 } from 'react-native'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Map } from 'immutable';
@@ -26,7 +27,8 @@ export default class InitiateRent extends React.PureComponent {
       rentButtonBackground: '#6de3dc',
       datesArray: [],
       yPosition: new Animated.Value(0),
-      yPositionPositive: new Animated.Value(0)
+      yPositionPositive: new Animated.Value(0),
+      height: 0
     }
 
     this.onDayPress = this.onDayPress.bind(this)
@@ -203,16 +205,20 @@ export default class InitiateRent extends React.PureComponent {
   }
 
   _renderModalContent = () => (
-    <View style={{flex: 1, justifyContent: 'center'}}>
-      <Animated.View
+    <KeyboardAvoidingView contentContainerStyle={{height: Dimensions.get('window').height}} behavior="position" enabled>
+      <View
+
+        onLayout={(event) => {
+            this.setState({height: event.nativeEvent.layout.height});
+        }}
+
         style={{
           paddingTop: 5,
           paddingBottom: 10,
           paddingLeft: 10,
           paddingRight: 10,
-          marginTop: this.state.yPosition,
-          marginBottom: this.state.yPositionPositive,
-          flex: 0.708,
+          marginTop: (Dimensions.get('window').height - this.state.height) / 2,
+          flex: 0.8,
           marginLeft: (Dimensions.get('window').width - 300) / 4,
           backgroundColor: 'rgba(0,0,0,0.8)',
           width: 300,
@@ -313,8 +319,8 @@ export default class InitiateRent extends React.PureComponent {
             </TouchableOpacity>
           </View>
         </View>
-      </Animated.View>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 
   componentWillUnmount() {
@@ -421,7 +427,7 @@ export default class InitiateRent extends React.PureComponent {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={this.state.modalVisible}
+          isVisible={this.state.modalVisible}
           onBackdropPress ={() => {console.log("backdrop pressed"); this.setModalVisible(false)}}>
           {this._renderModalContent()}
         </Modal>

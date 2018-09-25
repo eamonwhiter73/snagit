@@ -12,7 +12,8 @@ import {
   Image,
   Platform,
   Animated,
-  ScrollView
+  ScrollView,
+  KeyboardAvoidingView
 } from 'react-native'
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Map } from 'immutable';
@@ -185,15 +186,19 @@ export default class RespondToInquiry extends React.PureComponent {
   animateUp = () => {
     //console.log("animateUp");
 
-    Animated.timing(this.state.yPosition, {
-        toValue: -120,
-        duration: 300,
-    }).start();
+    
 
-    Animated.timing(this.state.yPositionPositive, {
-        toValue: 120,
-        duration: 300,
-    }).start();
+    Animated.parallel([
+      Animated.timing(this.state.yPosition, {
+          toValue: -120,
+          duration: 300,
+      }),
+
+      Animated.timing(this.state.yPositionPositive, {
+          toValue: 120,
+          duration: 300,
+      })
+    ]).start();
 
     /*Animated.timing(this.state.fadeAnim, {
         toValue: 0,
@@ -203,14 +208,15 @@ export default class RespondToInquiry extends React.PureComponent {
 
   _renderModalContent = () => {
     return ( 
-      <Animated.View
+      <KeyboardAvoidingView contentContainerStyle={{height: Dimensions.get('window').height}} behavior="position" enabled>
+      <View
         style={{
-          paddingTop: 5,
+          paddingTop: 10,
           paddingBottom: 10,
           paddingLeft: 10,
           paddingRight: 10,
-          marginTop: this.state.yPosition,
-          marginBottom: this.state.yPositionPositive,
+          marginTop: 20,
+          marginBottom: 20,
           flex: 1,
           marginLeft: (Dimensions.get('window').width - 300) / 4,
           backgroundColor: 'rgba(0,0,0,0.8)',
@@ -219,9 +225,9 @@ export default class RespondToInquiry extends React.PureComponent {
           borderWidth: 0,
         }}>
         <View style={{ flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
-          <View style={{height: 126}}>
-            <ScrollView contentContainerStyle={{flexGrow:1}} style={{flex: 1, flexDirection: 'column', backgroundColor: '#e6fffe', marginTop: 5}}>
-              <View style={{flex: 0, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 5, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
+          <View style={{height: 126, backgroundColor: '#e6fffe', alignItems: 'stretch', justifyContent: 'center'}}>
+            <ScrollView contentContainerStyle={{flexGrow:1}} style={{flexDirection: 'column', backgroundColor: '#e6fffe'}}>
+              <View style={{height: 90, backgroundColor: '#e6fffe', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingTop: 5, paddingBottom: 5, borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
                 <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
                   <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
                     <Image
@@ -411,7 +417,8 @@ export default class RespondToInquiry extends React.PureComponent {
             </TouchableOpacity>
           </View>
         </View>
-      </Animated.View>
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 
