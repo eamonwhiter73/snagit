@@ -211,7 +211,7 @@ export default class ProfileScreen extends React.Component {
                     borderBottomWidth: 2,
                     borderStyle: 'solid',
                     /*marginHorizontal: 10,*/
-                    borderRadius: 4,
+                    borderRadius: 2,
                     overflow: 'hidden',
                     flex: 0.5,
                     marginLeft: 5
@@ -288,7 +288,7 @@ export default class ProfileScreen extends React.Component {
             <View style={styles.small_container_username}>
               <Text style={{width: 225, textAlign: 'left', marginBottom: 5, fontWeight: '900', textAlign: 'left'}}>Username:</Text>
               <TextInput
-                style={{height: 40, width: 225, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                style={{height: 40, width: 225, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 2}}
                 onChangeText={(text) => this.setState({username: text})}
                 value={this.state.username}
                 placeholder="ex. user123"
@@ -298,7 +298,7 @@ export default class ProfileScreen extends React.Component {
             <View style={{paddingBottom: 1}, styles.small_container}>
               <Text style={{width: 225, textAlign: 'left', marginBottom: 5, fontWeight: '900'}}>Email:</Text>
               <TextInput
-                style={{height: 40, width: 225, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                style={{height: 40, width: 225, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 2}}
                 onChangeText={(text) => this.setState({email: text})}
                 value={this.state.email}
                 placeholder="ex. user@user.com"
@@ -321,7 +321,7 @@ export default class ProfileScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{/*width: Dimensions.get('window').width,*/flex: 0, paddingRight: 5, flexDirection: 'row', backgroundColor: '#fffbf5', marginBottom: 5}}>
+            <View style={{/*width: Dimensions.get('window').width,*/flex: 0, paddingLeft: 5, paddingRight: 10, flexDirection: 'row', backgroundColor: '#fffbf5', marginBottom: 10}}>
               <View style={styles.small_container_description}>
                 <Text style={{marginBottom: 5, marginLeft: 10, fontWeight: '900', marginTop: 10}}>Renting:</Text>
                 {(this.state.noItems && ( <Text style={{alignSelf: 'center'}}>No Items</Text> )) || (
@@ -349,7 +349,7 @@ export default class ProfileScreen extends React.Component {
               <View style={styles.small_container_biogreeting}>
                 <Text style={{width: Dimensions.get('window').width - 20, textAlign: 'left', marginBottom: 5, fontWeight: '900'}}>Bio:</Text>
                 <TextInput
-                  style={{width: Dimensions.get('window').width - 20, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                  style={{width: Dimensions.get('window').width - 20, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 2}}
                   onChangeText={(text) => this.setState({bio: text})}
                   value={this.state.bio}
                   placeholder="ex. I am a farmer."
@@ -361,7 +361,7 @@ export default class ProfileScreen extends React.Component {
               <View style={styles.small_container_biogreeting}>
                 <Text style={{width: Dimensions.get('window').width - 20, textAlign: 'left', marginBottom: 5, fontWeight: '900'}}>Standard Greeting:</Text>
                 <TextInput
-                  style={{width: Dimensions.get('window').width - 20, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                  style={{width: Dimensions.get('window').width - 20, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 2}}
                   onChangeText={(text) => this.setState({bio: text})}
                   value={this.state.bio}
                   placeholder="ex. I am a farmer."

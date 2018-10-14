@@ -30,8 +30,8 @@ YellowBox.ignoreWarnings(['You should only render one navigator explicitly in yo
 const AppNavigator = createBottomTabNavigator(
   {
     Home: { key: 'home', screen: HomeScreen },
-    Profile: { key: 'profile', screen: ProfileScreen },
-    Rent: { key: 'renttab', screen: CameraScreenNavigator },
+    Settings: { key: 'profile', screen: ProfileScreen },
+    Share: { key: 'renttab', screen: CameraScreenNavigator },
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -40,9 +40,9 @@ const AppNavigator = createBottomTabNavigator(
         let iconName;
         if (routeName === 'Home') {
           iconName = 'home';
-        } else if (routeName === 'Profile') {
-          iconName = 'user';
-        } else if (routeName === 'Rent') {
+        } else if (routeName === 'Settings') {
+          iconName = 'settings';
+        } else if (routeName === 'Share') {
           iconName = 'plus-square';
         }
 

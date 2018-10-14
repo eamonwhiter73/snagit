@@ -291,7 +291,7 @@ export default class RespondToInquiry extends React.PureComponent {
             </ScrollView>
           </View>
           <View style={{flex: 1}} onLayout={(event) => {
-            this.setState({height: event.nativeEvent.layout.height});
+            //this.setState({height: event.nativeEvent.layout.height});
           }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -309,7 +309,7 @@ export default class RespondToInquiry extends React.PureComponent {
                 {this.showCalendar()}
               </View>
             </TouchableWithoutFeedback>
-            <View style={{ flex: 0, marginBottom: 10, justifyContent: 'center', flexDirection: 'column', marginTop: 0 }}>
+            <View style={{ flex: 1 }}>
               <TextInput
                 style={{
                   width: 280,
@@ -318,7 +318,12 @@ export default class RespondToInquiry extends React.PureComponent {
                   backgroundColor: '#ffffff',
                   paddingLeft: 5,
                   borderRadius: 4,
-                  height: this.state.height - 313
+                  flex: 0.405,
+                  marginBottom: 10,
+                  flexDirection: 'column',
+                  position: 'relative',
+                  top: 94
+                  //height: this.state.height - 313
                 }}
                 onChangeText={text => this.setState({ message: text })}
                 value={this.state.message}

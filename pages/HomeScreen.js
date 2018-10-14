@@ -225,7 +225,7 @@ export default class HomeScreen extends React.Component {
      setTimeout(() => {
       this.props.navigation.dispatch(
         NavigationActions.navigate({
-          routeName: 'Rent',
+          routeName: 'Share',
           params: { param: 'RentTab' },
         })
       );

@@ -242,8 +242,8 @@ export default class InitiateRent extends React.PureComponent {
             </View>
           </TouchableWithoutFeedback>
 
-          <Animated.View style={{flexDirection: 'column',
-                        flex: 0.2,
+          <View style={{flexDirection: 'column',
+                        flex: 0.32,
                         marginBottom: 10,
                       }}>
             <TextInput
@@ -262,7 +262,7 @@ export default class InitiateRent extends React.PureComponent {
               numberOfLines={2}
               onFocus={this.animateUp}
             />
-          </Animated.View>
+          </View>
           <View style={{ flex: 0.1, borderRadius: 4, borderWidth: 0 }}>
             <TouchableOpacity
               activeOpacity={1}

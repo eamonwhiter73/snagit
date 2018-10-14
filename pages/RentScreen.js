@@ -29,7 +29,7 @@ export default class RentScreen extends React.Component {
 
   componentDidMount() {
     console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
-    
+
     Keyboard.addListener('keyboardWillHide', () => {
       Animated.timing(this.state.yPosition, {
         toValue: 0,
@@ -145,7 +145,7 @@ export default class RentScreen extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView behavior="position" enabled>
         <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center',}}>
           <View style={{flex: 1, backgroundColor: '#e6fffe', position: 'absolute', right: Platform.OS === 'ios' ? -8 : 0, top: Platform.OS === 'ios' ? 10 : 10, justifyContent: 'center', alignItems: 'flex-end', zIndex: 5, borderRadius: 8, borderWidth: 0}}>
             <SimpleLineIcons
@@ -170,15 +170,15 @@ export default class RentScreen extends React.Component {
           <View style={{width: Dimensions.get('window').width, backgroundColor: '#e6fffe', justifyContent: 'center', alignItems: 'center', borderBottomColor: '#6de3dc', borderBottomWidth: 0}}>
             <FitImage
               source={{uri: base64Image}}
-              style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width, marginTop: Platform.OS === 'ios' ? 20 : 10, borderColor: '#6de3dc', borderWidth: 0, borderRadius: 4}}
+              style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width, marginTop: Platform.OS === 'ios' ? 20 : 10, borderColor: '#6de3dc', borderWidth: 0, borderRadius: 2}}
             />
           </View>
           <Animated.View style={styles.small_container_top_animated, {marginTop: this.state.yPosition}}>
             <View style={styles.small_container_top}>
               <View style={styles.small_container_nowidth, {backgroundColor: '#d8fffd'}}>
-                <Text style={{marginBottom: 5, textAlign: 'center', fontWeight: '700', backgroundColor: '#d8fffd'}}>Item Name:</Text>
+                <Text style={{marginBottom: 5, textAlign: 'left', fontWeight: '700', backgroundColor: '#d8fffd'}}>Item Name:</Text>
                 <TextInput
-                  style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#fff', paddingLeft: 5, borderRadius: 4}}
+                  style={{height: 40, width: 180, borderColor: 'gray', borderWidth: 1, backgroundColor: '#fff', paddingLeft: 5, borderRadius: 2}}
                   onChangeText={(text) => this.setState({item_name: text})}
                   value={this.state.item_name}
                   placeholder="ex. rowboat"
@@ -188,7 +188,7 @@ export default class RentScreen extends React.Component {
               <View style={styles.small_container, {backgroundColor: '#d8fffd'}}>
                 <Text style={{marginBottom: 5, textAlign: 'center', fontWeight: '700'}}>Price (per day):</Text>
                 <TextInput
-                  style={{width: 120, height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: '#fff', paddingLeft: 5, borderRadius: 4}}
+                  style={{width: 120, height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: '#fff', paddingLeft: 5, borderRadius: 2}}
                   onChangeText={(text) => this.setState({price: text})}
                   value={this.state.price}
                   placeholder="ex. 20"
@@ -199,7 +199,7 @@ export default class RentScreen extends React.Component {
             <View style={{paddingBottom: 1}, styles.small_container_description}>
               <Text style={{marginBottom: 5, fontWeight: '700'}}>Item Description:</Text>
               <TextInput
-                style={{width: Dimensions.get('window').width - 50, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+                style={{width: Dimensions.get('window').width - 50, height: 60, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 2}}
                 onChangeText={(text) => this.setState({item_description: text})}
                 value={this.state.item_description}
                 placeholder="ex. 10 feet long"
@@ -229,7 +229,7 @@ export default class RentScreen extends React.Component {
           {/*<View style={styles.small_container}>
             <Text style={{marginBottom: 5}}>Price (per day):</Text>
             <TextInput
-              style={{width: 180, height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 4}}
+              style={{width: 180, height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: '#ffffff', paddingLeft: 5, borderRadius: 2}}
               onChangeText={(text) => this.setState({price: text})}
               value={this.state.price}
               placeholder="ex. 20"
@@ -250,7 +250,7 @@ export default class RentScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -337,7 +337,7 @@ const pickerSelectStyles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 9,
         borderColor: 'gray',
-        borderRadius: 4,
+        borderRadius: 2,
         backgroundColor: 'white',
         color: 'black',
         width: Dimensions.get('window').width - 50,
