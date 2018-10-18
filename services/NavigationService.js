@@ -27,6 +27,16 @@ function reset(routeName, params) {
 	);
 }
 
+function resetWithSubAction(routeName, params, routeNameTwo, paramsTwo) {
+  console.log('reset gets called');
+  _navigator.dispatch(
+    StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({routeName: routeName, params: params, action: NavigationActions.navigate({routeName: routeNameTwo, params: paramsTwo})})]
+      })
+  );
+}
+
 function state() {
 	console.log(_navigator);
 }
@@ -37,5 +47,6 @@ export default {
   navigate,
   setTopLevelNavigator,
   state,
-  reset
+  reset,
+  resetWithSubAction
 };

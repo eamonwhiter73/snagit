@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
+import { KeyboardAvoidingView, Animated, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Alert, Platform, Image, Picker, Keyboard, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
 import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import { Icon } from 'react-native-elements';

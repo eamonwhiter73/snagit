@@ -4,6 +4,7 @@ import firebase from 'react-native-firebase';
 import { Icon } from 'react-native-elements';
 import autobind from 'autobind-decorator';
 import FitImage from 'react-native-fit-image';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class ProfileScreen extends React.Component {
 
@@ -468,7 +469,6 @@ const styles = StyleSheet.create ({
       alignItems: 'center',
       backgroundColor: '#fffbf5',
       width: Dimensions.get('window').width,
-      marginTop: 40,
       marginTop: 50
    },
    small_container_description: {

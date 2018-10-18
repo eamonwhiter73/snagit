@@ -12,6 +12,8 @@
 #import "RNFirebaseNotifications.h"
 #import "RNFirebaseMessaging.h"
 #import <Firebase.h>
+#import "RNGoogleSignin.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @implementation AppDelegate
 
@@ -57,6 +59,36 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo
 fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
   [[RNFirebaseNotifications instance] didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
+/*- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options {
+  return [RNGoogleSignin application:application
+                             openURL:url
+                   sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                          annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+}*/
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  
+  NSLog(@"%@", [url description]);
+  
+  BOOL fBhandled = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                openURL:url
+                                                      sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                               annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+                    
+  BOOL ghandled = [RNGoogleSignin application:application
+                                                        openURL:url
+                                              sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                     annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+  // Add any custom logic here.
+  return fBhandled || ghandled;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  [FBSDKAppEvents activateApp];
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
