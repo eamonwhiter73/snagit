@@ -19,7 +19,8 @@ export default class RentableScreen extends React.Component {
       opacity: 1,
       backgroundColor: '#6de3dc',
       rentButtonBackground: '#6de3dc',
-      respondToInquiry: false
+      respondToInquiry: false,
+      user: null
       //condition: 'poor',
       //items: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}]
     };
@@ -138,6 +139,15 @@ export default class RentableScreen extends React.Component {
 
   componentDidMount() {
     console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
+
+    firebase.auth().onAuthStateChanged(user => {
+      if(user == null) {
+        this.props.navigation.navigate('Login');
+      }
+      else {
+        //
+      }
+    })
   };
 
   componentWillMount() {
@@ -223,7 +233,7 @@ export default class RentableScreen extends React.Component {
               style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width}}
             />
           </View>
-          <InitiateRent/>
+          <InitiateRent forEmail={firebase.auth().currentUser.email}/>
           <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center', backgroundColor: '#fffbf5'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
               <View style={styles.condition_container}>

@@ -37,8 +37,8 @@ function renameObjectKey(oldObj, oldName, newName) {
 }
 
 class ParamsObject {
-    constructor(value, tempId, dates) {
-        this.data = {message: value, tempId: tempId, dates:dates};
+    constructor(value, tempId, dates, fcmToken) {
+        this.data = {message: value, tempId: tempId, dates:dates, fcmToken:fcmToken};
     }
 }
 
@@ -61,7 +61,7 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 
 		var topic = 'all';
 
-		let params = toPlainObject(new ParamsObject(newValue[context.params.messageId].message, context.params.messageId.toString(), newValue[context.params.messageId].dates));
+		let params = toPlainObject(new ParamsObject(newValue[context.params.messageId].message, context.params.messageId.toString(), newValue[context.params.messageId].dates, newValue[context.params.messageId].senderFcmToken));
 		//params.data = toPlainObject(new WebObject());
 
 	    /*var payload = {
@@ -69,8 +69,20 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 	        message: newValue.data.message
 	      }
 	    };*/
+
+	    // This registration token comes from the client FCM SDKs.
+		var registrationToken = newValue[context.params.messageId].toFcmToken;
+
+		// See documentation on defining a message payload.
+		console.log("data:", params);
+		console.log("token:", registrationToken.toString());
+
+		var message = {
+		  data: toPlainObject({message: newValue[context.params.messageId].message, tempId: context.params.messageId.toString(), dates:newValue[context.params.messageId].dates, fcmToken:newValue[context.params.messageId].senderFcmToken.toString()}),
+		  token: registrationToken.toString()
+		};
 	    
-	    return admin.messaging().sendToTopic(topic, params).then((response) => {
+	    return admin.messaging().send(message).then((response) => {
           	console.log("Successfully sent message:", response);
 		  //console.log("Message ID:", response.messageId);
 

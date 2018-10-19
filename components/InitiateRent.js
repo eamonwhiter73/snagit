@@ -28,7 +28,9 @@ export default class InitiateRent extends React.PureComponent {
       datesArray: [],
       yPosition: new Animated.Value(0),
       yPositionPositive: new Animated.Value(0),
-      height: 0
+      height: 0,
+      fcmToken: null,
+      myFcmToken: null
     }
 
     this.onDayPress = this.onDayPress.bind(this)
@@ -276,10 +278,10 @@ export default class InitiateRent extends React.PureComponent {
                 borderWidth: 0,
               }}
               onPress={() => {
-                this.setState({ rentButtonBackground: '#94ebe6' })
+                this.setState({ rentButtonBackground: '#94ebe6' });
 
                 setTimeout(() => {
-                  this.setState({ rentButtonBackground: '#6de3dc' })
+                  this.setState({ rentButtonBackground: '#6de3dc' });
 
                   let timestamp = new Date().getTime().toString();
 
@@ -289,15 +291,18 @@ export default class InitiateRent extends React.PureComponent {
                   dataChat = {
                     "title": "Rental Inquiry",
                     "lastMessage": this.state.message,
-                    "timestamp": timestamp
+                    "timestamp": timestamp,
                   }
 
+                  console.log("myFcmToken:", this.state.myFcmToken);
                   dataMessage = {}
                   dataMessage[timestamp] = {
                     "name": "eamon",
                     "message": this.state.message,
                     "timestamp": timestamp,
-                    "dates": JSON.stringify(this.state.datesArray)
+                    "dates": JSON.stringify(this.state.datesArray),
+                    "toFcmToken": this.state.fcmToken,
+                    "senderFcmToken": this.state.myFcmToken
                   };
 
                   this.sendRentMessage(dataChat, dataMessage, timestamp)
@@ -328,6 +333,8 @@ export default class InitiateRent extends React.PureComponent {
   }
 
   componentDidMount() {
+    self = this;
+
     Keyboard.addListener('keyboardWillHide', () => {
 
       Animated.parallel([
@@ -354,7 +361,40 @@ export default class InitiateRent extends React.PureComponent {
 
         firebase.messaging().subscribeToTopic('all').catch((error) => {alert(error)});
 
-        firebase.messaging().getToken()
+        // User is signed in.
+        let userInfo = firebase.firestore().collection('users').doc(this.props.forEmail);
+
+        userInfo.get().then(function(doc) {
+          if (doc.exists) {
+            console.log("Document data in propsForEmail:", doc.data());
+
+            self.setState({fcmToken: doc.data().fcmToken});
+
+            let thisUserInfo = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
+
+            thisUserInfo.get().then(function(doc) {
+              if (doc.exists) {
+                  console.log("Document data in thisUserInfo:", doc.data());
+
+                  self.setState({myFcmToken: doc.data().fcmToken});
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+              }
+            }).catch(function(error) {
+                console.log("Error getting document:", error);
+            });
+          } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+          }
+
+              
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+        /*firebase.messaging().getToken()
           .then(fcmToken => {
             if (fcmToken) {
               //USE THIS FOR INDIVIDUAL DEVICE MESSAGES?
@@ -365,7 +405,7 @@ export default class InitiateRent extends React.PureComponent {
 
           }).catch((error) => {
             alert(error);
-          });
+          });*/
 
       }).then(() => {
         

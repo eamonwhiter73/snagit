@@ -13,7 +13,6 @@ export default class ProfileScreen extends React.Component {
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
     this.state = {
-      yPosition: new Animated.Value(0),  // Initial value for opacity: 0
       items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$250'},
               {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '50 mi', condition: 'Fair', rate: '$25'},
               {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
@@ -37,10 +36,6 @@ export default class ProfileScreen extends React.Component {
   animateUp = () => {
     console.log("animateUp");
 
-    Animated.timing(this.state.yPosition, {
-        toValue: -120,
-        duration: 300,
-    }).start();
 
     /*Animated.timing(this.state.fadeAnim, {
         toValue: 0,
@@ -56,10 +51,6 @@ export default class ProfileScreen extends React.Component {
       duration: 1,
     }).start();*/
 
-    Animated.timing(this.state.yPosition, {
-      toValue: 0,
-      duration: 1,
-    }).start();
 
     /*if(this.state.email == "") {
       Alert.alert("Please enter a valid email address, if you do not have an account please select the 'Sign Up' link below");
@@ -74,18 +65,11 @@ export default class ProfileScreen extends React.Component {
   }
 
   componentDidMount() {
-    console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
 
     if(this.state.items.length == 0) {
       this.setState({noItems: true});
     }
 
-    Keyboard.addListener('keyboardWillHide', () => {
-      Animated.timing(this.state.yPosition, {
-        toValue: 0,
-        duration: 1,
-      }).start();
-    })
     // The user is an Object, so they're logged in
     /*if (!this.state.user) {
       const { navigate } = this.props.navigation;
@@ -118,6 +102,12 @@ export default class ProfileScreen extends React.Component {
         }
       }
     );*/
+
+    firebase.auth().onAuthStateChanged(user => {
+      if(user == null) {
+        this.props.navigation.navigate('Login');
+      }
+    })
   }
 
   componentWillMount() {
@@ -402,7 +392,11 @@ export default class ProfileScreen extends React.Component {
               >
                 <TouchableOpacity
                   style = {styles.submitTouchBottom}
-                  onPress={() => {}}
+                  onPress={() => {
+                    firebase.auth().signOut().then(() => {
+                      this.props.navigation.navigate('Login');
+                    })
+                  }}
                 >
                   <Text style = {styles.submitText}>LOGOUT</Text>
                 </TouchableOpacity>

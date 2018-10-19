@@ -29,8 +29,16 @@ export default class HomeScreen extends React.Component {
     super();
 
     this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
-        // Process your token as required
-        
+      console.log(JSON.stringify(this.state.user));
+      let addToken = firebase.firestore().collection('users').doc(this.state.user.email);
+
+      // Set the 'capital' field of the city
+      addToken.update({fcmToken: fcmToken}).catch((error) => {
+         console.log(error);
+        addToken.set({fcmToken: fcmToken}).catch((error) => {
+          alert(error);
+        });
+      });
     });
 
     this.state = {
@@ -53,7 +61,8 @@ export default class HomeScreen extends React.Component {
       yPosition: new Animated.Value(0),
       showFilterArea: false,
       showRespondTo: false,
-      info: {message: "", dates: []}
+      info: {message: "", dates: []},
+      user: null
     };
 
     this.returnRespond = this.returnRespond.bind(this);
@@ -74,6 +83,7 @@ export default class HomeScreen extends React.Component {
           console.log('showRespondTo fired.');
           this.setState({info: this.props.navigation.getParam('data', '')})
           this.setState({showRespondTo: true});
+          this.props.navigation.setParams({data: null});
         }
       }
     );
@@ -130,6 +140,15 @@ export default class HomeScreen extends React.Component {
       }).then(() => {
         
       }).catch((error) => {alert(error)});
+
+      firebase.auth().onAuthStateChanged(user => {
+        if(user != null) {
+          this.setState({user: user});
+        }
+        else {
+          this.props.navigation.navigate('Login');
+        }
+      })
   }
 
   _getPermission = () => {

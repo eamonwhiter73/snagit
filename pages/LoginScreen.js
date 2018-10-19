@@ -36,14 +36,34 @@ export default class LoginScreen extends React.Component {
       if(currentUser != null) {
         console.info(JSON.stringify(currentUser.user.toJSON()));
 
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: 'Main' }),  
-          ],
+        // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
+        let addUserData = firebase.firestore().collection('users').doc(currentUser.user.email);
+
+        // Set the 'capital' field of the city
+        addUserData.update({google: currentUser.user.toJSON()}).then(() => {
+          const resetAction = StackActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({ routeName: 'Main' }),  
+            ],
+          });
+          
+          this.props.navigation.dispatch(resetAction);
+        }).catch((error) => {
+          //alert(error);
+          addUserData.set({google: currentUser.user.toJSON()}).then(() => {
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'Main' }),  
+              ],
+            });
+            
+            this.props.navigation.dispatch(resetAction);
+          }).catch((error) => {
+            alert(error);
+          });
         });
-        
-        this.props.navigation.dispatch(resetAction);
       }
       else {
         alert("Something went wrong in the googleLogin.");
@@ -76,26 +96,51 @@ export default class LoginScreen extends React.Component {
       // create a new firebase credential with the token
       const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
 
-      // login with credential
-      const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
+      try {
+        // login with credential
+        const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
 
-      if(currentUser != null) {
-        console.info(JSON.stringify(currentUser.user.toJSON()));
+        if(currentUser != null) {
+          console.info(JSON.stringify(currentUser.user.toJSON()));
 
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({ routeName: 'Main' }),  
-          ],
-        });
-        
-        this.props.navigation.dispatch(resetAction);
+          // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
+          let addUserData = firebase.firestore().collection('users').doc(currentUser.user.email);
+
+          // Set the 'capital' field of the city
+          addUserData.update({facebook: currentUser.user.toJSON()}).then(() => {
+            const resetAction = StackActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({ routeName: 'Main' }),  
+              ],
+            });
+            
+            this.props.navigation.dispatch(resetAction);
+          }).catch((error) => {
+            //alert(error);
+            addUserData.set({facebook: currentUser.user.toJSON()}).then(() => {
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({ routeName: 'Main' }),  
+                ],
+              });
+              
+              this.props.navigation.dispatch(resetAction);
+            }).catch((error) => {
+              alert(error);
+            });
+          });
+          
+        }
+        else {
+          alert("Something went wrong in the facebookLogin.");
+        }
       }
-      else {
-        alert("Something went wrong in the facebookLogin.");
+      catch (e) {
+        alert(e);
       }
 
-      console.info(JSON.stringify(currentUser.user.toJSON()))
     } catch (e) {
       console.error(e);
       alert(e);
@@ -105,38 +150,11 @@ export default class LoginScreen extends React.Component {
   static navigatorStyle = { navBarHidden: true };
 
   componentDidMount() {
-    // The user is an Object, so they're logged in
-    /*if (!this.state.user) {
-      const { navigate } = this.props.navigation;
-
-      navigate('LogIn');
-    }*/
-
-    /*this._sub = this.props.navigation.addListener(
-      'didFocus',
-      () => {
-        if(this.props.navigation.state.params.mode == 'fromEditItem') {
-          this.removeInitialItem = true;
-        }
-        else if(this.props.navigation.state.params.mode == 'fromPrice') {
-          Animated.timing(this.state.fadeAnim, {
-            toValue: 0.2,
-            duration: 1,
-          }).start(() => {
-            Animated.timing(this.state.fadeAnim, {
-              toValue: 1,
-              duration: 500,
-            }).start();
-          });
-        }
-        else if(this.props.navigation.state.params.mode == 'fromPriceManualSale') {
-          Animated.timing(this.state.fadeAnim, {
-            toValue: 0.2,
-            duration: 1,
-          }).start();
-        }
+    firebase.auth().onAuthStateChanged(user => {
+      if(user != null) {
+        this.props.navigation.navigate('Main');
       }
-    );*/
+    })
   }
 
   componentWillMount() {

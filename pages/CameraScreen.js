@@ -37,6 +37,11 @@ export default class CameraScreen extends React.Component {
   //GET NAVIGATION PROPS HERE SOMEHOW
 
   componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if(user == null) {
+        this.props.navigation.navigate('Login');
+      }
+    })
 
     console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
 
