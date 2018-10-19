@@ -36,12 +36,6 @@ function renameObjectKey(oldObj, oldName, newName) {
     return newObj;
 }
 
-class ParamsObject {
-    constructor(value, tempId, dates, fcmToken) {
-        this.data = {message: value, tempId: tempId, dates:dates, fcmToken:fcmToken};
-    }
-}
-
 exports.sendMessageNotification = functions.firestore.document('messages/{messageId}').onWrite((change, context) => {
       
       	// Get an object representing the document
@@ -61,7 +55,6 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 
 		var topic = 'all';
 
-		let params = toPlainObject(new ParamsObject(newValue[context.params.messageId].message, context.params.messageId.toString(), newValue[context.params.messageId].dates, newValue[context.params.messageId].senderFcmToken));
 		//params.data = toPlainObject(new WebObject());
 
 	    /*var payload = {
