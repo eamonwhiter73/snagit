@@ -66,10 +66,6 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 	    // This registration token comes from the client FCM SDKs.
 		var registrationToken = newValue[context.params.messageId].toFcmToken;
 
-		// See documentation on defining a message payload.
-		console.log("data:", params);
-		console.log("token:", registrationToken.toString());
-
 		var message = {
 		  data: toPlainObject({message: newValue[context.params.messageId].message, tempId: context.params.messageId.toString(), dates:newValue[context.params.messageId].dates, fcmToken:newValue[context.params.messageId].senderFcmToken.toString()}),
 		  token: registrationToken.toString()

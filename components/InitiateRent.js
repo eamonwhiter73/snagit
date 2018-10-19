@@ -436,28 +436,54 @@ export default class InitiateRent extends React.PureComponent {
     // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
     let addMessage = firebase.firestore().collection('messages').doc(timestamp);
 
+    let addMembers = firebase.firestore().collection('members').doc(timestamp);
+
     // Set the 'capital' field of the city
     addChat.update(dataChat).then(() => {
-                    // Set the 'capital' field of the city
-      addMessage.update(dataMessage).catch((error) => {
-        //alert(error);
-        addMessage.set(dataMessage).catch((error) => {
-          alert(error);
-        });
-      });
-    }).catch((error) => {
-      //alert(error);
-      addChat.set(dataChat).catch((error) => {
-        alert(error);
-      }).then(() => {
+      addMembers.update({[firebase.auth().currentUser.email]: true}).then(() => {
         addMessage.update(dataMessage).catch((error) => {
           //alert(error);
           addMessage.set(dataMessage).catch((error) => {
             alert(error);
           });
         });
+      }).catch((error) => {
+        addMembers.set({[firebase.auth().currentUser.email]: true}).then(() => {
+          addMessage.update(dataMessage).catch((error) => {
+            //alert(error);
+            addMessage.set(dataMessage).catch((error) => {
+              alert(error);
+            });
+          });
+        }).catch((error) => {
+          alert(error);
+        });
       })
-    });
+    }).catch((error) => {
+      addChat.set(dataChat).then(() => {
+        addMembers.update({[firebase.auth().currentUser.email]: true}).then(() => {
+          addMessage.update(dataMessage).catch((error) => {
+            //alert(error);
+            addMessage.set(dataMessage).catch((error) => {
+              alert(error);
+            });
+          });
+        }).catch((error) => {
+          addMembers.set({[firebase.auth().currentUser.email]: true}).then(() => {
+            addMessage.update(dataMessage).catch((error) => {
+              //alert(error);
+              addMessage.set(dataMessage).catch((error) => {
+                alert(error);
+              });
+            });
+          }).catch((error) => {
+            alert(error);
+          });
+        })
+      }).catch((error) => {
+        alert(error);
+      })
+    })
   }
 
   render() {
