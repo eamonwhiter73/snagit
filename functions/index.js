@@ -46,6 +46,7 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
       	const previousValue = change.before.data();
 
       	console.log("newValue:", newValue);
+      	console.log("previousValue:", previousValue);
 
       	console.log("messageIdChange:", context.params.messageId);
       	//console.log("prevValue:", previousValue);
@@ -55,6 +56,8 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 
 		var topic = 'all';
 
+		console.log("context:", context);
+
 		//params.data = toPlainObject(new WebObject());
 
 	    /*var payload = {
@@ -62,62 +65,101 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 	        message: newValue.data.message
 	      }
 	    };*/
+	    console.log("keys:", Object.keys(newValue)[0]);
+	    /*var registrationToken = newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken;
 
-	    // This registration token comes from the client FCM SDKs.
-		var registrationToken = newValue[context.params.messageId].toFcmToken;
 
-		var message = {
-		  data: toPlainObject({message: newValue[context.params.messageId].message, tempId: context.params.messageId.toString(), dates:newValue[context.params.messageId].dates, fcmToken:newValue[context.params.messageId].senderFcmToken.toString()}),
+		message = {
+		  data: toPlainObject({message: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].message, tempId: context.params.messageId, dates:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].dates, fcmToken:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].senderFcmToken.toString()}),
 		  token: registrationToken.toString()
-		};
+		};*/
+
+		console.log("checking for what newValue looks like:", newValue[Object.keys(newValue)[1]]);//[Object.keys(newValue)[Object.keys(newValue).length - 1]]);
+
+		var message = {};
+		var registrationToken = null;
+
+    	if(newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].fromWhere == 'initiate') {
+    		registrationToken = newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken;
+
+			message = {
+			  data: toPlainObject({name: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].name, message: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].message, tempId: context.params.messageId, dates:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].dates, fcmToken:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].senderFcmToken.toString(), fromWhere: 'initiate'}),
+			  token: registrationToken.toString()
+			};
+    	}
+    	else {
+    		registrationToken = newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].senderFcmToken;
+
+
+			message = {
+			  data: toPlainObject({name: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].name, message: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].message, tempId: context.params.messageId, dates:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].dates, fcmToken:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken.toString(), fromWhere: 'respond'}),
+			  token: registrationToken.toString()
+			};
+    	}
+	    // This registration token comes from the client FCM SDKs.
+
+	    //SET TIMEOUT ONLY FOR TESTING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    setTimeout(() => {
+	    	return admin.messaging().send(message).then((response) => {
+	          	console.log("Successfully sent message:", response);
+			  //console.log("Message ID:", response.messageId);
+
+			  	/*var symbols = {
+				    '*': '',
+				    '/': '',
+				    '[': '',
+				    ']': '',
+				    '~': ''
+				};
+				var str = response.replace(/([@*+/]|&(amp|lt|gt);)/g, function (m) { return symbols[m]; });
+
+				console.log("string after replace:", str);
+
+			  	var newObj = renameObjectKey(newValue, context.params.messageId, str);
+
+			    console.log("newObj:", newObj);
+
+			    return firebaseHelper.firestore
+				  .checkDocumentExists(db, 'messages', context.params.messageId)
+				  .then(result => {
+				  	console.log('result:', result);
+
+				  	console.log("newObj inside:", newObj);
+				  	
+				    // Boolean value of the result 
+				    //return new Promise((resolve, reject) => {
+					  if(result.exists) {
+				    	// If the document exist, you can get the document content 
+
+						if(Object.keys(result.data)[0] == newObj[Object.keys(newObj)[0]].timestamp) {
+				    		firebaseHelper.firestore.createDocumentWithID(db, 'messages', context.params.messageId, newObj);
+				    	}
+						else {
+				    		firebaseHelper.firestore.updateDocument(db, 'messages', context.params.messageId, newObj);
+				    	}
+
+				    	return 0;
+				      }
+				      else {
+				    	console.log("NO RESULT");
+				    	return 0;
+					  }
+					/*}).then((resultProm) => {
+						console.log('resultProm:', resultProm);
+					})
+					.catch((error) => {
+						console.log('eRROR:', error)
+					})*/
+				  /*})
+				  .catch((error) => {
+			  		console.log("eRrOr:", error);
+			  	  })*/
+
+	        }).catch((error) => {
+	       		console.log("error last:", error);
+	        })
+	    }, 3000)
 	    
-	    return admin.messaging().send(message).then((response) => {
-          	console.log("Successfully sent message:", response);
-		  //console.log("Message ID:", response.messageId);
-
-		  	var newObj = renameObjectKey(newValue, context.params.messageId, response.messageId);
-
-		    console.log("newObj:", newObj);
-
-		    return firebaseHelper.firestore
-			  .checkDocumentExists(db, 'messages', context.params.messageId)
-			  .then(result => {
-			  	console.log('result:', result);
-
-			  	console.log("newObj inside:", newObj);
-			  	
-			    // Boolean value of the result 
-			    //return new Promise((resolve, reject) => {
-				  if(result.exists) {
-			    	// If the document exist, you can get the document content 
-
-					if(Object.keys(result.data)[0] == newObj[Object.keys(newObj)[0]].timestamp) {
-			    		firebaseHelper.firestore.createDocumentWithID(db, 'messages', context.params.messageId, newObj);
-			    	}
-					else {
-			    		firebaseHelper.firestore.updateDocument(db, 'messages', context.params.messageId, newObj);
-			    	}
-
-			    	return 0;
-			      }
-			      else {
-			    	console.log("NO RESULT");
-			    	return 0;
-				  }
-				/*}).then((resultProm) => {
-					console.log('resultProm:', resultProm);
-				})
-				.catch((error) => {
-					console.log('eRROR:', error)
-				})*/
-			  })
-			  .catch((error) => {
-		  		console.log("eRrOr:", error);
-		  	  })
-
-        }).catch((error) => {
-       		console.log("error last:", error);
-        })
 
     return 0;
 })

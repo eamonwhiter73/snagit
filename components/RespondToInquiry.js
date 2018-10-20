@@ -348,6 +348,52 @@ export default class RespondToInquiry extends React.PureComponent {
               }}
               onPress={() => {
 
+                let addToken = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
+                addToken.get().then((resp) => {
+                  console.log("RESPOND PRESSED:", resp.fcmToken);
+                  let timestamp = new Date().getTime().toString();
+
+                  console.log('this.props.messageInfo:', this.props.messageInfo);
+
+                  dataMessage = {};
+                  dataMessage[timestamp] = {
+                    "name": "eamon",
+                    "message": this.state.message,
+                    "timestamp": timestamp,
+                    "dates": this.props.messageInfo.dates,
+                    "toFcmToken": this.props.messageInfo.fcmToken,
+                    "senderFcmToken": this.props.messageInfo.senderFcmToken,
+                    "fromWhere": 'respond'
+                  };
+
+                  console.log('sendRentMessage executed in respond:', this.props.messageInfo);
+                  console.log('dataMessage in respond:', dataMessage);
+                  // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
+                  let addMessage = firebase.firestore().collection('messages').doc(this.props.messageInfo.tempId);
+
+                  let addMembers = firebase.firestore().collection('members').doc(this.props.messageInfo.tempId);
+
+                  let getChat = firebase.firestore().collection('chats').doc(this.props.messageInfo.tempId);
+
+
+
+                  getChat.update({lastMessage: this.state.message}).then(() => {
+                    addMembers.update({[firebase.auth().currentUser.email]: true}).then(() => {
+                      addMessage.update(dataMessage).then(() => {
+                        console.log("UPDATED!");
+                        this.setModalVisible(false);
+                      })
+                      .catch((error) => {
+                        alert("error in first:", error);
+                      })
+                    }).catch((error) => {
+                      alert("error in second to last:", error);
+                    })
+                  }).catch((error) => {
+                    alert("error in last:", error);
+                  })
+                });
+                
               }}>
               <Text
                 style={{
@@ -376,7 +422,7 @@ export default class RespondToInquiry extends React.PureComponent {
                 borderWidth: 0,
               }}
               onPress={() => {
-
+                
               }}>
               <Text
                 style={{
@@ -425,6 +471,34 @@ export default class RespondToInquiry extends React.PureComponent {
         </View>
       </KeyboardAvoidingView>
     );
+  }
+
+  sendRentMessage(dataMessage) {
+    
+    console.log('sendRentMessage executed');
+    // Add a new document with a generated id.                          //user-user                           //send generated ID and then change to message id in cloud
+    let addMessage = firebase.firestore().collection('messages').doc(this.props.messageInfo.timestamp);
+
+    let addMembers = firebase.firestore().collection('members').doc(this.props.messageInfo.timestamp);
+
+    let getChat = firebase.firestore().collection('chats').doc(this.props.messageInfo.timestamp);
+
+
+
+    getChat.update({lastMessage: [this.state.message]}).then(() => {
+      addMembers.update({[firebase.auth().currentUser.email]: true}).then(() => {
+        addMessage.update(dataMessage).then(() => {
+          console.log("UPDATED!");
+        })
+        .catch((error) => {
+          alert(error);
+        })
+      }).catch((error) => {
+        alert(error);
+      })
+    }).catch((error) => {
+      alert(error);
+    })
   }
 
   waitToShowDates = (propsIn) => new Promise((resolve) => {

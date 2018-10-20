@@ -79,12 +79,17 @@ export default class HomeScreen extends React.Component {
       'didFocus',
       () => {
         console.log('in didFocus for HomeScreen');
-        if(this.props.navigation.getParam('data', '') != '') {
-          console.log('showRespondTo fired.');
-          this.setState({info: this.props.navigation.getParam('data', '')})
-          this.setState({showRespondTo: true});
-          this.props.navigation.setParams({data: null});
-        }
+        let addToken = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
+        addToken.get().then((resp) => {
+          if(this.props.navigation.getParam('data', '') != '') {
+            console.log('showRespondTo fired.');
+            this.setState({info: {...this.props.navigation.state.params.data, senderFcmToken: resp._data.fcmToken}}, () => {
+            this.setState({showRespondTo: true});
+            this.props.navigation.setParams({data: null});
+            })
+          }
+        });
+        
       }
     );
 
@@ -93,6 +98,7 @@ export default class HomeScreen extends React.Component {
       () => {
         this.setState({showRespondTo: false});
         this.setState({info: this.props.navigation.getParam('data', '')})
+        //this.props.navigation.setParams({data: null});
       }
     );
 

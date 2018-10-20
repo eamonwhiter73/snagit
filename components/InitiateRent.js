@@ -288,25 +288,27 @@ export default class InitiateRent extends React.PureComponent {
                   this.processMarkedDates();
                   console.log("this.state.datesArray", this.state.datesArray);
                   
-                  dataChat = {
+                  let dataChat = {
                     "title": "Rental Inquiry",
                     "lastMessage": this.state.message,
                     "timestamp": timestamp,
                   }
 
-                  console.log("myFcmToken:", this.state.myFcmToken);
-                  dataMessage = {}
-                  dataMessage[timestamp] = {
-                    "name": "eamon",
-                    "message": this.state.message,
-                    "timestamp": timestamp,
-                    "dates": JSON.stringify(this.state.datesArray),
-                    "toFcmToken": this.state.fcmToken,
-                    "senderFcmToken": this.state.myFcmToken
+                  console.log("timestamp for message:", timestamp);
+                  let dataMessage = {
+                    [timestamp]: {
+                      "name": "eamon",
+                      "message": this.state.message,
+                      "timestamp": timestamp,
+                      "dates": JSON.stringify(this.state.datesArray),
+                      "toFcmToken": this.state.fcmToken,
+                      "senderFcmToken": this.state.myFcmToken,
+                      "fromWhere": 'initiate'
+                    }
                   };
 
-                  this.sendRentMessage(dataChat, dataMessage, timestamp)
-                  this.setModalVisible(false)
+                  this.sendRentMessage(dataChat, dataMessage, timestamp);
+                  this.setModalVisible(false);
                 }, 1)
               }}>
               <Text

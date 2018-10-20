@@ -140,7 +140,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.messageListener = firebase.messaging().onMessage((message: RemoteMessage) => {
-      console.log(message);
+      console.log("message coming in:", message);
 
       // prevent infite look
       //if (!message.local_notification) {
@@ -156,20 +156,44 @@ export default class App extends React.Component {
 
           count++;
         }
+
+        let dataHold = message.data;
+
+        //let dataSwitch = {...dataHold, fromWhere: 'respond'};
+
+        console.log("message.data:", dataHold);
+
         // Process your message as required
-        Alert.alert(
-          'New Rental Inquiry',
-          'Dates Requested:\n\n'+string,
-          [
-            {text: 'RESPOND', onPress: () => {
-              console.log("message.data:", message.data);
-              console.log("this.props.ref:", this.props.ref);
-              NavigationService.resetWithSubAction('MainSeq', {}, 'Home', { data: JSON.parse(JSON.stringify(message.data)) });
-            }},
-            {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
-          ],
-          { cancelable: false }
-        )
+        if(message.data.fromWhere == 'initiate') {
+          Alert.alert(
+            'New Rental Inquiry',
+            'Dates Requested:\n\n'+string,
+            [
+              {text: 'RESPOND', onPress: () => {
+                console.log("message.data:", message.data);
+                console.log("this.props.ref:", this.props.ref);
+                NavigationService.resetWithSubAction('MainSeq', {}, 'Home', { data: JSON.parse(JSON.stringify(dataHold)) });
+              }},
+              {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
+            ],
+            { cancelable: false }
+          )
+        }
+        else {
+          Alert.alert(
+            'Response from ' + dataHold.name,
+            'Response:\n\n'+dataHold.message+'\n\nDates Requested:\n\n'+string,
+            [
+              {text: 'RESPOND', onPress: () => {
+                console.log("message.data:", message.data);
+                console.log("this.props.ref:", this.props.ref);
+                NavigationService.resetWithSubAction('MainSeq', {}, 'Home', { data: JSON.parse(JSON.stringify(dataHold)) });
+              }},
+              {text: 'IGNORE', onPress: () => console.log('IGNORE Pressed')},
+            ],
+            { cancelable: false }
+          )
+        }
       //}
     });
   }
