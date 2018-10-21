@@ -55,4 +55,6 @@ target 'snagit' do
   ]
   pod 'RNGoogleSignin', :path => '../node_modules/react-native-google-signin'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
 end

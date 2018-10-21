@@ -83,7 +83,7 @@ export default class CameraScreen extends React.Component {
         const resetAction = StackActions.reset({
           index: 0,
           actions: [
-            NavigationActions.navigate({ routeName: 'RentDetails', params: { base64orURI: data.base64 } }),  
+            NavigationActions.navigate({ routeName: 'RentDetails', params: { base64orURI: data.base64, uri: data.uri } }),  
           ],
         });
         

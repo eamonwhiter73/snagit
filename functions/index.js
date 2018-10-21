@@ -65,7 +65,7 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 	        message: newValue.data.message
 	      }
 	    };*/
-	    console.log("keys:", Object.keys(newValue)[0]);
+	    console.log("keys:", Object.keys(newValue)[Object.keys(newValue).length - 1]);
 	    /*var registrationToken = newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken;
 
 
@@ -74,7 +74,7 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
 		  token: registrationToken.toString()
 		};*/
 
-		console.log("checking for what newValue looks like:", newValue[Object.keys(newValue)[1]]);//[Object.keys(newValue)[Object.keys(newValue).length - 1]]);
+		console.log("checking for what newValue looks like:", newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]]);//[Object.keys(newValue)[Object.keys(newValue).length - 1]]);
 
 		var message = {};
 		var registrationToken = null;

@@ -7,7 +7,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import NavigationService from '../services/NavigationService';
 import FitImage from 'react-native-fit-image';
-
+import UUIDGenerator from 'react-native-uuid-generator';
+import * as firebaseSrc from 'firebase';
 
 export default class RentScreen extends React.Component {
 
@@ -15,6 +16,18 @@ export default class RentScreen extends React.Component {
     super();
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
+
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLLmScirUgZIiKRN-w1DZ8Rlmzeuhe1tY",
+      authDomain: "snagit-e2928.firebaseapp.com",
+      databaseURL: "https://snagit-e2928.firebaseio.com/",
+      projectId: "snagit-e2928",
+      storageBucket: "gs://snagit-e2928.appspot.com",
+      messagingSenderId: "757347444448",
+    };
+
+    firebaseSrc.initializeApp(firebaseConfig);
   }
 
   static navigatorStyle = { navBarHidden: true };
@@ -142,9 +155,10 @@ export default class RentScreen extends React.Component {
 
   render() {
     var base64Image = '';
+    var uri = this.props.navigation.getParam('uri', '');
 
     if(Platform.OS === 'ios') {
-      base64Image = `data:image/png;base64,${this.props.navigation.getParam('base64orURI', '')}`
+      base64Image = `data:image/jpg;base64,${this.props.navigation.getParam('base64orURI', '')}`
     }
     else {
       base64Image = this.props.navigation.getParam('base64orURI', '');
@@ -179,7 +193,7 @@ export default class RentScreen extends React.Component {
               style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width, marginTop: Platform.OS === 'ios' ? 20 : 10, borderColor: '#6de3dc', borderWidth: 0, borderRadius: 2}}
             />
           </View>
-          <Animated.View style={styles.small_container_top_animated, {marginTop: this.state.yPosition}}>
+          <View style={styles.small_container_top_animated}>
             <View style={styles.small_container_top}>
               <View style={styles.small_container_nowidth, {backgroundColor: '#d8fffd'}}>
                 <Text style={{marginBottom: 5, textAlign: 'left', fontWeight: '700', backgroundColor: '#d8fffd'}}>Item Name:</Text>
@@ -188,7 +202,6 @@ export default class RentScreen extends React.Component {
                   onChangeText={(text) => this.setState({item_name: text})}
                   value={this.state.item_name}
                   placeholder="ex. rowboat"
-                  onFocus={this.animateUp}
                 />
               </View>
               <View style={styles.small_container, {backgroundColor: '#d8fffd'}}>
@@ -198,7 +211,6 @@ export default class RentScreen extends React.Component {
                   onChangeText={(text) => this.setState({price: text})}
                   value={this.state.price}
                   placeholder="ex. 20"
-                  onFocus={this.animateUp}
                 />
               </View>
             </View>
@@ -211,7 +223,6 @@ export default class RentScreen extends React.Component {
                 placeholder="ex. 10 feet long"
                 multiline = {true}
                 numberOfLines = {2}
-                onFocus={this.animateUp}
               />
             </View>
             <View style={styles.small_container_condition}>
@@ -231,7 +242,7 @@ export default class RentScreen extends React.Component {
                 selectedValue={this.state.condition}
               />
             </View>
-          </Animated.View>
+          </View>
           {/*<View style={styles.small_container}>
             <Text style={{marginBottom: 5}}>Price (per day):</Text>
             <TextInput
@@ -250,9 +261,49 @@ export default class RentScreen extends React.Component {
           >
             <TouchableOpacity
               style = {styles.submitTouch}
-              onPress={() => {}}
+              onPress={() => {
+                // Promise interface
+                UUIDGenerator.getRandomUUID().then((uuid) => {
+                  var item = {[uuid]:
+                                {
+                                  base64: base64Image,
+                                  key: uuid,
+                                  location: {
+                                    "timestamp": 1484669056399.49,
+                                    "coords": {
+                                      "accuracy": 5,
+                                      "altitude": 0,
+                                      "altitudeAccuracy": -1,
+                                      "heading": -1,
+                                      "latitude": 37.785834,
+                                      "longitude": -122.406417,
+                                      "speed": -1
+                                    },
+                                  },
+                                  condition: this.state.condition,
+                                  description: this.state.item_description,
+                                  name: this.state.item_name
+                                }
+                              }
+
+                  const storageRef = firebase.storage().ref().child(`item_images/${firebase.auth().currentUser.email}/${Object.keys(item)[0]}.jpg`);
+                  var itemRef = firebase.firestore().collection('items').doc(firebase.auth().currentUser.email);
+
+                  console.log(base64Image.substring(23));
+
+                  storageRef.put(uri).then(snapshot => {
+                    console.log('Uploaded a base64 string, snapshot:', snapshot);
+
+                    storageRef.getDownloadURL().then((url) => {
+                      item.imageURL = url;
+                      itemRef.set(item);
+                    });
+                  })
+                  
+                });
+              }}
             >
-              <Text style = {styles.submitText}>SUBMIT</Text>
+              <Text style = {styles.submitText}>BORROW</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

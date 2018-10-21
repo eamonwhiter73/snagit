@@ -375,10 +375,10 @@ export default class RespondToInquiry extends React.PureComponent {
 
                   let getChat = firebase.firestore().collection('chats').doc(this.props.messageInfo.tempId);
 
-
+                  var email = firebase.auth().currentUser.email;
 
                   getChat.update({lastMessage: this.state.message}).then(() => {
-                    addMembers.update({[firebase.auth().currentUser.email]: true}).then(() => {
+                    addMembers.update({[email]: true}).then(() => {
                       addMessage.update(dataMessage).then(() => {
                         console.log("UPDATED!");
                         this.setModalVisible(false);
