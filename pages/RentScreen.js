@@ -16,18 +16,6 @@ export default class RentScreen extends React.Component {
     super();
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
-
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCLLmScirUgZIiKRN-w1DZ8Rlmzeuhe1tY",
-      authDomain: "snagit-e2928.firebaseapp.com",
-      databaseURL: "https://snagit-e2928.firebaseio.com/",
-      projectId: "snagit-e2928",
-      storageBucket: "gs://snagit-e2928.appspot.com",
-      messagingSenderId: "757347444448",
-    };
-
-    firebaseSrc.initializeApp(firebaseConfig);
   }
 
   static navigatorStyle = { navBarHidden: true };
