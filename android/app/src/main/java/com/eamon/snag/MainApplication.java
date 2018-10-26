@@ -10,19 +10,13 @@ import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import org.reactnative.camera.RNCameraPackage;
-import org.reactnative.camera.RNCameraPackage;
-import io.invertase.firebase.RNFirebasePackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import org.reactnative.camera.RNCameraPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
-import io.invertase.firebase.RNFirebasePackage;
 // optional packages - add/remove as appropriate
-import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
+//import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage;
@@ -41,10 +35,21 @@ import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 
 import java.util.Arrays;
 import java.util.List;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.facebook.appevents.AppEventsLogger;
 
 public class MainApplication extends Application implements ReactApplication {
 
+  private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
+
+  protected static CallbackManager getCallbackManager() {
+    return mCallbackManager;
+  }
+
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
@@ -55,19 +60,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.asList(
         new MainReactPackage(),
-            new RNFSPackage(),
-            new RNUUIDGeneratorPackage(),
-            new RNGoogleSigninPackage(),
-            new VectorIconsPackage(),
-            new RNFirebasePackage(),
-            new RNCameraPackage(),
-            new RNCameraPackage(),
-        new RNFetchBlobPackage(),
-        new RNCameraPackage(),
+        new FBSDKPackage(mCallbackManager),
+        new RNFSPackage(),
+        new RNUUIDGeneratorPackage(),
+        new RNGoogleSigninPackage(),
         new VectorIconsPackage(),
         new RNFirebasePackage(),
+        new RNCameraPackage(),
         // add/remove these packages as appropriate
-        new RNFirebaseAdMobPackage(),
+        //new RNFirebaseAdMobPackage(),
         new RNFirebaseAnalyticsPackage(),
         new RNFirebaseAuthPackage(),
         new RNFirebaseRemoteConfigPackage(),
@@ -100,6 +101,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
+    AppEventsLogger.activateApp(this);
+    //...
   }
 }

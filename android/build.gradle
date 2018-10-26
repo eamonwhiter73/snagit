@@ -2,6 +2,7 @@
 
 buildscript {
     repositories {
+        mavenCentral()
         google()
         jcenter()
         maven {
@@ -24,9 +25,10 @@ allprojects {
         google()
         jcenter()
         maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url "$rootDir/../node_modules/react-native/android"
+          // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+          url "$rootDir/../node_modules/react-native/android"
         }
+        maven { url 'https://maven.google.com' }
     }
 
     configurations.all {
@@ -35,4 +37,15 @@ allprojects {
             force "com.google.android.gms:play-services-tasks:15.0.1"
         }
     }
+}
+
+subprojects {
+  project.configurations.all {
+     resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'com.android.support'
+              && !details.requested.name.contains('multidex') ) {
+           details.useVersion "26.0.2"
+        }
+     }
+  }
 }

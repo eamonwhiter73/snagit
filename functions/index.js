@@ -83,17 +83,17 @@ exports.sendMessageNotification = functions.firestore.document('messages/{messag
     		registrationToken = newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken;
 
 			message = {
-			  data: toPlainObject({name: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].name, message: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].message, tempId: context.params.messageId, dates:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].dates, fcmToken:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].senderFcmToken.toString(), fromWhere: 'initiate'}),
-			  token: registrationToken.toString()
+			  data: toPlainObject({name: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].name, message: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].message, tempId: context.params.messageId, dates:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].dates, fcmToken:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].senderFcmToken, fromWhere: 'initiate'}),
+			  token: registrationToken
 			};
     	}
     	else {
-    		registrationToken = newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].senderFcmToken;
+    		registrationToken = newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken;
 
 
 			message = {
-			  data: toPlainObject({name: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].name, message: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].message, tempId: context.params.messageId, dates:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].dates, fcmToken:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken.toString(), fromWhere: 'respond'}),
-			  token: registrationToken.toString()
+			  data: toPlainObject({name: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].name, message: newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].message, tempId: context.params.messageId, dates:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].dates, fcmToken:newValue[Object.keys(newValue)[Object.keys(newValue).length - 1]].toFcmToken, fromWhere: 'respond'}),
+			  token: registrationToken
 			};
     	}
 	    // This registration token comes from the client FCM SDKs.
