@@ -364,7 +364,7 @@ export default class InitiateRent extends React.PureComponent {
         firebase.messaging().subscribeToTopic('all').catch((error) => {alert(error)});
 
         // User is signed in.
-        let userInfo = firebase.firestore().collection('users').doc(this.props.forEmail);
+        let userInfo = firebase.firestore().collection('users').doc(this.props.forEmail.email);
 
         userInfo.get().then(function(doc) {
           if (doc.exists) {
@@ -374,11 +374,11 @@ export default class InitiateRent extends React.PureComponent {
 
             let thisUserInfo = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
 
-            thisUserInfo.get().then(function(doc) {
-              if (doc.exists) {
-                  console.log("Document data in thisUserInfo:", doc.data());
+            thisUserInfo.get().then(function(doc2) {
+              if (doc2.exists) {
+                  console.log("Document data in thisUserInfo:", doc2.data());
 
-                  self.setState({myFcmToken: doc.data().fcmToken});
+                  self.setState({myFcmToken: doc2.data().fcmToken});
               } else {
                   // doc.data() will be undefined in this case
                   console.log("No such document!");

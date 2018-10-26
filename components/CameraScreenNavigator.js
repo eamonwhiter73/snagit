@@ -18,9 +18,13 @@ export default class CameraScreenNavigator extends React.Component {
       'didFocus',
       () => {
         if(this.props.navigation.getParam('param', '') === 'RentTab') {
+          let item = this.props.navigation.getParam('item', '');
+          console.log('this.props.navigation.getParam() in CameraScreenNavigator:', this.props.navigation.state.params);
+
           this.navigator && this.navigator.dispatch(
             NavigationActions.navigate({
               routeName: 'Rentable',
+              params: {item: this.props.navigation.getParam('item', '')}
             })
           );
 

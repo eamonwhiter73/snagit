@@ -28,29 +28,16 @@ export default class HomeScreen extends React.Component {
   constructor() {
     super();
 
-    this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
-      console.log(JSON.stringify(this.state.user));
-      let addToken = firebase.firestore().collection('users').doc(this.state.user.email);
-
-      // Set the 'capital' field of the city
-      addToken.update({fcmToken: fcmToken}).catch((error) => {
-         console.log(error);
-        addToken.set({fcmToken: fcmToken}).catch((error) => {
-          alert(error);
-        });
-      });
-    });
-
     this.state = {
       searchText: "",
-      items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$250'},
-              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '50 mi', condition: 'Fair', rate: '$25'},
-              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25'},
-              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25'}
+      items: [{uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item1', dist: '3.2 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item2', dist: '50 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'},
+              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item3', dist: '3.2 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item4', dist: '3.2 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'},
+              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item5', dist: '3.2 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item6', dist: '3.2 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'},
+              {uri: 'http://snag.eamondev.com/assets/rowboat.png', key: 'item7', dist: '3.2 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'},
+              {uri: 'http://snag.eamondev.com/assets/billythekid2.jpg', key: 'item8', dist: '3.2 mi', condition: 'Fair', rate: '$25', email: 'eamon.white7@gmail.com'}
              ],
       conditions: [{value: 'Poor', key: 'poor', label: 'Poor'}, {value: 'Fair', key: 'fair', label: 'Fair'}, {value: 'Good', key: 'good', label: 'Good'}, {value: 'New', key: 'new', label: 'New'}],
       backgroundColor: '#e6fffe',
@@ -66,6 +53,8 @@ export default class HomeScreen extends React.Component {
     };
 
     this.returnRespond = this.returnRespond.bind(this);
+
+    //this.navigateToRentable = this.navigateToRentable.bind(this);
     //this.ref = firebase.firestore().collection('items');
     //this.authSubscription = null;
   }
@@ -73,7 +62,23 @@ export default class HomeScreen extends React.Component {
   static navigatorStyle = { navBarHidden: true };
 
   componentDidMount() {
+
     console.log('key for stack navigator:',this.props.navigation.dangerouslyGetParent().state.key);
+
+    let addToken = firebase.firestore().collection('users').doc(firebase.auth().currentUser.email);
+
+    this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(fcmToken => {
+      console.log(JSON.stringify(this.state.user));
+      console.log("fcmTokenFromHome:", fcmToken);
+
+      // Set the 'capital' field of the city
+      addToken.update({fcmToken: fcmToken}).catch((error) => {
+         console.log(error);
+        addToken.set({fcmToken: fcmToken}).catch((error) => {
+          alert(error);
+        });
+      });
+    });
 
     this._sub = this.props.navigation.addListener(
       'didFocus',
@@ -149,7 +154,23 @@ export default class HomeScreen extends React.Component {
 
       firebase.auth().onAuthStateChanged(user => {
         if(user != null) {
-          this.setState({user: user});
+          this.setState({user: user}, ()=>{
+            let addToken = firebase.firestore().collection('users').doc(user.email);
+
+            if(Platform.OS === 'android') {
+              
+              firebase.messaging().getToken().then((token) => {
+                addToken.update({fcmToken: token}).catch((error) => {
+                 console.log(error);
+                  addToken.set({fcmToken: token}).catch((error) => {
+                    alert(error);
+                  });
+                });
+              })
+              // Set the 'capital' field of the city
+                
+            }
+          });
         }
         else {
           this.props.navigation.navigate('Login');
@@ -232,7 +253,7 @@ export default class HomeScreen extends React.Component {
     }
   }
 
-  navigateToRentable = () => {
+  navigateToRentable = (item) => {
     console.log('in navigateToRentable');
 
     /*this.props
@@ -251,7 +272,7 @@ export default class HomeScreen extends React.Component {
       this.props.navigation.dispatch(
         NavigationActions.navigate({
           routeName: 'Share',
-          params: { param: 'RentTab' },
+          params: { param: 'RentTab',  item: item },
         })
       );
 
@@ -300,7 +321,7 @@ export default class HomeScreen extends React.Component {
     const uri = 'http://snag.eamondev.com/assets/rowboat.png';
 
     return (
-      <TouchableOpacity onPress={this.navigateToRentable.bind(this)}>
+      <TouchableOpacity onPress={this.navigateToRentable.bind(this, item)}>
         <View style={{
                     flexDirection: 'column',
                     backgroundColor: /*'#e6fffe'*/this.state.backgroundColor,
@@ -326,7 +347,7 @@ export default class HomeScreen extends React.Component {
                 Dist.
               </Text>
               <Text style={{flex: 1, fontSize: 15, marginLeft: 10, textAlign: 'center', color: '#6de3dc', fontWeight: '900'}}
-                    onPress={this.navigateToRentable}
+                    onPress={this.navigateToRentable.bind(this, item)}
               >
                 {item.dist}
               </Text>
@@ -345,12 +366,12 @@ export default class HomeScreen extends React.Component {
             </View>*/}
             <View style={{flexDirection: 'column', flex: 0.5, justifyContent: 'space-between'}}>
               <Text style={{textDecorationLine: 'underline', flex: 1, fontSize: 12, fontWeight: '700', textAlign: 'center'}}
-                    onPress={this.navigateToRentable}
+                    onPress={this.navigateToRentable.bind(this, item)}
               >
                 Rate
               </Text>
               <Text style={{flex: 1, fontSize: 15, fontWeight: '900', textAlign: 'center', color: '#6de3dc'}}
-                    onPress={this.navigateToRentable}
+                    onPress={this.navigateToRentable.bind(this, item)}
               >
                 {item.rate}
               </Text>

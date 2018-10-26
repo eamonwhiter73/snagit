@@ -233,7 +233,7 @@ export default class RentableScreen extends React.Component {
               style={{height: Dimensions.get('window').height/2, width: Dimensions.get('window').width}}
             />
           </View>
-          <InitiateRent forEmail={firebase.auth().currentUser.email}/>
+          <InitiateRent forEmail={this.props.navigation.getParam('item', '')}/>
           <View style={{flex: 1, flexDirection: 'column', /*flex: 0.4,*/ justifyContent: 'center', alignItems: 'center', backgroundColor: '#fffbf5'}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
               <View style={styles.condition_container}>
