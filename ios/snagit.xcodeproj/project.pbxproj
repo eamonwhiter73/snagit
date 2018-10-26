@@ -54,7 +54,6 @@
 		A038CD85D39748E122AC50D7 /* libPods-snagit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 333056BA5B7ADABE709DF4A1 /* libPods-snagit.a */; };
 		A8EF4F5585D14BF99B4691C5 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 76EA796F201B49A58EBE6937 /* OpenSans-Bold.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		B46F7E356BDA4AA69502E4E0 /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF85478A7B894691A64D73C2 /* libRNCamera.a */; };
 		C53793BD86F041CCAAF3D3BF /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DBB406DB8AE48A186F1F9F2 /* libRNVectorIcons.a */; };
 		C5D3CDD47AF540FEB1150DE6 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FFB89FF48FB144B8B10A253E /* Ionicons.ttf */; };
 		CC9AE73CA96F4C6B8C7B358C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 274CB54256B14B2794E48793 /* Octicons.ttf */; };
@@ -407,7 +406,6 @@
 				A038CD85D39748E122AC50D7 /* libPods-snagit.a in Frameworks */,
 				DDD923D02177BA550096AA99 /* GoogleAppUtilities.framework in Frameworks */,
 				D3AD5E5B14D542BD849AD973 /* libRNUUIDGenerator.a in Frameworks */,
-				B46F7E356BDA4AA69502E4E0 /* libRNCamera.a in Frameworks */,
 				46E7AE9E705E4A3C9792EBCF /* libRNFS.a in Frameworks */,
 				26C5A11D9CA643F38AF54934 /* libRCTActionSheet.a in Frameworks */,
 				0FA6A02EF6C4410394EAFFDF /* libRNGoogleSignin.a in Frameworks */,
